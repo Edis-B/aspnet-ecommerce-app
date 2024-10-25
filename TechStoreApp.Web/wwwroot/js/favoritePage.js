@@ -17,7 +17,6 @@ async function removeFromFavorites() {
 
             if (confirmation) {
                 // Get the id of the element
-                // asdfsdafsfd
                 const containerDiv = form.closest(`.row-container`);
                 productId = containerDiv.id.split('_')[1];
 
