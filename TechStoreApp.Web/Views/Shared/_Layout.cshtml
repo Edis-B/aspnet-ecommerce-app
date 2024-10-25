@@ -1,0 +1,103 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="~/css/Header.css">
+    <script src="~/js/Header.js"></script>
+    <script src="~/js/common.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <header>
+        <a class="header-logo" asp-controller="Home" asp-action="Index">
+            <img style="height: 100%" alt="Logo" src="~/images/Logo.png" />
+        </a>
+
+        <div class="header-search-div">
+            <div id="dropdown-container">
+                <div class="burger-background-div">
+                    <input type="checkbox" id="menu-toggle" />
+                    <label class="hamburger-menu" for="menu-toggle">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </label>
+                </div>
+
+                <form id="component-form">
+                    <div class="menu-popup-div">
+                        <ul>
+                            <li id="Prebuilt Configuration">Configured Systems<hr /></li>
+                            <li id="Graphics Card">Graphics Cards<hr /></li>
+                            <li id="Processor">Processors<hr /></li>
+                            <li id="Processor Cooler">CPU Coolers<hr /></li>
+                            <li id="PC Case">Computer Cases<hr /></li>
+                            <li id="Motherboard">Motherboards<hr /></li>
+                            <li id="RAM">RAM sticks<hr /></li>
+                            <li id="SSD">Solid State Drives<hr /></li>
+                            <li id="HDD">Hard Disks<hr /></li>
+                            <li id="Powersupply">Power Supplies</li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+
+            <form class="lupa-bar-form" asp-controller="Search" asp-action="Search" method="get">
+                <input name="query" class="header-search-bar" type="text" placeholder="Search in category...">
+                <button type="submit" class="header-search-button">
+                    <img style="height: 100%" src="~/images/magnifying-glass-icon-11.png">
+                </button>
+            </form>
+        </div>
+
+        <div class="header-accesories-div">
+            @{
+                if (!User.Identity.IsAuthenticated)
+                {
+                    <a class="header-login-button" method="post" asp-action="Login" asp-controller="Home">
+                        Login
+                    </a>
+                }
+                else
+                {
+                    @await Component.InvokeAsync("UserProfile")
+                }
+            }
+            <div id="cart-decoration">
+                <a class="header-cart-img" asp-controller="Cart" asp-action="Cart">
+                    <img style="height: 100%" src="~/images/cart-icon-28356.png">
+                </a>
+                <span id="cart-item-count"></span>
+            </div>
+            <a class="header-heart-img" asp-controller="Favorites" asp-action="Favorites">
+                <img style="height: 100%" src="~/images/Heart-icon.png">
+            </a>
+            <a class="header-phone-img" asp-controller="Home" asp-action="Cart">
+                <img style="height: 100%" src="~/images/phone-icon-946.png">
+            </a>
+        </div>
+    </header>
+
+    <div id="overlay" class="overlay"></div>
+
+    <script>
+        function isLogged() {
+            return @User.Identity.IsAuthenticated.ToString().ToLower(); // Outputs 'true' or 'false'
+        }
+    </script>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    @RenderBody()
+
+    @section Scripts {
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    }
+
+    @RenderSection("Scripts", required: false) <!-- Ensure this is at the end of the body -->
+</body>
+</html>

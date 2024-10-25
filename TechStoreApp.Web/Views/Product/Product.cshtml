@@ -1,0 +1,85 @@
+﻿@using TechStoreApp.Web.ViewModels.Products
+@model ProductViewModel
+
+<script src="~/js/ProductPage.js"></script>
+<link rel="stylesheet" href="~/css/ProductPage.css" />
+<title>@Model.Name</title>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<div class="div-image-container">
+    <img class="image-for-product" src="@Model.ImageUrl" data-stock="@Model.Stock" />
+</div>
+
+<form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
+    <input type="hidden" name="productId" value="@Model.ProductId" />
+    <button class="add-to-cart-button" action="submit">
+        Add to Cart
+        <img class="cart-image" src="~/images/cart-icon-28356.png" />
+    </button>
+</form>
+
+<div class="favorite-contain-accessories">
+    <input type="checkbox" id="checkbox_@(Model.ProductId)" class="image-checkbox-input" value="@Model.CheckedString" />
+    <label for="checkbox_@(Model.ProductId)" class="image-checkbox-label">
+        <img class="full-heart" src="~/images/Black Hollow Full.png" alt="Full Heart" />
+        <img class="hollow-heart" src="~/images/Black Hollow Heart.png" alt="Hollow Heart" />
+    </label>
+</div>
+
+<div>
+    <h3 class="product-name-p">@Model.Name</h3>
+    <p class="product-description-p">@Model.Description</p>
+    <p class="product-price-p">@Model.Price</p>
+    <p class="product-stock-p">@Model.Stock</p>
+</div>
+
+<div class="review-section">
+    <form id="post-review-form" method="post">
+        <input type="hidden" name="productId" value="@Model.ProductId" id="product-id-input">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+        <label asp-for="Review.Comment">Comment</label>
+        <input type="text" name="comment" asp-for="Review.Comment" id="review-comment-input">       
+        <span asp-validation-for="Review.Comment" id="validate-Comment" class="text-danger"></span>
+
+        <label asp-for="Review.Rating">Rating</label>
+        <input type="hidden" name="rating" asp-for="Review.Rating" id="userRating">
+        <span asp-validation-for="Review.Rating" id="validate-Rating" class="text-danger"></span>
+
+        <button id="post-review-button" type="submit">Post Review</button>
+    </form>
+
+    <div class="user-rating-div">
+        <button class="single-star">&#9734;</button>
+        <button class="single-star">&#9734;</button>
+        <button class="single-star">&#9734;</button>
+        <button class="single-star">&#9734;</button>
+        <button class="single-star">&#9734;</button>
+    </div>
+</div>
+
+<h3>Reviews</h3>
+<div class="reviews-div-container">
+    @{
+        foreach (var item in Model.Reviews)
+        {
+            <hr />
+            <div class="review-container">
+                <p class="author-review">@item.Author</p>
+                <p class="review-comment">@item.Comment</p>
+                <p class="single-star-p">
+                    @{
+                        // Get string for rating
+                        var filledStars = new string('★', item.Rating);    // Filled stars
+                        var emptyStars = new string('☆', 5 - item.Rating); // Empty stars
+                    }
+                    @Html.Raw(filledStars)@Html.Raw(emptyStars)
+                </p>
+            </div>
+        }
+    }
+</div>

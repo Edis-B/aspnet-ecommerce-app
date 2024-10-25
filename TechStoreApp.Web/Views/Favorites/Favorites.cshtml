@@ -1,0 +1,46 @@
+﻿@using TechStoreApp.Web.ViewModels.Favorites
+@model FavoriteViewModel
+
+<link rel="stylesheet" href="~/css/FavoritesPage.css" />
+<script src="~/js/favoritePage.js"></script>
+<title>Favorites</title>
+
+<div class="main-body-container">
+    @{
+        if (Model.Products.Count != 0)
+        {
+            foreach (var item in Model.Products)
+            {
+                <div class="row-container" id="product-id_@item.ProductId">
+                    <form class="remove-from-favorites">
+                        <button type="submit">
+                            <img src="~/images/black-x-symbol.png"/>
+                        </button>
+                    </form>
+
+                    <div class="item-container">
+                        <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
+                            <img class="image-for-product" src="@item.ImageUrl" alt="Product image" />
+                        </a>
+                    </div>
+                    
+                    <p>@item.Name</p>
+                    <p>Liked on: @item.DateLiked</p>
+
+                    <form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@item.ProductId" />
+                        <button class="add-to-cart-button" action="submit">
+                            Add to Cart
+                            <img class="cart-image" src="~/images/cart-icon-28356.png" />
+                        </button>
+                    </form>
+
+                </div>
+            }
+        }
+        else
+        {
+            <p>No favorited items.</p>
+        }
+    }
+</div>

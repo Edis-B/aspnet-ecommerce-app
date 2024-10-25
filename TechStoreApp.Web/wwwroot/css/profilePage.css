@@ -1,0 +1,36 @@
+﻿.product-image{
+    height: 100%;
+}
+
+.product-cell-div{
+    height: 200px;
+    width: 100%;
+    display: flex;
+}
+
+.single-order {
+    width: 60%;
+    height: auto;
+    display:flex;
+    flex-direction: column;
+}
+
+.orders-container{
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    margin: auto;
+}
+
+.order-head{
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid black;
+    padding-inline: 10px;
+}
+
+.order-footer{
+    margin-bottom:20px;
+    border: 1px solid black;
+    padding-inline: 10px;
+}

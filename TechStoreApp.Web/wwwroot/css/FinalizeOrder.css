@@ -1,0 +1,13 @@
+﻿.item-info-container{
+    display: block;
+    width: 80%;
+    height: 200px;
+}
+
+.item-info-container img{
+    height: 100%;
+}
+
+.item-info-container p{
+    display: inline;
+}

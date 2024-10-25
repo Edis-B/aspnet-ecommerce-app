@@ -1,0 +1,9 @@
+﻿.user-profile {
+    height: 50%;
+    margin: 10px;
+}
+
+.user-profile img{
+    height: 100%;
+    border-radius: 100%;
+}

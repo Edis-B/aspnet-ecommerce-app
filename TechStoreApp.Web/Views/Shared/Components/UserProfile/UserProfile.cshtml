@@ -1,0 +1,9 @@
+﻿@model TechStoreApp.Web.ViewModels.Header.UserModel
+
+<link rel="stylesheet" href="~/css/pfpHeader.css"/>
+
+<a class="user-profile" asp-action="Index" asp-controller="Profile">
+    <img style="color: white" src="@Model.User.ProfilePictureUrl" alt="Profile Picture" />
+</a>
+
+

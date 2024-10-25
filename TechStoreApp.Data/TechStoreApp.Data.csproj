@@ -1,0 +1,69 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\Models\**" />
+    <EmbeddedResource Remove="Data\Models\**" />
+    <None Remove="Data\Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20240929172929_Initial.cs" />
+    <Compile Remove="Migrations\20240929172929_Initial.Designer.cs" />
+    <Compile Remove="Migrations\20241006112131_addedAdresses.cs" />
+    <Compile Remove="Migrations\20241006112131_addedAdresses.Designer.cs" />
+    <Compile Remove="Migrations\20241006112424_addedAdressesForeignKey.cs" />
+    <Compile Remove="Migrations\20241006112424_addedAdressesForeignKey.Designer.cs" />
+    <Compile Remove="Migrations\20241006133805_addedIdentityAddressAndPostalCode.cs" />
+    <Compile Remove="Migrations\20241006133805_addedIdentityAddressAndPostalCode.Designer.cs" />
+    <Compile Remove="Migrations\20241006134050_addedAddresses.cs" />
+    <Compile Remove="Migrations\20241006134050_addedAddresses.Designer.cs" />
+    <Compile Remove="Migrations\20241006134209_DBInit.cs" />
+    <Compile Remove="Migrations\20241006134209_DBInit.Designer.cs" />
+    <Compile Remove="Migrations\20241007172600_addReviewConstraints.cs" />
+    <Compile Remove="Migrations\20241007172600_addReviewConstraints.Designer.cs" />
+    <Compile Remove="Migrations\20241007172822_DBinit.cs" />
+    <Compile Remove="Migrations\20241007172822_DBinit.Designer.cs" />
+    <Compile Remove="Migrations\20241008104837_ProfilePictureadd.cs" />
+    <Compile Remove="Migrations\20241008104837_ProfilePictureadd.Designer.cs" />
+    <Compile Remove="Migrations\20241008112006_DbInit.cs" />
+    <Compile Remove="Migrations\20241008112006_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20241008112447_DbInit2.cs" />
+    <Compile Remove="Migrations\20241008112447_DbInit2.Designer.cs" />
+    <Compile Remove="Migrations\20241008112624_DbInit.cs" />
+    <Compile Remove="Migrations\20241008112624_DbInit.Designer.cs" />
+    <Compile Remove="Migrations\20241011180431_statuses.cs" />
+    <Compile Remove="Migrations\20241011180431_statuses.Designer.cs" />
+    <Compile Remove="Migrations\20241011180951_adresses.cs" />
+    <Compile Remove="Migrations\20241011180951_adresses.Designer.cs" />
+    <Compile Remove="Migrations\TechStoreDbContextModelSnapshot.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.8" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TechStoreApp.Data.Models\TechStoreApp.Data.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
+</Project>

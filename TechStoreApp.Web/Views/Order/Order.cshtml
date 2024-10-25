@@ -1,0 +1,94 @@
+﻿@using TechStoreApp.Web.ViewModels.Orders
+@model OrderViewModel
+<link rel="stylesheet" href="~/css/OrderPage.css"/>
+<script src="~/js/OrderPage.js"></script>
+<title>Cart</title>
+
+
+<div class="content-wrapper">
+    <div class="user-information-content">
+        <div class="delivery-address-div">
+            <p>Select delivery address:</p>
+            <select id="adresses">
+                <option>Empty</option>
+                @{
+                    foreach (var address in Model.UserAddresses)
+                    {
+                        <option id="@address.Id">@address.Details</option>
+                    }
+                }
+            </select>
+
+            <form id="save-address-form" asp-action="SaveAddress" asp-controller="Address" method="post">
+                <div>
+                    <label>Country</label>
+                    <input type="text" asp-for="Address.Country" />
+                    <span asp-validation-for="Address.Country" class="text-danger"></span>
+                </div>
+
+                <div>
+                    <label>City</label>
+                    <input type="text" asp-for="Address.City" />
+                    <span asp-validation-for="Address.City" class="text-danger"></span>
+                </div>
+                
+                <div>
+                    <label>Postal Code</label>
+                    <input type="text" asp-for="Address.PostalCode" />
+                    <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
+                </div>
+                
+                <div>
+                    <label>Address Details</label>
+                    <textarea type="text" asp-for="Address.Details" class="address-details" ></textarea>
+                    <span asp-validation-for="Address.Details" class="text-danger"></span>
+                </div>
+                
+                <input type="hidden" asp-for="Address.Id"/>
+
+                <button type="submit">Save Address</button>
+            </form>
+        </div>
+            
+        <div class="payment-selection-div">
+            <p>Select payment method:</p>
+
+        </div>
+    </div>
+    <div class="order-details-content">
+        @{
+            foreach (var item in Model.CartItems)
+            {
+                <div class="single-product-cell">
+                    <div class="div-image-container">
+                        <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.Product.ProductId })">
+                            <img class="product-image" src="@item.Product.ImageUrl" alt="Product image" />
+                        </a>
+                    </div>
+                    <div class="products-details">
+                        <p class="product-name">@item.Product.Name</p>
+                        <p>@item.Quantity</p>                          
+                        <p>x</p>
+                        <p class="single-item-price">@item.Product.Price</p>
+                    </div>                        
+                </div>
+
+                <hr>
+            }
+            <div class="order-price-summary">
+                <p class="">Total: @Model.TotalCost</p>
+
+                <button class="go-back-button">Back</button>
+
+                <form id="send-address-form" method="post" asp-action="FinalizeOrder" asp-controller="Order">
+                    <input type="hidden" asp-for="@Model.Address.Country">
+                    <input type="hidden" asp-for="@Model.Address.City">
+                    <input type="hidden" asp-for="@Model.Address.PostalCode">
+                    <input type="hidden" asp-for="@Model.Address.Details">
+
+                    <button type="submit" id="continue-order-button">Continue</button>
+                </form>
+            </div>
+        }
+    </div>
+</div>

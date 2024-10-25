@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TechStoreApp.Data\TechStoreApp.Data.csproj" />
+    <ProjectReference Include="..\TechStoreApp.Data.Models\TechStoreApp.Data.Models.csproj" />
+  </ItemGroup>
+
+</Project>

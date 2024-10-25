@@ -1,0 +1,38 @@
+﻿body{
+    background-color: white;
+}
+
+.single-star {
+    font-size: 2rem;
+    border: none;
+    background-color: white;
+    font-weight: bold;
+    color: orange;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    cursor: pointer;
+}
+
+.single-star-p {
+    font-weight: bold;
+    font-size: 2rem;
+    border: none;
+    color: orange;
+    padding: 0;
+    letter-spacing: 0.2em;
+}
+
+.user-rating-div {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.reviews-div-container hr{
+    border: solid 1px;
+    border-color: gray;
+}

@@ -1,0 +1,94 @@
+﻿body{
+    margin-inline: 15%;
+}
+.user-information-content{
+    flex: 2.2;
+    background-color: lightgray;
+}
+
+.content-wrapper{
+    display: flex;
+    flex-direction: row;
+}
+
+.single-product-cell{
+    height: 150px;
+    width: 100%;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+.order-details-content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: lightblue;
+    flex: 1;
+}
+
+.order-details-content hr{
+    border: solid 1px;
+    width: 300px;
+    color: gray;
+}
+.product-image{
+    height: 100%;
+    max-width: 180px;
+}
+
+.products-details{
+    display: flex;
+    flex: 5;
+    flex-direction: row;
+    float: right;
+    padding: 10px;
+}
+
+.products-details p {
+    margin: 0;
+}
+
+.div-image-container{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex: 4;
+    height: 100%;
+    width: 200px;
+}
+
+.product-name{
+    display: block;
+}
+
+.payment-selection-div{
+
+}
+
+.delivery-address-div{
+    display: flex;
+    flex-direction: column;
+}
+
+.address-details{
+    height: 30px;
+}
+
+.delivery-address-div div{
+    display: flex;
+    flex-direction: column;
+}
+
+.delivery-address-div div input{
+    width: 200px;
+}
+
+.delivery-address-div div span{
+    margin-bottom: 10px;
+}
+
+#adresses{
+    width: 208px;
+    margin-bottom: 10px;
+}

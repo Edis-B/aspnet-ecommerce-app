@@ -1,0 +1,46 @@
+﻿@using TechStoreApp.Web.ViewModels.Search
+@model SearchViewModel
+
+<link rel="stylesheet" href="~/css/SearchPage.css"/>
+
+<div class="whole-SearchPage-body">
+    <div class="filters-wrap-div">
+
+        <form id="search-in-category-form" asp-action="Search" asp-controller="Search" method="get">
+            <input type="hidden" asp-for="@Model.Category" value="@Model.Category"/>
+
+            <input type="text" asp-for="@Model.Query" placeholder="Search in category..."/>
+
+            <button type="submit">
+                <img src="~/images/magnifying-glass-icon-11.png" />
+            </button>
+        </form>
+
+        <div id="category-filter-div">
+            <ul>
+                <li><a id="Prebuilt Configuration">Configured Systems</a></li>
+                <li><a id="Graphics Card">Graphics Cards</a></li>
+                <li><a id="Processor">Processors</a></li>
+                <li><a id="Processor Cooler">CPU Coolers</a></li>
+                <li><a id="PC Case">PC Cases</a></li>
+                <li><a id="Motherboard">Motherboards</a></li>
+                <li><a id="RAM">RAM sticks</a></li>
+                <li><a id="SSD">Solid state drives (SSDs)</a></li>
+                <li><a id="HDD">Hard disk drives (HDDs)</a></li>
+                <li><a id="Powersupply">Power Supplies</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="products-wrap-div">
+         @await Component.InvokeAsync("Search", new { query = Model.Query, category = Model.Category, currentPage = Model.CurrentPage })
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/SearchPage.js"></script>
+    <script>
+        function getModel() {
+            return @Html.Raw(Json.Serialize(Model));
+        }
+    </script>
+}

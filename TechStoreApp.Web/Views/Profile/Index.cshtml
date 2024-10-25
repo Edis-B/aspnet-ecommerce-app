@@ -1,0 +1,9 @@
+﻿<link rel="stylesheet" href="~/css/profilePage.css"/>
+
+<form asp-controller="Account" asp-action="Logout" method="post">
+    <button type="submit" class="logout-button">Logout</button>
+</form>
+
+<div class="orders-container">
+    @await Component.InvokeAsync("UserOrders")
+</div>

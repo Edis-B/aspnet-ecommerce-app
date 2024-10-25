@@ -1,0 +1,37 @@
+﻿@using TechStoreApp.Web.ViewModels.Orders
+@model OrderFinalizedModel
+
+<link rel="stylesheet" href="~/css//FinalizeOrder.css"/>
+<title>Finalize</title>
+
+<div class="order-details">
+    @{
+        foreach (var item in Model.Cart.CartItems)
+        {
+            <div class="item-info-container">
+                <img src="@item.Product.ImageUrl">
+                <p>@item.Product.Name</p>
+                <p>@item.Quantity</p><p> x </p><p>$@item.Product.Price.</p>
+            </div>
+        }
+        <p class="total-price"></p>
+    }
+    <div class="delivery-address-details">
+        <p>@Model.Address.Country</p>
+        <p>@Model.Address.City</p>
+        <p>@Model.Address.PostalCode</p>
+        <p>@Model.Address.Details</p>
+    </div>
+
+    <div id="send-order-div">
+        <form id="send-order-form" asp-controller="Order" asp-action="SendOrder" method="post">
+            <input type="hidden" asp-for="@Model.Address.Country">
+            <input type="hidden" asp-for="@Model.Address.City">
+            <input type="hidden" asp-for="@Model.Address.PostalCode">
+            <input type="hidden" asp-for="@Model.Address.Details">
+
+            <button type="submit">Send Order</button>
+        </form>
+    </div>
+</div>
+
