@@ -1,4 +1,4 @@
-﻿public class SearchCategoryViewModel
+﻿public class SearchCategoryFormModel
 {
     public string CategoryId { get; set; }
     public string Query { get; set; }

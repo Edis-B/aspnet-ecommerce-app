@@ -20,14 +20,14 @@ async function categoriesMenu() {
         }
 
         optionA.addEventListener('click', async () => {
-            const response = await fetch(`/Search/SearchByCategory`, {
+            const response = await fetch(`/Search/Search`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    categoryId: optionA.id,
-                    query: model.query
+                    Category: optionA.id,
+                    Query: model.query
                 })
             });
 

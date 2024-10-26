@@ -28,8 +28,10 @@ namespace TechStoreApp.Web.Views.Shared.Components
 
             if (!string.IsNullOrEmpty(category))
             {
-                productsQuery = productsQuery.Where(p => p.Category.Description == category);
-
+                if (category != "All")
+                {
+                    productsQuery = productsQuery.Where(p => p.Category.Description == category);
+                }
             }
 
             if (!string.IsNullOrEmpty(query))
@@ -60,7 +62,7 @@ namespace TechStoreApp.Web.Views.Shared.Components
 
             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            var model = new SearchViewModel
+            var model = new SearchFormModel
             {
                 Query = query,
                 Results = results,

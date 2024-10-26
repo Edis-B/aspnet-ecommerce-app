@@ -20,7 +20,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpGet]
         public async Task<IActionResult> Search(string? query, string? category, int currentPage = 1)
         {
-            var model = new SearchViewModel
+            var model = new SearchFormModel
             {
                 Category = category,
                 CurrentPage = currentPage,
@@ -29,13 +29,18 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return View(model);
         }
+
         [HttpPost]
-        public JsonResult SearchByCategory([FromBody] SearchCategoryViewModel request)
+        public async Task<IActionResult> Search([FromBody] SearchFormModel model)
         {
-            string url = Url.Action("Search", new { query = request.Query, category = request.CategoryId, currentPage = 1 });
-            return Json(new { redirectUrl = url });
+            var searchModel = new SearchFormModel
+            {
+                Category = model.Category,
+                CurrentPage = model.CurrentPage,
+                Query = model.Query
+            };
+
+            return View(searchModel);
         }
     }
-
-
 }

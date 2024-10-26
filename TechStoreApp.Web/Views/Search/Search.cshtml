@@ -1,5 +1,5 @@
 ﻿@using TechStoreApp.Web.ViewModels.Search
-@model SearchViewModel
+@model SearchFormModel
 
 <link rel="stylesheet" href="~/css/SearchPage.css"/>
 
@@ -8,7 +8,6 @@
 
         <form id="search-in-category-form" asp-action="Search" asp-controller="Search" method="get">
             <input type="hidden" asp-for="@Model.Category" value="@Model.Category"/>
-
             <input type="text" asp-for="@Model.Query" placeholder="Search in category..."/>
 
             <button type="submit">
@@ -18,6 +17,7 @@
 
         <div id="category-filter-div">
             <ul>
+                <li><a id="All">All products</a></li>
                 <li><a id="Prebuilt Configuration">Configured Systems</a></li>
                 <li><a id="Graphics Card">Graphics Cards</a></li>
                 <li><a id="Processor">Processors</a></li>
