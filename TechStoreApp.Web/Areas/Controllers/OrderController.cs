@@ -5,7 +5,6 @@ using System.Security.Claims;
 using System.Security.Policy;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
-using TechStoreApp.Data.Models.Models;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Cart;

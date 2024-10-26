@@ -18,7 +18,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search(string? query, string? category, int currentPage = 1)
+        public IActionResult Search(string? query, string? category, int currentPage = 1)
         {
             var model = new SearchFormModel
             {
@@ -31,7 +31,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Search([FromBody] SearchFormModel model)
+        public IActionResult Search([FromBody] SearchFormModel model)
         {
             var searchModel = new SearchFormModel
             {

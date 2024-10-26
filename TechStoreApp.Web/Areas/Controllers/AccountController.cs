@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using TechStoreApp.Data.Models.Models;
+using TechStoreApp.Data.Models;
 using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Web.Areas.Controllers
@@ -69,11 +69,7 @@ namespace TechStoreApp.Web.Areas.Controllers
 
         private ApplicationUser CreateUser()
         {
-            try
-            {
-                return Activator.CreateInstance<ApplicationUser>();
-            }
-            catch (Exception ex) { throw new Exception(); }
+            return Activator.CreateInstance<ApplicationUser>();
         }
     }
 }

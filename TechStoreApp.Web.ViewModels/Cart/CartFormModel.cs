@@ -1,4 +1,4 @@
-﻿using TechStoreApp.Data.Models.Models;
+﻿using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Web.ViewModels.Cart
 {

@@ -8,6 +8,7 @@ using NuGet.Versioning;
 using System.Security.Claims;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Products;
@@ -18,74 +19,18 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class CartController : Controller
     {
         private readonly TechStoreDbContext context;
+        private readonly ICartService cartService;
 
-        public CartController(TechStoreDbContext _context)
+        public CartController(TechStoreDbContext _context, ICartService _cartService)
         {
+            cartService = _cartService;
             context = _context;
         }
         
         [HttpPost]
         public async Task<JsonResult> AddToCart([FromBody] AddToCartViewModel model)
         {
-            int productId = model.ProductId;
-            string userId = GetUserId();
-
-            var product = await context.Products
-                .FindAsync(productId);
-
-            if (product.Stock <= 0)
-            {
-                return Json(new { success = false, message = "Out of stock!" });
-            }
-
-            var user = await context.Users
-                .Where(x => x.Id == userId)
-                .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
-                .FirstOrDefaultAsync();
-
-
-            // Create a cart if the user doesn't have one
-            if (user.Cart == null)
-            {
-                await context.Carts.AddAsync(new Cart
-                    { 
-                        UserId = userId, 
-                        UpdateDate = DateTime.Now 
-                    });
-                await context.SaveChangesAsync();
-
-            }
-
-            var cartId = user.Cart.CartId;
-
-            // Create a cartItem with the correct product and cart id
-            if (!user.Cart.CartItems.Any(x => x.ProductId == productId))
-            {
-                await context.CartItems.AddAsync(new CartItem
-                {
-                    CartId = cartId,
-                    ProductId = productId,
-                    Quantity = 1
-                });
-                await context.SaveChangesAsync();
-            }
-            else
-            {
-                var cartItem = user.Cart.CartItems
-                .Where(ci => ci.ProductId == productId)
-                .FirstOrDefault();
-
-                if (cartItem.Quantity >= product.Stock)
-                {
-                    return Json(new { success = false, message = "Reached stock limit!" });
-                }
-
-                cartItem.Quantity++;
-                await context.SaveChangesAsync();
-            }
-
-            return Json(new { success = true, message = "Product added to cart!" });
+            return await cartService.AddToCart(model);
         }
 
         [HttpGet]
@@ -156,7 +101,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> DecreaseCount([FromBody] CartFormModel model)
+        public async Task<JsonResult> DecreaseCount([FromBody] CartFormModel model)
         {
             var userId = GetUserId();
             var _user = context.Users

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using TechStoreApp.Data.Models.Models;
+using TechStoreApp.Data.Models;
 using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Web.ViewModels.Search

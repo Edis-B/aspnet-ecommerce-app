@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Security.Claims;
 using TechStoreApp.Data;
-using TechStoreApp.Data.Models.Models;
+using TechStoreApp.Data.Models;
 using TechStoreApp.Web.ViewModels.Favorites;
 using TechStoreApp.Web.ViewModels.Products;
 
@@ -53,7 +53,6 @@ namespace TechStoreApp.Web.Areas.Controllers
         public async Task<IActionResult> Favorites(FavoriteViewModel model)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
 
             var products = await context.Favorited
                 .Where(f => f.UserId == userId)

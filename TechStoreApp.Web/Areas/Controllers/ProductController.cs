@@ -16,7 +16,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         private readonly TechStoreDbContext context;
         public ProductController(TechStoreDbContext _context)
         {
-            this.context = _context;
+            context = _context;
         }
 
         public async Task<IActionResult> RedirectToDetails(int productId)
@@ -71,17 +71,6 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return Json(new { message = "Successfully added" });
         }
-        //[HttpGet]
-        //public async Task<IActionResult> GetReviews(int ProductId)
-        //{
-        //    var product = await _context.Products
-        //        .Where(p => p.ProductId == ProductId)
-        //        .Include(p => p.Reviews)
-        //            .ThenInclude(r => r.User)
-        //        .FirstOrDefaultAsync();
-
-        //    return Ok(product);
-        //}
 
         public string GetUserId()
         {

@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using TechStoreApp.Data.Models.Models;
+using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Web.Areas.Identity.Pages.Account
 {

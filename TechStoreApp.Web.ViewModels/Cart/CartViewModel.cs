@@ -1,5 +1,4 @@
-﻿using TechStoreApp.Data.Models.Models;
-using TechStoreApp.Web.ViewModels.Cart;
+﻿using TechStoreApp.Web.ViewModels.Cart;
 
 namespace TechStoreApp.Web.ViewModels
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using TechStoreApp.Data.Models.Models;
+using TechStoreApp.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using TechStoreApp.Data.Models;
@@ -30,11 +30,6 @@ public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<Review> Reviews { get; set; }
     public virtual DbSet<Favorited> Favorited { get; set; }
     public virtual DbSet<Address> Addresses { get; set; }
-
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    optionsBuilder.UseSqlServer("Server=DESKTOP-4LU0QTD\\SQLEXPRESS03;Database=TechStoreDBTest;Trusted_Connection=True;TrustServerCertificate=True");
-    //}
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

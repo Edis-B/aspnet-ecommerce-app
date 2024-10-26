@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace TechStoreApp.Data.Models.Models
+namespace TechStoreApp.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {

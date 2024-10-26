@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TechStoreApp.Data.Models.Models;
+using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Data.Models
 {

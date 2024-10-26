@@ -1,4 +1,4 @@
-﻿using TechStoreApp.Data.Models.Models;
+﻿using TechStoreApp.Data.Models;
 using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Cart;
 
