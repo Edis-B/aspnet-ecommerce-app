@@ -11,12 +11,12 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface ICartService
     {
-        Task<JsonResult> AddToCart(AddToCartViewModel model);
+        Task<JsonResult> AddToCartAsync(AddToCartViewModel model);
 
         Task<CartViewModel> Cart();
         Task<JsonResult> IncreaseCount(CartFormModel model);
         Task<JsonResult> DecreaseCount(CartFormModel model);
-        Task<JsonResult> GetCartItemsCount();
+        Task<JsonResult> GetCartItemsCountAsync();
         Task<JsonResult> RemoveFromCart(RemoveFromCartViewModel model);
         Task<JsonResult> ClearCart();
     }

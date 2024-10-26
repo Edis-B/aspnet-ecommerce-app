@@ -23,7 +23,7 @@ namespace TechStoreApp.Services.Data
             userService = _userService;
 
         }
-        public async Task<JsonResult> AddToCart(AddToCartViewModel model)
+        public async Task<JsonResult> AddToCartAsync(AddToCartViewModel model)
         {
             int productId = model.ProductId;
             string userId = userService.GetUserId();
@@ -102,9 +102,29 @@ namespace TechStoreApp.Services.Data
             throw new NotImplementedException();
         }
 
-        public Task<JsonResult> GetCartItemsCount()
+        public async Task<JsonResult> GetCartItemsCountAsync()
         {
-            throw new NotImplementedException();
+            var userId = userService.GetUserId();
+            var user = await context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return new JsonResult(new { total = 0 });
+            }
+
+            if (user.Cart == null)
+            {
+                return new JsonResult(new { total = 0 });
+            }
+
+            var totalItems = user.Cart.CartItems
+                .Sum(c => c.Quantity);
+
+            return new JsonResult(new { total = totalItems });
         }
 
         public Task<JsonResult> IncreaseCount(CartFormModel model)

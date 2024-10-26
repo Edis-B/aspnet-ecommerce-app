@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Services.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,7 +17,6 @@ builder.Services.AddDbContext<TechStoreDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     {
@@ -26,7 +27,11 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 	})
     .AddEntityFrameworkStores<TechStoreDbContext>();
 
+builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICartService, CartService>();
+            
 
 builder.Services.AddControllersWithViews();
 

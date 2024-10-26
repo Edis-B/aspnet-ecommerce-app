@@ -30,7 +30,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpPost]
         public async Task<JsonResult> AddToCart([FromBody] AddToCartViewModel model)
         {
-            return await cartService.AddToCart(model);
+            return await cartService.AddToCartAsync(model);
         }
 
         [HttpGet]
@@ -123,27 +123,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         [AllowAnonymous]
         public async Task<JsonResult> GetCartItemsCount()
         {
-            var userId = GetUserId();
-            var user = await context.Users
-                .Where(u => u.Id == userId)
-                .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
-                .FirstOrDefaultAsync();
-
-            if (user == null)
-            {
-                return Json(new { total = 0 });
-            }
-
-            if (user.Cart == null)
-            {
-                return Json(new { total = 0 });
-            }
-
-            var totalItems = user.Cart.CartItems
-                .Sum(c => c.Quantity);
-
-            return Json(new { total = totalItems });
+            return await cartService.GetCartItemsCountAsync();
         }
         [HttpDelete]
         public async Task<JsonResult> RemoveFromCart([FromBody] RemoveFromCartViewModel model)
