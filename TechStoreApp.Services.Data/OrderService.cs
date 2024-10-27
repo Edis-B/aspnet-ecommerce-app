@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Orders;
@@ -84,7 +85,59 @@ namespace TechStoreApp.Services.Data
 
         public async Task<OrderFinalizedModel> GetOrderFinalizedModelAsync(OrderViewModel model)
         {
-            throw new NotImplementedException();
+            var userId = userService.GetUserId();
+
+            var user = await context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Cart)
+                     .ThenInclude(c => c.CartItems)
+                        .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync();
+
+
+            var newAddress = new AddressFormModel
+            {
+                Country = model.Address.Country,
+                City = model.Address.City,
+                PostalCode = model.Address.PostalCode,
+                Details = model.Address.Details
+            };
+
+            model.Address = newAddress;
+
+            var totalCost = user.Cart.CartItems
+                .Sum(ci => ci.Product.Price * ci.Quantity);
+
+            var newModel = new OrderFinalizedModel
+            {
+                Address = model.Address,
+                Cart = await context.Carts
+                    .Where(c => c.UserId == userId)
+                    .Select(c => new CartViewModel()
+                    {
+                        CartItems = c.CartItems.Select(ci => new CartItemViewModel()
+                        {
+                            Quantity = ci.Quantity,
+                            CartId = ci.CartId,
+                            ProductId = ci.ProductId,
+                            Product = new ProductViewModel()
+                            {
+                                ProductId = ci.Product.ProductId,
+                                CategoryId = ci.Product.CategoryId,
+                                Name = ci.Product.Name,
+                                Price = ci.Product.Price,
+                                Description = ci.Product.Description,
+                                Stock = ci.Product.Stock,
+                                ImageUrl = ci.Product.ImageUrl,
+                            }
+                        })
+                        .ToList()
+                    })
+                    .FirstOrDefaultAsync() ?? new CartViewModel(),
+                TotalSum = totalCost,
+            };
+
+            return newModel;
         }
 
 

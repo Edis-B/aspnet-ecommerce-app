@@ -33,57 +33,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpPost]
         public async Task<IActionResult> FinalizeOrder(OrderViewModel model)
         {
-            var userId = GetUserId();
-
-            var user = await context.Users
-                .Where(u => u.Id == userId)
-                .Include(u => u.Cart)
-                     .ThenInclude(c => c.CartItems)
-                        .ThenInclude(ci => ci.Product)
-                .FirstOrDefaultAsync();
-            
-                
-            var newAddress = new AddressFormModel
-            {
-                Country = model.Address.Country,
-                City = model.Address.City,
-                PostalCode= model.Address.PostalCode,
-                Details = model.Address.Details
-            };
-
-            model.Address = newAddress;
-
-            var totalCost = user.Cart.CartItems
-                .Sum(ci => ci.Product.Price * ci.Quantity);
-
-            var newModel = new OrderFinalizedModel
-            {
-                Address = model.Address,
-                Cart = await context.Carts
-                    .Where(c => c.UserId == userId)
-                    .Select(c => new CartViewModel()
-                    {
-                        CartItems = c.CartItems.Select(ci => new CartItemViewModel()
-                        {
-                            Quantity = ci.Quantity,
-                            CartId = ci.CartId,
-                            ProductId = ci.ProductId,
-                            Product = new ProductViewModel()
-                            {
-                                ProductId = ci.Product.ProductId,
-                                CategoryId = ci.Product.CategoryId,
-                                Name = ci.Product.Name,
-                                Price = ci.Product.Price,
-                                Description = ci.Product.Description,
-                                Stock = ci.Product.Stock,
-                                ImageUrl = ci.Product.ImageUrl,
-                            }
-                        })
-                        .ToList()
-                    })
-                    .FirstOrDefaultAsync() ?? new CartViewModel(),
-                TotalSum = totalCost,
-            };
+            var newModel = await orderService.GetOrderFinalizedModelAsync(model);
 
             return View("OrderFinalized", newModel);
         }
