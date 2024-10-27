@@ -10,6 +10,7 @@ using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Favorites;
+using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Services.Data
 {
@@ -39,15 +40,37 @@ namespace TechStoreApp.Services.Data
 
             return new JsonResult(new { message = "Successfully added to favorites" });
         }
-
-        public Task<FavoriteViewModel> GetUserFavoritesAsync()
+        public async Task<JsonResult> RemoveFromFavoritesAsync(FavoriteFormModel model)
         {
-            throw new NotImplementedException();
+            string userId = userService.GetUserId();
+
+            var toBeRemoved = await context.Favorited
+                .FirstOrDefaultAsync(f => f.UserId == userId && f.ProductId == model.ProductId);
+
+            context.Favorited.Remove(toBeRemoved);
+
+            await context.SaveChangesAsync();
+
+            return new JsonResult(new { message = "Successfully removed from favorites" });
         }
-
-        public Task<JsonResult> RemoveFromFavoritesAsync(FavoriteFormModel model)
+        public async Task<FavoriteViewModel> GetUserFavoritesAsync()
         {
-            throw new NotImplementedException();
+            string userId = userService.GetUserId();
+
+            var model = new FavoriteViewModel();
+
+            model.Products = await context.Favorited
+                .Where(f => f.UserId == userId)
+                .Select(f => new ProductViewModel
+                {
+                    ProductId = f.ProductId,
+                    Name = f.Product.Name,
+                    ImageUrl = f.Product.ImageUrl,
+                    DateLiked = f.FavoritedAt.ToString("dd/MM/yyyy"),
+                })
+                .ToListAsync();
+
+            return model;
         }
     }
 }
