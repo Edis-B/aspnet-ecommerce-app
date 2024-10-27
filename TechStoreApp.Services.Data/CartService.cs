@@ -201,14 +201,43 @@ namespace TechStoreApp.Services.Data
         }
 
 
-        public Task<JsonResult> RemoveFromCart(RemoveFromCartViewModel model)
+        public async Task<JsonResult> RemoveFromCartAsync(RemoveFromCartViewModel model)
         {
-            throw new NotImplementedException();
+            var userId = userService.GetUserId();
+            var cartItem = await context.CartItems
+                .Where(ci => ci.ProductId == model.ProductId)
+                .Where(ci => ci.Cart.UserId == userId)
+                .FirstOrDefaultAsync();
+
+            if (cartItem == null) 
+            {
+                return new JsonResult(new { success = true, message = "Item is not in cart!" });
+            }
+
+            context.CartItems.Remove(cartItem!);
+            await context.SaveChangesAsync();
+
+            return new JsonResult(new { success = true, message = "Successfully removed item from cart!" });
         }
 
-        public Task<JsonResult> ClearCart()
+        public async Task<JsonResult> ClearCartAsync()
         {
-            throw new NotImplementedException();
+            var userId = userService.GetUserId();
+
+            var cart = await context.Carts
+                .Where(c => c.UserId == userId)
+                    .Include(c => c.CartItems)
+                .FirstOrDefaultAsync();
+
+            if (cart == null || cart.CartItems.Count == 0)
+            {
+                return new JsonResult(new { success = false, message = "Cart is already empty!" });
+            }
+
+            context.Remove(cart);
+            await context.SaveChangesAsync();
+
+            return new JsonResult(new { success = true, message = "Successfully removed item from cart!" });
         }
     }
 }

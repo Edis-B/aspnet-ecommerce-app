@@ -17,7 +17,7 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<JsonResult> IncreaseCountAsync(CartFormModel model);
         Task<JsonResult> DecreaseCountAsync(CartFormModel model);
         Task<JsonResult> GetCartItemsCountAsync();
-        Task<JsonResult> RemoveFromCart(RemoveFromCartViewModel model);
-        Task<JsonResult> ClearCart();
+        Task<JsonResult> RemoveFromCartAsync(RemoveFromCartViewModel model);
+        Task<JsonResult> ClearCartAsync();
     }
 }

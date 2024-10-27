@@ -61,39 +61,12 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpDelete]
         public async Task<JsonResult> RemoveFromCart([FromBody] RemoveFromCartViewModel model)
         {
-            var userId = GetUserId();
-            var cartItem = await context.CartItems
-                .Where(ci => ci.ProductId == model.ProductId)
-                .Where(ci => ci.Cart.UserId == userId)
-                .FirstOrDefaultAsync();
-
-            context.CartItems.Remove(cartItem);
-            await context.SaveChangesAsync();
-
-            return Json(new { success = true, message = "Successfully removed item from cart!" });
+            return await cartService.RemoveFromCartAsync(model);
         }
         [HttpDelete]
         public async Task<JsonResult> ClearCart()
         {
-            var userId = GetUserId();
-
-            var cart = await context.Carts
-                .Where(c => c.UserId == userId)
-                .FirstOrDefaultAsync();
-
-            if (cart == null)
-            {
-                return Json(new { success = false, message = "Cart is already empty!" });
-            }
-
-            context.Remove(cart);
-            await context.SaveChangesAsync();
-
-            return Json(new { success = true, message = "Successfully removed item from cart!" });
-        }
-        private string GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return await cartService.ClearCartAsync();
         }
     }
 }
