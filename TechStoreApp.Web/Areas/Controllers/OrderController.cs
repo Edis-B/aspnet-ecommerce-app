@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Security.Policy;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Cart;
@@ -16,68 +17,18 @@ namespace TechStoreApp.Web.Areas.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        TechStoreDbContext context;
-        public OrderController(TechStoreDbContext _context)
+        private readonly TechStoreDbContext context;
+        private readonly IOrderService orderService;
+        public OrderController(TechStoreDbContext _context, IOrderService _orderService)
         {
+            orderService = _orderService;
             context = _context;
         }
         public async Task<IActionResult> Order()
         {
-            var userId = GetUserId();
+            var orderViewModel = await orderService.GetOrderViewModelAsync();
 
-            var user = await context.Users
-                .Where(u => u.Id == userId)
-                .Include(u => u.Addresses)
-                .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
-                        .ThenInclude(ci => ci.Product)
-                .FirstOrDefaultAsync();
-
-            var newModel = new OrderViewModel();
-
-            newModel.UserAddresses = context.Addresses
-                .Where(a => a.UserId == userId)
-                .Select(a => new AddressViewModel()
-                {
-                    Country = a.Country,
-                    City = a.City,
-                    PostalCode = a.PostalCode,
-                    Details = a.Details,
-                    Id = a.AddressId
-                })
-                .ToList();
-
-            if (user.Cart == null || !user.Cart.CartItems.Any())
-            {
-                var model = new OrderViewModel();
-
-                return View(model);
-            }
-
-            newModel.TotalCost = user.Cart.CartItems
-                .Sum(ci => ci.Product.Price * ci.Quantity);
-
-            newModel.CartItems = await context.CartItems
-                .Where(ci => ci.CartId == user.Cart.CartId)
-                .Select(ci => new CartItemViewModel()
-                {
-                    Quantity = ci.Quantity,
-                    CartId = ci.CartId,
-                    ProductId = ci.ProductId,
-                    Product = new ProductViewModel()
-                    {
-                        ProductId = ci.Product.ProductId,
-                        CategoryId = ci.Product.CategoryId,
-                        Name = ci.Product.Name,
-                        Price = ci.Product.Price,
-                        Description = ci.Product.Description,
-                        Stock = ci.Product.Stock,
-                        ImageUrl = ci.Product.ImageUrl,
-                    }
-                })
-                .ToListAsync();
-            
-            return View(newModel);
+            return View("Order", orderViewModel);
         }
         [HttpPost]
         public async Task<IActionResult> FinalizeOrder(OrderViewModel model)
