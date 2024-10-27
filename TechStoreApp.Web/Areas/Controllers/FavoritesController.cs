@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Claims;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Favorites;
 using TechStoreApp.Web.ViewModels.Products;
 
@@ -14,25 +15,16 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class FavoritesController : Controller
     {
         private readonly TechStoreDbContext context;
-        public FavoritesController(TechStoreDbContext _context)
+        private readonly IFavoriteService favoriteService;
+        public FavoritesController(TechStoreDbContext _context, IFavoriteService _favoriteService)
         {
+            favoriteService = _favoriteService;
             context = _context;
         }
         [HttpPost]
-        public async Task<IActionResult> AddToFavorites([FromBody] FavoriteFormModel model)
+        public async Task<JsonResult> AddToFavorites([FromBody] FavoriteFormModel model)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var newFavoriteProduct = new Favorited {
-                ProductId = model.ProductId,
-                UserId = userId,
-                FavoritedAt = DateTime.Now
-            };
-
-            await context.Favorited.AddAsync(newFavoriteProduct);
-            await context.SaveChangesAsync();
-
-            return Json(new { message = "Successfully added to favorites" });
+            return await favoriteService.AddToFavoritesAsync(model);
         }
 
         [HttpDelete]

@@ -32,6 +32,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IFavoriteService, FavoriteService>();    
             
 
 builder.Services.AddControllersWithViews();
