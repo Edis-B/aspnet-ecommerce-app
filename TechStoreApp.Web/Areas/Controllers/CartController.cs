@@ -43,52 +43,13 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpPut]
         public async Task<JsonResult> IncreaseCount([FromBody] CartFormModel model)
         {
-            var product = await context.Products
-                .FindAsync(model.ProductId);
-
-            if (product.Stock <= 0)
-            {
-                return Json(new { success = false, message = "Out of stock!" });
-            }
-
-            var userId = GetUserId();
-            var _user = await context.Users
-                .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
-                .FirstOrDefaultAsync(u => u.Id == userId);
-;
-
-			var _cartItem = _user.Cart.CartItems
-                .FirstOrDefault(ci => ci.ProductId == model.ProductId);
-
-            if (_cartItem.Quantity >= product.Stock)
-            {
-                return Json(new { success = false, newQuantity = _cartItem.Quantity, message = "Reached stock limit!" });
-            }
-
-            _cartItem.Quantity++;
-            await context.SaveChangesAsync();
-
-            return Json(new { success = true, newQuantity = _cartItem.Quantity, message = "Successfully increased items!" });
+            return await cartService.IncreaseCountAsync(model);
         }
 
         [HttpPut]
         public async Task<JsonResult> DecreaseCount([FromBody] CartFormModel model)
         {
-            var userId = GetUserId();
-            var _user = context.Users
-                .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
-                .FirstOrDefault(u => u.Id == userId);
-            
-
-            var _cartItem = _user.Cart.CartItems
-                .FirstOrDefault(ci => ci.ProductId == model.ProductId);
-
-            _cartItem.Quantity--;
-            await context.SaveChangesAsync();
-
-            return Json(new { success = true, newQuantity = _cartItem.Quantity, message = "Successfully decreased items!" });
+            return await cartService.DecreaseCountAsync(model);
         }
 
         [HttpGet]
