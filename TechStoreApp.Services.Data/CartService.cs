@@ -10,6 +10,7 @@ using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Cart;
+using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Services.Data
 {
@@ -87,9 +88,40 @@ namespace TechStoreApp.Services.Data
             return new JsonResult(new { success = true, message = "Product added to cart!" });
         }
 
-        public Task<CartViewModel> Cart()
+        public async Task<CartViewModel> GetCartItemsAsync()
         {
-            throw new NotImplementedException();
+            var userId = userService.GetUserId();
+
+            var _user = await context.Users
+                .Where(x => x.Id == userId)
+                .Include(x => x.Cart)
+                    .ThenInclude(c => c.CartItems)
+                .FirstOrDefaultAsync();
+                
+
+            var cartItems = _user?.Cart?.CartItems
+                .Select(ci => new CartItemViewModel
+                {
+                    Quantity = ci.Quantity,
+                    CartId = ci.ProductId,
+                    ProductId = ci.ProductId,
+                    Product = context.Products
+                        .Where(p => p.ProductId == ci.ProductId)
+                        .Select(p => new ProductViewModel()
+                        {
+                            ProductId = p.ProductId,
+                            ImageUrl = p.ImageUrl
+                        })
+                        .FirstOrDefault() ?? new ProductViewModel()
+                })
+                .ToList();
+
+            CartViewModel newViewModel = new()
+            {
+                CartItems = cartItems
+            };
+
+            return newViewModel;
         }
 
         public Task<JsonResult> ClearCart()

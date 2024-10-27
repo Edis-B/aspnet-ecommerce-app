@@ -36,37 +36,9 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpGet]
         public async Task<IActionResult> Cart()
         {
-            var userId = GetUserId();
-            var _user = await context.Users
-                .Where(u => u.Id == userId)
-                .Include(c => c.Cart)
-                    .ThenInclude(c => c.CartItems)
-                        .ThenInclude(ci => ci.Product)
-                .FirstOrDefaultAsync();
+            var usersCartItems = await cartService.GetCartItemsAsync();
 
-            var cartItems = _user?.Cart?.CartItems
-                .Select(ci => new CartItemViewModel
-                {
-                    Quantity = ci.Quantity,
-                    CartId = ci.ProductId,
-                    ProductId = ci.ProductId,
-                    Product = context.Products
-                        .Where(p => p.ProductId == ci.ProductId)
-                        .Select(p => new ProductViewModel()
-                        {
-                            ProductId = p.ProductId,
-                            ImageUrl = p.ImageUrl
-                        })
-                        .FirstOrDefault() ?? new ProductViewModel()
-                })
-                .ToList();
-
-            CartViewModel newViewModel = new()
-            {
-                CartItems = cartItems
-            };
-
-            return View(newViewModel);
+            return View(usersCartItems);
         }
         [HttpPut]
         public async Task<JsonResult> IncreaseCount([FromBody] CartFormModel model)

@@ -13,7 +13,7 @@ namespace TechStoreApp.Services.Data.Interfaces
     {
         Task<JsonResult> AddToCartAsync(AddToCartViewModel model);
 
-        Task<CartViewModel> Cart();
+        Task<CartViewModel> GetCartItemsAsync();
         Task<JsonResult> IncreaseCount(CartFormModel model);
         Task<JsonResult> DecreaseCount(CartFormModel model);
         Task<JsonResult> GetCartItemsCountAsync();
