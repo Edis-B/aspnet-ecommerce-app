@@ -33,11 +33,9 @@ namespace TechStoreApp.Services.Data
         {
             return httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)!;
         }
-        public async Task<ApplicationUser> GetUserByTheirIdAsync()
+        public async Task<ApplicationUser> GetUserByTheirIdAsync(string Id)
         {
-            var userId = GetUserId();
-
-            return await context.Users.FindAsync(userId);
+            return await context.Users.FindAsync(Id);
         }
 
         public async Task LogoutAsync()

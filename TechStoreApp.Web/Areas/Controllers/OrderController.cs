@@ -33,44 +33,50 @@ namespace TechStoreApp.Web.Areas.Controllers
                         .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync();
 
-            var totalCost = user.Cart.CartItems
+            var newModel = new OrderViewModel();
+
+            newModel.UserAddresses = context.Addresses
+                .Where(a => a.UserId == userId)
+                .Select(a => new AddressViewModel()
+                {
+                    Country = a.Country,
+                    City = a.City,
+                    PostalCode = a.PostalCode,
+                    Details = a.Details,
+                    Id = a.AddressId
+                })
+                .ToList();
+
+            if (user.Cart == null || !user.Cart.CartItems.Any())
+            {
+                var model = new OrderViewModel();
+
+                return View(model);
+            }
+
+            newModel.TotalCost = user.Cart.CartItems
                 .Sum(ci => ci.Product.Price * ci.Quantity);
 
-            var newModel = new OrderViewModel
-            {
-                UserAddresses = context.Addresses
-                    .Where(a => a.UserId == userId)
-                    .Select(a => new AddressViewModel()
+            newModel.CartItems = await context.CartItems
+                .Where(ci => ci.CartId == user.Cart.CartId)
+                .Select(ci => new CartItemViewModel()
+                {
+                    Quantity = ci.Quantity,
+                    CartId = ci.CartId,
+                    ProductId = ci.ProductId,
+                    Product = new ProductViewModel()
                     {
-                        Country = a.Country,
-                        City = a.City,
-                        PostalCode = a.PostalCode,
-                        Details = a.Details,
-                        Id = a.AddressId
-                    })
-                    .ToList(),
-                TotalCost = totalCost,
-                CartItems = await context.CartItems
-                    .Where(ci => ci.CartId == user.Cart.CartId)
-                    .Select(ci => new CartItemViewModel()
-                    {
-                        Quantity = ci.Quantity,
-                        CartId = ci.CartId,
-                        ProductId = ci.ProductId,
-                        Product = new ProductViewModel()
-                        {
-                            ProductId = ci.Product.ProductId,
-                            CategoryId = ci.Product.CategoryId,
-                            Name = ci.Product.Name,
-                            Price = ci.Product.Price,
-                            Description = ci.Product.Description,
-                            Stock = ci.Product.Stock,
-                            ImageUrl = ci.Product.ImageUrl,
-                        }
-                    })
-                    .ToListAsync()
-            };
-
+                        ProductId = ci.Product.ProductId,
+                        CategoryId = ci.Product.CategoryId,
+                        Name = ci.Product.Name,
+                        Price = ci.Product.Price,
+                        Description = ci.Product.Description,
+                        Stock = ci.Product.Stock,
+                        ImageUrl = ci.Product.ImageUrl,
+                    }
+                })
+                .ToListAsync();
+            
             return View(newModel);
         }
         [HttpPost]

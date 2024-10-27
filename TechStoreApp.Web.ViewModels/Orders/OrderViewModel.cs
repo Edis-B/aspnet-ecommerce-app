@@ -6,8 +6,8 @@ namespace TechStoreApp.Web.ViewModels.Orders
 {
     public class OrderViewModel
     {
-        public List<AddressViewModel> UserAddresses { get; set; }
-        public List<CartItemViewModel> CartItems { get; set; }
+        public List<AddressViewModel> UserAddresses { get; set; } = new List<AddressViewModel>();
+        public List<CartItemViewModel> CartItems { get; set; } = new List<CartItemViewModel>();
         public AddressFormModel Address { get; set; }
         public decimal TotalCost { get; set; }
     }
