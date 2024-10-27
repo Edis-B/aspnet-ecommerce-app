@@ -11,15 +11,12 @@ namespace TechStoreApp.Web.Areas.Controllers
     [AllowAnonymous]
     public class AccountController : Controller
     {
-        UserManager<ApplicationUser> _userManager;
-        SignInManager<ApplicationUser> _signInManager;
         private readonly IUserService userService;
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IUserService _userService)
+        public AccountController(IUserService _userService)
         {
             userService = _userService;
-            _signInManager = signInManager;
-            _userManager = userManager;
         }
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
@@ -27,6 +24,7 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
@@ -42,38 +40,26 @@ namespace TechStoreApp.Web.Areas.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            // To be implemented
             return View();
         }
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
         {
-            var user = CreateUser();
-            ViewData["PreviousUrl"] = returnUrl;
+            var result = await userService.RegisterAsync(model);
 
-            user.UserName = model.UserName;
-            if (model.ProfilePictureUrl == null)
+            if (result.Succeeded)
             {
-                user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
+                if (returnUrl != null)
+                {
+                    return LocalRedirect(returnUrl);
+                }
+
+                return RedirectToAction("Index", "Home");
             }
 
-            var result = await _userManager.CreateAsync(user, model.Password);
-
-            if (!result.Succeeded)
-            {
-                return View(model);
-            }
-
-            if (returnUrl != null)
-            {
-                return LocalRedirect(returnUrl);
-            }
-
-            return RedirectToAction("Index", "Home");
-        }
-
-        private ApplicationUser CreateUser()
-        {
-            return Activator.CreateInstance<ApplicationUser>();
+            // To be implemented
+            return View();
         }
     }
 }

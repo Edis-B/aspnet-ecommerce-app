@@ -58,5 +58,25 @@ namespace TechStoreApp.Services.Data
                 rememberMe,
                 shouldLockout);
         }
+
+        public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
+        {
+            var user = CreateUser();
+
+            user.UserName = model.UserName;
+            if (model.ProfilePictureUrl == null)
+            {
+                user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
+            }
+
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            return result;
+        }
+
+        private ApplicationUser CreateUser()
+        {
+            return Activator.CreateInstance<ApplicationUser>();
+        }
     }
 }

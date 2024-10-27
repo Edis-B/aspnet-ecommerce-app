@@ -16,6 +16,7 @@ namespace TechStoreApp.Services.Data.Interfaces
         string GetUserId();
         Task LogoutAsync();
         Task<SignInResult> SignInAsync(LoginViewModel model);
+        Task<IdentityResult> RegisterAsync(RegisterViewModel model);
         Task<ApplicationUser> GetUserByTheirIdAsync();
     }
 }
