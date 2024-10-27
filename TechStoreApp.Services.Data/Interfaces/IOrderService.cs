@@ -13,7 +13,7 @@ namespace TechStoreApp.Services.Data.Interfaces
     {
         Task<OrderViewModel> GetOrderViewModelAsync();
         Task<OrderFinalizedModel> GetOrderFinalizedModelAsync(OrderViewModel model);
-        Task<JsonResult> SendOrderAsync(SendOrderViewModel model);
+        Task SendOrderAsync(SendOrderViewModel model);
         Task<Address> GetAddressByIdAsync(int id);
     }
 }

@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Data;
 
@@ -43,20 +42,7 @@ public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser>
             entity.HasKey(e => new { e.CartId, e.ProductId });
         });
 
-        modelBuilder.Entity<Address>(entity =>
-        {
-            entity.HasKey(a => new { a.AddressId, a.UserId });
-        });
-
-        modelBuilder.Entity<ApplicationUser>(b =>
-        {
-            b.ToTable("MyUsers");
-        });
-
-
-
         base.OnModelCreating(modelBuilder);
-
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

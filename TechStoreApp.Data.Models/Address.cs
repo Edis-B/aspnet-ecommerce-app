@@ -14,7 +14,6 @@ namespace TechStoreApp.Data.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AddressId { get; set; }
-        [Key]
         public string UserId { get; set; }
         [Required]
         public string Country { get; set; }

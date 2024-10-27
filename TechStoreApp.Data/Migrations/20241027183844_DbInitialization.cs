@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TechStoreApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class DBInit : Migration
+    public partial class DbInitialization : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -112,7 +112,7 @@ namespace TechStoreApp.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Addresses", x => new { x.AddressId, x.UserId });
+                    table.PrimaryKey("PK_Addresses", x => x.AddressId);
                     table.ForeignKey(
                         name: "FK_Addresses_AspNetUsers_UserId",
                         column: x => x.UserId,

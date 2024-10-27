@@ -82,7 +82,6 @@ namespace TechStoreApp.Services.Data
 
             return newModel;
         }
-
         public async Task<OrderFinalizedModel> GetOrderFinalizedModelAsync(OrderViewModel model)
         {
             var userId = userService.GetUserId();
@@ -139,15 +138,68 @@ namespace TechStoreApp.Services.Data
 
             return newModel;
         }
-
-
-        public async Task<JsonResult> SendOrderAsync(SendOrderViewModel model)
+        public async Task SendOrderAsync(SendOrderViewModel model)
         {
-            throw new NotImplementedException();
+            var userId = userService.GetUserId();
+
+            var user = await context.Users
+                .Where(u => u.Id == userId)
+                .Include(u => u.Cart)
+                    .ThenInclude(c => c.CartItems)
+                        .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync();
+
+            var shippingAddressString = $"{model.Address.Country}, {model.Address.City} ({model.Address.PostalCode}), {model.Address.Details}";
+
+            var totalCost = user.Cart.CartItems
+                .Sum(ci => ci.Product.Price * ci.Quantity);
+
+            var newOrder = new Order()
+            {
+                UserId = userId,
+                OrderDate = DateTime.Now,
+                TotalAmount = totalCost,
+                ShippingAddress = shippingAddressString,
+                StatusId = 1
+            };
+
+            // Add order to database
+            await context.AddAsync(newOrder);
+            await context.SaveChangesAsync();
+
+            var cartItems = user.Cart.CartItems;
+
+            // Seed context with the order's details
+            foreach (var item in cartItems)
+            {
+                var newOrderDetail = new OrderDetail()
+                {
+                    OrderId = newOrder.OrderId,
+                    ProductId = item.ProductId,
+                    Quantity = item.Quantity,
+                    UnitPrice = item.Product.Price
+                };
+
+                var productsToDecrease = await context.Products
+                    .FindAsync(item.ProductId);
+
+                productsToDecrease.Stock = productsToDecrease.Stock -= item.Quantity;
+
+                await context.AddAsync(newOrderDetail);
+            }
+
+            // Remove cart entries for user
+            context.CartItems.RemoveRange(cartItems);
+            context.Carts.Remove(user.Cart);
+
+            await context.SaveChangesAsync();
         }
         public async Task<Address> GetAddressByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var address = await context.Addresses
+                .FindAsync(id);
+
+            return address;
         }
     }
 }

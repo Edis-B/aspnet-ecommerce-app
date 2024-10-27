@@ -167,9 +167,6 @@ namespace TechStoreApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressId"));
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -186,71 +183,18 @@ namespace TechStoreApp.Data.Migrations
                     b.Property<int>("PostalCode")
                         .HasColumnType("int");
 
-                    b.HasKey("AddressId", "UserId");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("AddressId");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Addresses");
                 });
 
-            modelBuilder.Entity("TechStoreApp.Data.Models.Cart", b =>
-                {
-                    b.Property<int>("CartId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("TechStoreApp.Data.Models.CartItem", b =>
-                {
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("CartItems");
-                });
-
-            modelBuilder.Entity("TechStoreApp.Data.Models.Category", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("CategoryId");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("TechStoreApp.Data.Models.Models.ApplicationUser", b =>
+            modelBuilder.Entity("TechStoreApp.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -318,7 +262,64 @@ namespace TechStoreApp.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("TechStoreApp.Data.Models.Models.Favorited", b =>
+            modelBuilder.Entity("TechStoreApp.Data.Models.Cart", b =>
+                {
+                    b.Property<int>("CartId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"));
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Carts");
+                });
+
+            modelBuilder.Entity("TechStoreApp.Data.Models.CartItem", b =>
+                {
+                    b.Property<int>("CartId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId", "ProductId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("CartItems");
+                });
+
+            modelBuilder.Entity("TechStoreApp.Data.Models.Category", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CategoryId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("TechStoreApp.Data.Models.Favorited", b =>
                 {
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
@@ -497,7 +498,7 @@ namespace TechStoreApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", null)
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -506,7 +507,7 @@ namespace TechStoreApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", null)
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -521,7 +522,7 @@ namespace TechStoreApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", null)
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -530,7 +531,7 @@ namespace TechStoreApp.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", null)
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -539,7 +540,7 @@ namespace TechStoreApp.Data.Migrations
 
             modelBuilder.Entity("TechStoreApp.Data.Models.Address", b =>
                 {
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", "User")
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -550,7 +551,7 @@ namespace TechStoreApp.Data.Migrations
 
             modelBuilder.Entity("TechStoreApp.Data.Models.Cart", b =>
                 {
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", "User")
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", "User")
                         .WithOne("Cart")
                         .HasForeignKey("TechStoreApp.Data.Models.Cart", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -578,7 +579,7 @@ namespace TechStoreApp.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("TechStoreApp.Data.Models.Models.Favorited", b =>
+            modelBuilder.Entity("TechStoreApp.Data.Models.Favorited", b =>
                 {
                     b.HasOne("TechStoreApp.Data.Models.Product", "Product")
                         .WithMany("Favorites")
@@ -586,7 +587,7 @@ namespace TechStoreApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", "User")
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -605,7 +606,7 @@ namespace TechStoreApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", "User")
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -654,7 +655,7 @@ namespace TechStoreApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TechStoreApp.Data.Models.Models.ApplicationUser", "User")
+                    b.HasOne("TechStoreApp.Data.Models.ApplicationUser", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -665,17 +666,7 @@ namespace TechStoreApp.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("TechStoreApp.Data.Models.Cart", b =>
-                {
-                    b.Navigation("CartItems");
-                });
-
-            modelBuilder.Entity("TechStoreApp.Data.Models.Category", b =>
-                {
-                    b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("TechStoreApp.Data.Models.Models.ApplicationUser", b =>
+            modelBuilder.Entity("TechStoreApp.Data.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Addresses");
 
@@ -684,6 +675,16 @@ namespace TechStoreApp.Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("TechStoreApp.Data.Models.Cart", b =>
+                {
+                    b.Navigation("CartItems");
+                });
+
+            modelBuilder.Entity("TechStoreApp.Data.Models.Category", b =>
+                {
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("TechStoreApp.Data.Models.Order", b =>
