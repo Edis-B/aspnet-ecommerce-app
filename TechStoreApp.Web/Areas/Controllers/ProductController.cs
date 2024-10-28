@@ -31,27 +31,9 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpPost]
         public async Task<JsonResult> CreateReview([FromBody] ReviewFormModel model)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var newReview = new Review
-            {
-                ReviewDate = DateTime.Now,
-                Rating = model.Rating,
-                ProductId = model.ProductId,
-                Comment = model.Comment,
-                UserId = userId
-
-            };
-
-            await context.AddAsync(newReview);
-            await context.SaveChangesAsync();
+            await productService.CreateAndAddReviewToDBAsync(model);
 
             return Json(new { message = "Successfully added" });
-        }
-
-        public string GetUserId()
-        {
-            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 }

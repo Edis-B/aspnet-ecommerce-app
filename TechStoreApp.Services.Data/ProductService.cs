@@ -2,9 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data;
+using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
@@ -55,8 +57,20 @@ namespace TechStoreApp.Services.Data
         }
         public async Task CreateAndAddReviewToDBAsync(ReviewFormModel model)
         {
-            throw new NotImplementedException();
-        }
+            var userId = userService.GetUserId();
 
+            var newReview = new Review
+            {
+                ReviewDate = DateTime.Now,
+                Rating = model.Rating,
+                ProductId = model.ProductId,
+                Comment = model.Comment,
+                UserId = userId
+
+            };
+
+            await context.AddAsync(newReview);
+            await context.SaveChangesAsync();
+        }
     }
 }
