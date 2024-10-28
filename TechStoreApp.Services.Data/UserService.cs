@@ -37,12 +37,10 @@ namespace TechStoreApp.Services.Data
         {
             return await context.Users.FindAsync(Id);
         }
-
         public async Task LogoutAsync()
         {
             await signInManager.SignOutAsync();
         }
-
         public async Task<SignInResult> SignInAsync(LoginViewModel model)
         {
             bool rememberMe = model.RememberMe;
@@ -56,7 +54,6 @@ namespace TechStoreApp.Services.Data
                 rememberMe,
                 shouldLockout);
         }
-
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
         {
             var user = CreateUser();
@@ -71,7 +68,6 @@ namespace TechStoreApp.Services.Data
 
             return result;
         }
-
         private ApplicationUser CreateUser()
         {
             return Activator.CreateInstance<ApplicationUser>();
