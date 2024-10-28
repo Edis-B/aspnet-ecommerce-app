@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TechStoreApp.Data;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Web.Areas.Controllers
@@ -9,24 +10,19 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class ProfileController : Controller
     {
         private readonly TechStoreDbContext context;
-        public ProfileController(TechStoreDbContext _context)
+        private readonly IProfileService profileService;
+
+        public ProfileController(TechStoreDbContext _context, IProfileService _profileService)
         {
-            this.context = _context;
+            context = _context;
+            profileService = _profileService;
         }
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var model = await  profileService.GetUserProfilePictureUrlAsync();
 
-            var user = await context.Users
-                .Where(u => u.Id == userId)
-                .Select(u => new ProfileViewModel()
-                {
-                    ProfilePictureUrl = u.ProfilePictureUrl,
-                    
-                })
-                .FirstOrDefaultAsync();
-
-            return View("Index", user);
+            return View("Index", model);
         }
     }
 }

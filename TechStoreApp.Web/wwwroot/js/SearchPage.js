@@ -13,27 +13,16 @@ async function categoriesMenu() {
     const model = getModel();
 
     categories.forEach(optionA => {
-        const categoryModel = model.category;
+        const currentCategory = model.category;
+        const currentQuery = model.query ? model.query : '';
 
-        if (categoryModel && optionA.id == categoryModel) {
+        if (currentCategory && optionA.id == currentCategory) {
             optionA.style.backgroundColor = 'white';
         }
 
         optionA.addEventListener('click', async () => {
-            const response = await fetch(`/Search/Search`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Category: optionA.id,
-                    Query: model.query
-                })
-            });
-
-            const data = await response.json();
-
-            window.location.href = data.redirectUrl;
+            const newCategory = optionA.id;
+            window.location.href = `/Search/Search?Category=${newCategory}&Query=${currentQuery}`;
         });
 
     });
