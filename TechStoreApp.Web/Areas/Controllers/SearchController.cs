@@ -10,11 +10,10 @@ namespace TechStoreApp.Web.Areas.Controllers
 {
     public class SearchController : Controller
     {
-        private readonly TechStoreDbContext context;
 
-        public SearchController(TechStoreDbContext _context)
+        public SearchController()
         {
-            context = _context;
+
         }
 
         [HttpGet]
@@ -28,19 +27,6 @@ namespace TechStoreApp.Web.Areas.Controllers
             };
 
             return View(model);
-        }
-
-        [HttpPost]
-        public IActionResult Search([FromBody] SearchFormModel model)
-        {
-            var searchModel = new SearchFormModel
-            {
-                Category = model.Category,
-                CurrentPage = model.CurrentPage,
-                Query = model.Query
-            };
-
-            return View(searchModel);
         }
     }
 }

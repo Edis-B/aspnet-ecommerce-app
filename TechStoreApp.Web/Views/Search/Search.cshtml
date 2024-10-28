@@ -1,7 +1,7 @@
 ﻿@using TechStoreApp.Web.ViewModels.Search
 @model SearchFormModel
 
-<link rel="stylesheet" href="~/css/SearchPage.css"/>
+<link rel="stylesheet" href="~/css/search-page.css"/>
 
 <div class="whole-SearchPage-body">
     <div class="filters-wrap-div">
@@ -37,7 +37,7 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/SearchPage.js"></script>
+    <script src="~/js/search-page.js"></script>
     <script>
         function getModel() {
             return @Html.Raw(Json.Serialize(Model));

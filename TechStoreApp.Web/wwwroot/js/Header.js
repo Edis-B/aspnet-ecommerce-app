@@ -28,23 +28,9 @@ function menuInitialization() {
 
     categories.forEach(category => {
         category.addEventListener('click', async () => {
-
             let categoryString = category.id;
 
-            const response = await fetch(`/Search/Search`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    Category: categoryString
-                })
-            });
-
-            const data = await response.json();
-
-            window.location.href = data.redirectUrl;
-
+            window.location.href = `/Search/Search?Category=${categoryString}`;
         });
     });
 }
