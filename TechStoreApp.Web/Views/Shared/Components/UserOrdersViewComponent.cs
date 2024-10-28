@@ -16,18 +16,29 @@ namespace TechStoreApp.Web.Views.Shared.Components
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var userId =  HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var orders = await context.Orders
                 .Where(o => o.UserId == userId)
-                .Include(o => o.OrderDetails)
-                    .ThenInclude(od => od.Product)
+                .Select(o => new MyOrderViewModel()
+                {
+                    OrderId = o.OrderId,
+                    OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
+                    OrderDetails = o.OrderDetails
+                        .Select(od => new OrderDetailViewModel()
+                        {
+                            ProductImageUrl = od.Product.ImageUrl,
+                            ProductName = od.Product.Name,
+                            Quantity = od.Quantity,
+                            UnitPrice = od.UnitPrice
+                        })
+                        .ToList(),
+                    ShippingAddress = o.ShippingAddress
+                })
                 .ToListAsync();
 
-            var orderModel = new DisplayOrderViewModel()
-            {
-                Orders = orders
-            };
+            var orderModel = new DisplayOrderPageViewModel();
+            orderModel.Orders = orders;
 
             return View("UserOrders", orderModel);
         }

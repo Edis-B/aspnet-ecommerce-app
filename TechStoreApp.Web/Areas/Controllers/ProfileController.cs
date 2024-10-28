@@ -2,25 +2,31 @@
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TechStoreApp.Data;
+using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Web.Areas.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly TechStoreDbContext _context;
-        public ProfileController(TechStoreDbContext context)
+        private readonly TechStoreDbContext context;
+        public ProfileController(TechStoreDbContext _context)
         {
-            _context = context;
+            this.context = _context;
         }
         public async Task<IActionResult> Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.Users
+
+            var user = await context.Users
                 .Where(u => u.Id == userId)
-                .Include(u => u.Orders)
+                .Select(u => new ProfileViewModel()
+                {
+                    ProfilePictureUrl = u.ProfilePictureUrl,
+                    
+                })
                 .FirstOrDefaultAsync();
 
-            return View(user);
+            return View("Index", user);
         }
     }
 }

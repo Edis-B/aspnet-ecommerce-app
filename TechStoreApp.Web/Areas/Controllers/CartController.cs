@@ -18,13 +18,11 @@ namespace TechStoreApp.Web.Areas.Controllers
     [Authorize]
     public class CartController : Controller
     {
-        private readonly TechStoreDbContext context;
         private readonly ICartService cartService;
 
-        public CartController(TechStoreDbContext _context, ICartService _cartService)
+        public CartController(ICartService _cartService)
         {
             cartService = _cartService;
-            context = _context;
         }
         
         [HttpPost]

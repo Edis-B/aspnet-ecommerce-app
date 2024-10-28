@@ -14,12 +14,10 @@ namespace TechStoreApp.Web.Areas.Controllers
     [Authorize]
     public class FavoritesController : Controller
     {
-        private readonly TechStoreDbContext context;
         private readonly IFavoriteService favoriteService;
-        public FavoritesController(TechStoreDbContext _context, IFavoriteService _favoriteService)
+        public FavoritesController(IFavoriteService _favoriteService)
         {
             favoriteService = _favoriteService;
-            context = _context;
         }
         [HttpPost]
         public async Task<JsonResult> AddToFavorites([FromBody] FavoriteFormModel model)

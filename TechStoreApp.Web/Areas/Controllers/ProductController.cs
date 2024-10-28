@@ -14,12 +14,10 @@ namespace TechStoreApp.Web.Areas.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly TechStoreDbContext context;
         private readonly IProductService productService;
-        public ProductController(TechStoreDbContext _context, IProductService _productService)
+        public ProductController(IProductService _productService)
         {
             productService = _productService;
-            context = _context;
         }
 
         public async Task<IActionResult> RedirectToDetails(int productId)

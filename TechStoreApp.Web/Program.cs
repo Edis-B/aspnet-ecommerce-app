@@ -34,6 +34,7 @@ builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IFavoriteService, FavoriteService>();    
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IProductService, ProductService>();
             
 
 builder.Services.AddControllersWithViews();

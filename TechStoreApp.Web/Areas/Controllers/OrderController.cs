@@ -17,12 +17,10 @@ namespace TechStoreApp.Web.Areas.Controllers
     [Authorize]
     public class OrderController : Controller
     {
-        private readonly TechStoreDbContext context;
         private readonly IOrderService orderService;
-        public OrderController(TechStoreDbContext _context, IOrderService _orderService)
+        public OrderController(IOrderService _orderService)
         {
             orderService = _orderService;
-            context = _context;
         }
         [HttpGet]
         public async Task<IActionResult> Order()

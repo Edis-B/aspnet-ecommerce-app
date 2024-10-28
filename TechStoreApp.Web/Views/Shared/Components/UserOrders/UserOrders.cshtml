@@ -1,5 +1,5 @@
 ﻿@using TechStoreApp.Web.ViewModels.Orders
-@model DisplayOrderViewModel
+@model DisplayOrderPageViewModel
 
 @foreach (var order in Model.Orders)
 {
@@ -14,8 +14,8 @@
 		@foreach (var orderDetail in order.OrderDetails)
 		{
 			<div class="product-cell-div">
-				<img class="product-image" src="@orderDetail.Product.ImageUrl" />
-				<p>@orderDetail.Product.Name</p>
+				<img class="product-image" src="@orderDetail.ProductImageUrl" />
+				<p>@orderDetail.ProductName</p>
 				<p>@orderDetail.Quantity x $@orderDetail.UnitPrice</p>
 				
 			</div>

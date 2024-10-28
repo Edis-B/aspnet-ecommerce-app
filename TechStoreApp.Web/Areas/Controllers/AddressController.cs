@@ -9,12 +9,10 @@ namespace TechStoreApp.Web.Areas.Controllers
 {
     public class AddressController : Controller
     {
-        private readonly TechStoreDbContext context;
         private readonly IAddressService addressService;
-        public AddressController(TechStoreDbContext _context, IAddressService _addressService)
+        public AddressController(IAddressService _addressService)
         {
             addressService = _addressService;
-            context = _context;
         }
         [HttpPost]
         public async Task<IActionResult> SaveAddress(OrderViewModel model)
