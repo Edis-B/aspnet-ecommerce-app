@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Orders;
 
@@ -14,13 +15,13 @@ namespace TechStoreApp.Services.Data
 {
     public class AddressService : IAddressService
     {
-        private readonly TechStoreDbContext context;
+        private readonly IRepository<Address, int> addressRepository;
         private readonly IUserService userService;
-        public AddressService(TechStoreDbContext _context, IUserService _userService)
+        public AddressService(IUserService _userService,
+            IRepository<Address, int> _addressRepository)
         {
-            context = _context;
             userService = _userService;
-
+            addressRepository = _addressRepository;
         }
         public async Task SaveAddressAsync(OrderViewModel model)
         {
@@ -35,8 +36,7 @@ namespace TechStoreApp.Services.Data
                 PostalCode = model.Address.PostalCode,
             };
 
-            await context.AddAsync(newAddress);
-            await context.SaveChangesAsync();
+            await addressRepository.AddAsync(newAddress);
         }
     }
 }

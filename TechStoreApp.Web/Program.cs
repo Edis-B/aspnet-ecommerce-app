@@ -5,6 +5,8 @@ using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Services.Data;
+using TechStoreApp.Data.Repository;
+using TechStoreApp.Data.Repository.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +38,18 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
-            
+
+builder.Services.AddScoped<IRepository<Address, int>, Repository<Address, int>>();
+builder.Services.AddScoped<IRepository<ApplicationUser, Guid>, Repository<ApplicationUser, Guid>>();
+builder.Services.AddScoped<IRepository<Cart, int>, Repository<Cart, int>>();
+builder.Services.AddScoped<IRepository<CartItem, object>, Repository<CartItem, object>>();
+builder.Services.AddScoped<IRepository<Category, int>, Repository<Category, int>>();
+builder.Services.AddScoped<IRepository<Favorited, int>, Repository<Favorited, int>>();
+builder.Services.AddScoped<IRepository<Order, int>, Repository<Order, int>>();
+builder.Services.AddScoped<IRepository<OrderDetail, int>, Repository<OrderDetail, int>>();
+builder.Services.AddScoped<IRepository<Product, int>, Repository<Product, int>>();
+builder.Services.AddScoped<IRepository<Review, int>, Repository<Review, int>>();
+builder.Services.AddScoped<IRepository<Status, int>, Repository<Status, int>>();
 
 builder.Services.AddControllersWithViews();
 
