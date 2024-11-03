@@ -212,18 +212,20 @@ namespace TechStoreApp.Services.Data
         public async Task<JsonResult> RemoveFromCartAsync(RemoveFromCartViewModel model)
         {
             var userId = userService.GetUserId();
+
             var cartItem = await cartItemRepository
                 .GetAllAttached()
                 .Where(ci => ci.ProductId == model.ProductId)
                 .Where(ci => ci.Cart.UserId == userId)
                 .FirstOrDefaultAsync();
 
+            // Defensive check
             if (cartItem == null) 
             {
                 return new JsonResult(new { success = true, message = "Item is not in cart!" });
             }
 
-            cartItemRepository.DeleteAsync(new { cartItem.CartId, cartItem.ProductId });
+            await cartItemRepository.DeleteAsync(cartItem.CartId, cartItem.ProductId);
 
             return new JsonResult(new { success = true, message = "Successfully removed item from cart!" });
         }

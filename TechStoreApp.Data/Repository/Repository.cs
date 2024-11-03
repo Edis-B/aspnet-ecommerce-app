@@ -38,10 +38,19 @@ namespace TechStoreApp.Data.Repository
         {
             return dbSet.Find(id);
         }
+        public TType GetById(params TId[] id)
+        {
+            return dbSet.Find(id[0], id[1]);
+        }
 
         public async Task<TType> GetByIdAsync(TId id)
         {
             return await dbSet.FindAsync(id);
+        }
+
+        public async Task<TType> GetByIdAsync(params TId[] id)
+        {
+            return await dbSet.FindAsync(id[0], id[1]);
         }
 
         public void Add(TType item)
@@ -70,7 +79,20 @@ namespace TechStoreApp.Data.Repository
 
             return true;
         }
+        public bool Delete(params TId[] id)
+        {
+            TType entity = GetById(id[0], id[1]);
 
+            if (entity == null)
+            {
+                return false;
+            }
+
+            dbSet.Remove(entity);
+            context.SaveChanges();
+
+            return true;
+        }
         public async Task<bool> DeleteAsync(TId id)
         {
             TType entity = await GetByIdAsync(id);
@@ -85,7 +107,20 @@ namespace TechStoreApp.Data.Repository
 
             return true;
         }
+        public async Task<bool> DeleteAsync(params TId[] id)
+        {
+            TType entity = await GetByIdAsync(id[0], id[1]);
 
+            if (entity == null)
+            {
+                return false;
+            }
+
+            dbSet.Remove(entity);
+            await context.SaveChangesAsync();
+
+            return true;
+        }
         public bool Update(TType item)
         {
             try
@@ -103,7 +138,6 @@ namespace TechStoreApp.Data.Repository
                 return false;
             }
         }
-
         public async Task<bool> UpdateAsync(TType item)
         {
             try
@@ -120,5 +154,8 @@ namespace TechStoreApp.Data.Repository
                 return false;
             }
         }
+
+
+
     }
 }

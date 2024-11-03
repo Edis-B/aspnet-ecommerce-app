@@ -44,7 +44,7 @@ builder.Services.AddScoped<IRepository<ApplicationUser, Guid>, Repository<Applic
 builder.Services.AddScoped<IRepository<Cart, int>, Repository<Cart, int>>();
 builder.Services.AddScoped<IRepository<CartItem, object>, Repository<CartItem, object>>();
 builder.Services.AddScoped<IRepository<Category, int>, Repository<Category, int>>();
-builder.Services.AddScoped<IRepository<Favorited, int>, Repository<Favorited, int>>();
+builder.Services.AddScoped<IRepository<Favorited, object>, Repository<Favorited, object>>();
 builder.Services.AddScoped<IRepository<Order, int>, Repository<Order, int>>();
 builder.Services.AddScoped<IRepository<OrderDetail, int>, Repository<OrderDetail, int>>();
 builder.Services.AddScoped<IRepository<Product, int>, Repository<Product, int>>();

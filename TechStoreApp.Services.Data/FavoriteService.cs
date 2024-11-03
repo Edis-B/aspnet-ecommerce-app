@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Favorites;
 using TechStoreApp.Web.ViewModels.Products;
@@ -16,13 +17,13 @@ namespace TechStoreApp.Services.Data
 {
     public class FavoriteService : IFavoriteService
     {
-        private readonly TechStoreDbContext context;
+        private readonly IRepository<Favorited, object> favoritedRepository;
         private readonly IUserService userService;
-        public FavoriteService(TechStoreDbContext _context, IUserService _userService)
+        public FavoriteService(IRepository<Favorited, object> _favoritedRepository,
+            IUserService _userService)
         {
-            context = _context;
+            favoritedRepository = _favoritedRepository;
             userService = _userService;
-
         }
         public async Task<JsonResult> AddToFavoritesAsync(FavoriteFormModel model)
         {
@@ -35,8 +36,7 @@ namespace TechStoreApp.Services.Data
                 FavoritedAt = DateTime.Now
             };
 
-            await context.Favorited.AddAsync(newFavoriteProduct);
-            await context.SaveChangesAsync();
+            await favoritedRepository.AddAsync(newFavoriteProduct);
 
             return new JsonResult(new { message = "Successfully added to favorites" });
         }
@@ -44,12 +44,7 @@ namespace TechStoreApp.Services.Data
         {
             string userId = userService.GetUserId();
 
-            var toBeRemoved = await context.Favorited
-                .FirstOrDefaultAsync(f => f.UserId == userId && f.ProductId == model.ProductId);
-
-            context.Favorited.Remove(toBeRemoved);
-
-            await context.SaveChangesAsync();
+            await favoritedRepository.DeleteAsync(userId, model.ProductId);
 
             return new JsonResult(new { message = "Successfully removed from favorites" });
         }
@@ -59,7 +54,8 @@ namespace TechStoreApp.Services.Data
 
             var model = new FavoriteViewModel();
 
-            model.Products = await context.Favorited
+            model.Products = await favoritedRepository 
+                .GetAllAttached()
                 .Where(f => f.UserId == userId)
                 .Select(f => new ProductViewModel
                 {
