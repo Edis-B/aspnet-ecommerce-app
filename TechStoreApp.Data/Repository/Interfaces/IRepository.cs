@@ -17,6 +17,8 @@ namespace TechStoreApp.Data.Repository.Interfaces
         IQueryable<TType> GetAllAttached();
         void Add(TType item);
         Task AddAsync(TType item);
+        void AddRange(IEnumerable<TType> item);
+        Task AddRangeAsync(IEnumerable<TType> item);
         bool Delete(TId id);
         bool Delete(params TId[] id);
         Task<bool> DeleteAsync(TId id);

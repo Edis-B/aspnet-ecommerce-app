@@ -1,6 +1,0 @@
-﻿public class SearchCategoryViewModel
-{
-    public string CategoryId { get; set; }
-    public string Query { get; set; }
-    public int CurrentPage { get; set; } = 1; // Default to 1 if not provided
-}

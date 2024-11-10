@@ -19,7 +19,6 @@ builder.Services.AddDbContext<TechStoreDbContext>(options =>
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = false;
@@ -27,6 +26,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 		options.Password.RequireNonAlphanumeric = false;
 		options.Password.RequireUppercase = false;
 	})
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<TechStoreDbContext>();
 
 builder.Services.AddHttpContextAccessor();
@@ -51,6 +51,8 @@ builder.Services.AddScoped<IRepository<Product, int>, Repository<Product, int>>(
 builder.Services.AddScoped<IRepository<Review, int>, Repository<Review, int>>();
 builder.Services.AddScoped<IRepository<Status, int>, Repository<Status, int>>();
 
+builder.Services.AddScoped<ISeedDataService, SeedDataService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -70,10 +72,14 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seedDataService = scope.ServiceProvider.GetRequiredService<ISeedDataService>();
+    await seedDataService.SeedAllData();
+}
 
 app.MapControllerRoute(
     name: "default",

@@ -10,6 +10,7 @@ function menuInitialization() {
 
     burgerButton.addEventListener('change', () => {
         let burgerBackground = burgerButton.parentNode;
+
         // Add animations for burger menu
         if (burgerButton.checked) {
             popupCategories.style.display = 'block';

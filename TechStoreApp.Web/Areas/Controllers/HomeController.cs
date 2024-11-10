@@ -10,33 +10,14 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly TechStoreDbContext context;
 
-        public HomeController(ILogger<HomeController> logger, TechStoreDbContext context)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            this.context = context;
         }
 
         public IActionResult Index()
         {
-            if (!context.Categories.Any())
-            {
-                context.Categories.AddRange(SeedDataCategories.GetCategories());
-                context.SaveChanges();
-
-            }
-            if (!context.Products.Any())
-            {
-                context.Products.AddRange(SeedDataProducts.GetProducts());
-                context.SaveChanges();
-            }
-            if (!context.Statuses.Any())
-            {
-                context.Statuses.AddRange(SeedDataStatuses.GetStatuses());
-                context.SaveChanges();
-            }
-
             return View();
         }
 

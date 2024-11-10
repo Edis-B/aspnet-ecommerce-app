@@ -64,6 +64,17 @@ namespace TechStoreApp.Data.Repository
             await dbSet.AddAsync(item);
             await context.SaveChangesAsync();
         }
+        public void AddRange(IEnumerable<TType> item)
+        {
+            dbSet.AddRange(item);
+            context.SaveChanges();
+        }
+
+        public async Task AddRangeAsync(IEnumerable<TType> item)
+        {
+            await dbSet.AddRangeAsync(item);
+            await context.SaveChangesAsync();
+        }
 
         public bool Delete(TId id)
         {
@@ -154,7 +165,6 @@ namespace TechStoreApp.Data.Repository
                 return false;
             }
         }
-
 
 
     }

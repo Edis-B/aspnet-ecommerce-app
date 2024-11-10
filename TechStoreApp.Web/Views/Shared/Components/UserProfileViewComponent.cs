@@ -6,7 +6,7 @@ using TechStoreApp.Data;
 using TechStoreApp.Web.ViewModels.Header;
 using TechStoreApp.Web.ViewModels.User;
 
-namespace TechStoreApp.Web.Views.Product
+namespace TechStoreApp.Web.Views.Shared.Components
 {
     public class UserProfileViewComponent : ViewComponent
     {
@@ -29,8 +29,8 @@ namespace TechStoreApp.Web.Views.Product
                 })
                 .FirstOrDefaultAsync();
 
-            var userModel = new UserModel() 
-            { 
+            var userModel = new UserModel()
+            {
                 User = user
             };
 

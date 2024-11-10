@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using TechStoreApp.Data.Models;
-using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Data.Models;
 

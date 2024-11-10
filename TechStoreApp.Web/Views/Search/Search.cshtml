@@ -8,7 +8,7 @@
 
         <form id="search-in-category-form" asp-action="Search" asp-controller="Search" method="get">
             <input type="hidden" asp-for="@Model.Category" value="@Model.Category"/>
-            <input type="text" asp-for="@Model.Query" placeholder="Search in category..."/>
+            <input type="text"  asp-for="@Model.Query" placeholder="Search in category..."/>
 
             <button type="submit">
                 <img src="~/images/magnifying-glass-icon-11.png" />
@@ -16,19 +16,23 @@
         </form>
 
         <div id="category-filter-div">
-            <ul>
-                <li><a id="All">All products</a></li>
-                <li><a id="Prebuilt Configuration">Configured Systems</a></li>
-                <li><a id="Graphics Card">Graphics Cards</a></li>
-                <li><a id="Processor">Processors</a></li>
-                <li><a id="Processor Cooler">CPU Coolers</a></li>
-                <li><a id="PC Case">PC Cases</a></li>
-                <li><a id="Motherboard">Motherboards</a></li>
-                <li><a id="RAM">RAM sticks</a></li>
-                <li><a id="SSD">Solid state drives (SSDs)</a></li>
-                <li><a id="HDD">Hard disk drives (HDDs)</a></li>
-                <li><a id="Powersupply">Power Supplies</a></li>
-            </ul>
+            <form id="filter-by-category" asp-action="Search" asp-controller="Search" method="get">
+                <input type="hidden" asp-for="@Model.Query" value="@Model.Query" />
+
+                <ul>
+                    <li><button type="submit" name="Category" value="All">All products</button></li>
+                    <li><button type="submit" name="Category" value="Prebuilt Configuration">Configured Systems</button></li>
+                    <li><button type="submit" name="Category" value="Graphics Card">Graphics Cards</button></li>
+                    <li><button type="submit" name="Category" value="Processor">Processors</button></li>
+                    <li><button type="submit" name="Category" value="Processor Cooler">CPU Coolers</button></li>
+                    <li><button type="submit" name="Category" value="PC Case">PC Cases</button></li>
+                    <li><button type="submit" name="Category" value="Motherboard">Motherboards</button></li>
+                    <li><button type="submit" name="Category" value="RAM">RAM sticks</button></li>
+                    <li><button type="submit" name="Category" value="SSD">Solid state drives (SSDs)</button></li>
+                    <li><button type="submit" name="Category" value="HDD">Hard disk drives (HDDs)</button></li>
+                    <li><button type="submit" name="Category" value="Powersupply">Power Supplies</button></li>
+                </ul>
+            </form>
         </div>
     </div>
     <div class="products-wrap-div">

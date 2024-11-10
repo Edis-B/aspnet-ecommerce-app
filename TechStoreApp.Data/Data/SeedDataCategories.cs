@@ -11,7 +11,6 @@ namespace TechStoreApp.Data.Data
     {
         public static List<Category> GetCategories()
         {
-
             return new List<Category>
             {
                 new Category { Description = "Prebuilt Configuration" },
