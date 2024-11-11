@@ -18,15 +18,21 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<Product, int> productRepository;
         private readonly IRepository<Status, int> statusRepository;
         private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
+        private readonly IUserService userService;
         public SeedDataService(IRepository<Category, int> _categoryRepository,
             IRepository<Product, int> _productRepository,
             IRepository<Status, int> _statusRepository,
-            RoleManager<IdentityRole> _roleManager)
+            RoleManager<IdentityRole> _roleManager,
+            UserManager<ApplicationUser> _userManager,
+            IUserService _userService)
         {
             categoryRepository = _categoryRepository;
             productRepository = _productRepository;
             statusRepository = _statusRepository;
             roleManager = _roleManager;
+            userManager = _userManager;
+            userService = _userService;
         }
         public async Task SeedAllData()
         {
@@ -34,6 +40,7 @@ namespace TechStoreApp.Services.Data
             await SeedCategories();
             await SeedProducts();
             await SeedStatuses();
+            await SeedAccounts();
         }
         public async Task SeedRoles()
         {
@@ -41,15 +48,31 @@ namespace TechStoreApp.Services.Data
             {
                 var roles = new List<IdentityRole>
                 {
-                    new IdentityRole { Name = "Admin", NormalizedName = "ADMIN" },
-                    new IdentityRole { Name = "User", NormalizedName = "USER" },
-                    new IdentityRole { Name = "Moderator", NormalizedName = "MODERATOR" }
+                    new IdentityRole { Name = "Admin" },
+                    new IdentityRole { Name = "User" },
+                    new IdentityRole { Name = "Moderator" }
                 };
 
                 foreach (var role in roles)
                 {
                     await roleManager.CreateAsync(role);
                 }
+            }
+        }
+        public async Task SeedAccounts()
+        {
+            var Admins = await userManager.GetUsersInRoleAsync("Admin");
+
+            if (!Admins.Any())
+            {
+                var user = userService.CreateUser();
+
+                await userManager.AddToRoleAsync(user, "Admin");
+
+                user.UserName = "Administrator";
+                user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
+
+                var result = await userManager.CreateAsync(user, "Administrator");
             }
         }
 
@@ -76,5 +99,6 @@ namespace TechStoreApp.Services.Data
                 statusRepository.AddRangeAsync(SeedDataStatuses.GetStatuses());
             }
         }
+
     }
 }

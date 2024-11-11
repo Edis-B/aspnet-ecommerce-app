@@ -12,11 +12,15 @@ namespace TechStoreApp.Data.Models
     {
         [Key]
         public string UserId { get; set; }
+
         [Key]
         public int ProductId { get; set; }
+
         public DateTime FavoritedAt { get; set; }
+
         [ForeignKey(nameof(UserId))]
         public virtual ApplicationUser User { get; set; }
+
         [ForeignKey(nameof(ProductId))]
         public virtual Product Product { get; set; }
     }

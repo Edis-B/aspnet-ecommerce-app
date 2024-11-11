@@ -13,6 +13,7 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task SeedProducts();
         Task SeedCategories();
         Task SeedStatuses();
+        Task SeedAccounts();
 
     }
 }

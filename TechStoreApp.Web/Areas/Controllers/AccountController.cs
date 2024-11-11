@@ -18,6 +18,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             await userService.LogoutAsync();
@@ -26,6 +27,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model, string returnUrl)
         {
             var signInStatus = await userService.SignInAsync(model);
@@ -44,7 +46,8 @@ namespace TechStoreApp.Web.Areas.Controllers
             return View();
         }
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
         {
             var result = await userService.RegisterAsync(model);
 

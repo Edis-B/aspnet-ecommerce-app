@@ -18,5 +18,6 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<SignInResult> SignInAsync(LoginViewModel model);
         Task<IdentityResult> RegisterAsync(RegisterViewModel model);
         Task<ApplicationUser> GetUserByTheirIdAsync(string Id);
+        ApplicationUser CreateUser();
     }
 }

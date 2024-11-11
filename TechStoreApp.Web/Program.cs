@@ -91,6 +91,11 @@ app.MapControllerRoute(
     pattern: "Product/RedirectToDetails/{productId:int}"
 );
 
+app.MapControllerRoute(
+    name: "editProductDetails",
+    pattern: "Product/Edit/{productId:int}/Edit"
+);
+
 app.MapRazorPages();
 
 app.Run();

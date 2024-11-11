@@ -11,6 +11,7 @@ public partial class Cart
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int CartId { get; set; }
+
     [Required]
     public string UserId { get; set; }
 

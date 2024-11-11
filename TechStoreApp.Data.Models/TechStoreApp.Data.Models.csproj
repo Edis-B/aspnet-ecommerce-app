@@ -26,4 +26,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TechStoreApp.Common\TechStoreApp.Common.csproj" />
+  </ItemGroup>
+
 </Project>

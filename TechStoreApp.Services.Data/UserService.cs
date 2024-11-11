@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.User;
 
@@ -18,15 +19,17 @@ namespace TechStoreApp.Services.Data
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
-        private readonly TechStoreDbContext context;
+        private readonly IRepository<ApplicationUser, Guid> userRepository;
 
-        public UserService(IHttpContextAccessor _httpContextAccessor, TechStoreDbContext _context,
-            SignInManager<ApplicationUser> _signInManager, UserManager<ApplicationUser> _userManager)
+        public UserService(IHttpContextAccessor _httpContextAccessor,
+            SignInManager<ApplicationUser> _signInManager, 
+            UserManager<ApplicationUser> _userManager,
+            IRepository<ApplicationUser, Guid> _userRepository)
         {
             signInManager = _signInManager;
             userManager = _userManager;
             httpContextAccessor = _httpContextAccessor;
-            context = _context;
+            userRepository = _userRepository;
         }
 
         public string GetUserId()
@@ -35,7 +38,8 @@ namespace TechStoreApp.Services.Data
         }
         public async Task<ApplicationUser> GetUserByTheirIdAsync(string Id)
         {
-            return await context.Users.FindAsync(Id);
+            return await userRepository
+                .GetByIdAsync(Guid.Parse(Id))!;
         }
         public async Task LogoutAsync()
         {
@@ -57,6 +61,7 @@ namespace TechStoreApp.Services.Data
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
         {
             var user = CreateUser();
+            await userManager.AddToRoleAsync(user, "User");
 
             user.UserName = model.UserName;
             if (model.ProfilePictureUrl == null)
@@ -68,7 +73,7 @@ namespace TechStoreApp.Services.Data
 
             return result;
         }
-        private ApplicationUser CreateUser()
+        public ApplicationUser CreateUser()
         {
             return Activator.CreateInstance<ApplicationUser>();
         }
