@@ -8,12 +8,11 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface ISeedDataService
     {
-        Task SeedAllData();
+        Task SeedAllMissingData();
         Task SeedRoles();
-        Task SeedProducts();
-        Task SeedCategories();
-        Task SeedStatuses();
         Task SeedAccounts();
-
-    }
+        Task SeedCategories();
+        Task SeedProducts();
+        Task SeedStatuses();
+    } 
 }

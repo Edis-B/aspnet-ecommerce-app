@@ -12,7 +12,6 @@ namespace TechStoreApp.Services.Data.Interfaces
     public interface ICartService
     {
         Task<JsonResult> AddToCartAsync(AddToCartViewModel model);
-
         Task<CartViewModel> GetCartItemsAsync();
         Task<JsonResult> IncreaseCountAsync(CartFormModel model);
         Task<JsonResult> DecreaseCountAsync(CartFormModel model);

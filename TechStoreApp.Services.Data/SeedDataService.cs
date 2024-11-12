@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechStoreApp.Data.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Common;
 
 namespace TechStoreApp.Services.Data
 {
@@ -34,13 +29,14 @@ namespace TechStoreApp.Services.Data
             userManager = _userManager;
             userService = _userService;
         }
-        public async Task SeedAllData()
+        public async Task SeedAllMissingData()
         {
+            // awaiting disrupts db flow and breaks the data
             await SeedRoles();
+            await SeedAccounts();
             await SeedCategories();
             await SeedProducts();
             await SeedStatuses();
-            await SeedAccounts();
         }
         public async Task SeedRoles()
         {
@@ -48,7 +44,7 @@ namespace TechStoreApp.Services.Data
             {
                 var roles = new List<IdentityRole>
                 {
-                    new IdentityRole { Name = "Admin" },
+                    new IdentityRole { Name = GeneralConstraints.AdminRoleName },
                     new IdentityRole { Name = "User" },
                     new IdentityRole { Name = "Moderator" }
                 };
@@ -61,13 +57,13 @@ namespace TechStoreApp.Services.Data
         }
         public async Task SeedAccounts()
         {
-            var Admins = await userManager.GetUsersInRoleAsync("Admin");
+            var Admins = await userManager.GetUsersInRoleAsync(GeneralConstraints.AdminRoleName);
 
             if (!Admins.Any())
             {
                 var user = userService.CreateUser();
 
-                await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.AddToRoleAsync(user, GeneralConstraints.AdminRoleName);
 
                 user.UserName = "Administrator";
                 user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
@@ -80,7 +76,7 @@ namespace TechStoreApp.Services.Data
         {
             if (!categoryRepository.GetAll().Any())
             {
-                categoryRepository.AddRangeAsync(SeedDataCategories.GetCategories());
+                await categoryRepository.AddRangeAsync(SeedDataCategories.GetCategories());
             }
         }
 
@@ -88,7 +84,7 @@ namespace TechStoreApp.Services.Data
         {
             if (!productRepository.GetAll().Any())
             {
-                productRepository.AddRangeAsync(SeedDataProducts.GetProducts());
+                await productRepository.AddRangeAsync(SeedDataProducts.GetProducts());
             }
         }
 
@@ -96,7 +92,7 @@ namespace TechStoreApp.Services.Data
         {
             if (!statusRepository.GetAll().Any())
             {
-                statusRepository.AddRangeAsync(SeedDataStatuses.GetStatuses());
+                await statusRepository.AddRangeAsync(SeedDataStatuses.GetStatuses());
             }
         }
 

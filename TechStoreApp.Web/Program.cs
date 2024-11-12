@@ -78,22 +78,12 @@ app.UseAuthorization();
 using (var scope = app.Services.CreateScope())
 {
     var seedDataService = scope.ServiceProvider.GetRequiredService<ISeedDataService>();
-    await seedDataService.SeedAllData();
+    await seedDataService.SeedAllMissingData();
 }
 
 app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
-);
-
-app.MapControllerRoute(
-    name: "productDetails",
-    pattern: "Product/RedirectToDetails/{productId:int}"
-);
-
-app.MapControllerRoute(
-    name: "editProductDetails",
-    pattern: "Product/Edit/{productId:int}/Edit"
+    name: "Default",
+    pattern: "{controller=Home}/{action=Index}"
 );
 
 app.MapRazorPages();

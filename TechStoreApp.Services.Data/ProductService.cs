@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.ViewModels.Category;
 using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
 
@@ -15,19 +18,27 @@ namespace TechStoreApp.Services.Data
 {
     public class ProductService : IProductService
     {
-        private readonly TechStoreDbContext context;
+        private readonly IRepository<Product, int> productRepository;
+        private readonly IRepository<Review, int> reviewRepository;
+        private readonly IRepository<Category, int> categoryRepository;
         private readonly IUserService userService;
-        public ProductService(TechStoreDbContext _context, IUserService _userService)
+        public ProductService(IUserService _userService,
+            IRepository<Review, int> _reviewRepository,
+            IRepository<Category, int> _categoryRepository,
+            IRepository<Product, int> _productRepository)
         {
-            context = _context;
             userService = _userService;
-
+            productRepository = _productRepository;
+            reviewRepository = _reviewRepository;
+            categoryRepository = _categoryRepository;
         }
+
         public async Task<ProductViewModel> GetProductViewModelAsync(int productId)
         {
             var userId = userService.GetUserId();
 
-            var product = await context.Products
+            var product = await productRepository
+                .GetAllAttached()
                 .Where(p => p.ProductId == productId)
                 .Select(p => new ProductViewModel
                 {
@@ -40,16 +51,17 @@ namespace TechStoreApp.Services.Data
                     ImageUrl = p.ImageUrl,
                     CheckedString = p.Favorites.Any(f => f.UserId == userId) ? "checked" : "unchecked"
                 })
-            .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync();
 
-            product.Reviews = await context.Reviews
+            product.Reviews = await reviewRepository
+                .GetAllAttached()
                 .Where(r => r.ProductId == productId)
                 .Select(r => new ReviewViewModel
                 {
                     Comment = r.Comment,
                     ProductId = r.ProductId,
                     Rating = r.Rating,
-                    Author = r.User.UserName
+                    Author = r.User!.UserName ?? "Error with UserName"
                 })
                 .ToListAsync();
 
@@ -66,11 +78,63 @@ namespace TechStoreApp.Services.Data
                 ProductId = model.ProductId,
                 Comment = model.Comment,
                 UserId = userId
-
             };
 
-            await context.AddAsync(newReview);
-            await context.SaveChangesAsync();
+            await reviewRepository.AddAsync(newReview);
+        }
+
+        public async Task<EditProductViewModel> GetEditProductViewModelAsync(int productId)
+        {
+            var product = await productRepository
+                .GetAllAttached()
+                .Include(p => p.Category)
+                .Where(p => p.ProductId == productId)
+                .Select(p => new EditProductViewModel
+                {
+                    ProductId = productId,
+                    ProductName = p.Name,
+                    CategoryId = p.CategoryId,
+                    CategoryName = p.Category.Description ?? "Invalid Category",
+                    Description = p.Description,
+                    Price = p.Price,
+                    Stock = p.Stock,
+                    ImageUrl = p.ImageUrl,
+                    Categories = categoryRepository
+                        .GetAllAttached()
+                        .Select(c => new CategoryViewModel()
+                        {
+                            Id = c.CategoryId,
+                            Description = c.Description ?? "Error with category"
+                        })                   
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            return product;
+        }
+
+        public async Task EditProductAsync(EditProductViewModel model)
+        {
+            var product = await productRepository.GetByIdAsync(model.ProductId);
+
+            product.CategoryId = model.CategoryId;
+            product.Name = model.ProductName;
+            product.Description = model.Description;
+            product.Price = model.Price;
+            product.Stock = model.Stock;
+            product.ImageUrl = model.ImageUrl;
+
+            await productRepository.UpdateAsync(product);
+        }
+
+        public Task<AddProductViewModel> GetAddProductViewModelAsync(int productId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AddProductViewModel> AddProductAsync(AddProductViewModel model)
+        {
+            throw new NotImplementedException();
         }
     }
 }

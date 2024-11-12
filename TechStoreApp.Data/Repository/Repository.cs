@@ -165,7 +165,5 @@ namespace TechStoreApp.Data.Repository
                 return false;
             }
         }
-
-
     }
 }

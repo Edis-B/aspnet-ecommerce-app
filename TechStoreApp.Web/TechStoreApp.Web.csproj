@@ -34,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TechStoreApp.Common\TechStoreApp.Common.csproj" />
     <ProjectReference Include="..\TechStoreApp.Data.Models\TechStoreApp.Data.Models.csproj" />
     <ProjectReference Include="..\TechStoreApp.Data\TechStoreApp.Data.csproj" />
     <ProjectReference Include="..\TechStoreApp.Services.Data\TechStoreApp.Services.Data.csproj" />

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TechStoreApp.Common\TechStoreApp.Common.csproj" />
     <ProjectReference Include="..\TechStoreApp.Web.ViewModels\TechStoreApp.Web.ViewModels.csproj" />
   </ItemGroup>
 
