@@ -108,9 +108,9 @@ namespace TechStoreApp.Services.Data
                         })                   
                         .ToList()
                 })
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync() ?? null;
 
-            return product;
+            return product!;
         }
 
         public async Task EditProductAsync(EditProductViewModel model)
@@ -127,14 +127,38 @@ namespace TechStoreApp.Services.Data
             await productRepository.UpdateAsync(product);
         }
 
-        public Task<AddProductViewModel> GetAddProductViewModelAsync(int productId)
+        public async Task<int> AddProductAsync(AddProductViewModel model)
         {
-            throw new NotImplementedException();
+            var newProduct = new Product()
+            {
+                Name = model.ProductName,
+                Description = model.Description,
+                Price = model.Price,
+                Stock = model.Stock,
+                ImageUrl = model.ImageUrl,
+                CategoryId = model.CategoryId,
+            };
+
+            await productRepository.AddAsync(newProduct);
+
+            return newProduct.ProductId;
         }
 
-        public Task<AddProductViewModel> AddProductAsync(AddProductViewModel model)
+        public AddProductViewModel GetAddProductViewModel()
         {
-            throw new NotImplementedException();
+            var newModel = new AddProductViewModel()
+            {
+                Categories = categoryRepository
+                    .GetAllAttached()
+                    .Select(c => new CategoryViewModel()
+                    {
+                        Description = c.Description,
+                        Id = c.CategoryId
+                    })
+            };
+
+            return newModel;
+
         }
     }
 }

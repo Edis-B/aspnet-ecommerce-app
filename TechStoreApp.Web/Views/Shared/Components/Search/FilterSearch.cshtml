@@ -21,6 +21,14 @@
 
 <div class="products-div">
     @{
+        <div class="single-product-cell">
+            <form class="" asp-controller="Product" asp-action="Add" method="get">
+                <button class="add-to-cart-button" type="submit">
+                    Add new item
+                </button>
+            </form>
+        </div>
+
         if (Model.Results.Any())
         {
             foreach (var item in @Model.Results)
@@ -37,7 +45,7 @@
                     
                     <form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
                         <input type="hidden" name="productId" value="@item.Product.ProductId" />
-                        <button class="add-to-cart-button" action="submit">
+                        <button class="add-to-cart-button" type="submit">
                             Add to Cart
                             <img class="cart-image" src="~/images/cart-icon-28356.png" />
                         </button>

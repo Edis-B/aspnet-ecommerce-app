@@ -31,30 +31,37 @@ namespace TechStoreApp.Web.Areas.Controllers
         {
             var viewModel = await productService.GetEditProductViewModelAsync(productId);
 
+            if (viewModel == null)
+            {
+                return View("Error");
+            }
+
             return View("Edit", viewModel);
         }
 
         [HttpPost]
         [Authorize(Roles = GeneralConstraints.AdminRoleName)]
-        public async Task<IActionResult> Edit(EditProductViewModel model)
+        public async Task<IActionResult> EditPost(EditProductViewModel model)
         {
             await productService.EditProductAsync(model);
 
-            return RedirectToAction(nameof(RedirectToDetails), model.ProductId);
+            return RedirectToAction(nameof(RedirectToDetails), new { productId = model.ProductId });
         }
 
         [HttpGet]
         public async Task<IActionResult> Add()
         {
-            return View("Add");
+            var newViewModel = productService.GetAddProductViewModel();
+
+            return View("Add", newViewModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(AddProductViewModel model)
         {
-            var product = await productService.AddProductAsync(model);
+            int newProductId = await productService.AddProductAsync(model);
 
-            return View("Add");
+            return RedirectToAction(nameof(RedirectToDetails), new { productId = newProductId });
         }
 
 
