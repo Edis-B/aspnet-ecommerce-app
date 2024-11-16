@@ -7,6 +7,7 @@ using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Data.Repository;
 using TechStoreApp.Data.Repository.Interfaces;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,11 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
 	})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<TechStoreDbContext>();
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Account/Login";
+});
 
 builder.Services.AddHttpContextAccessor();
 

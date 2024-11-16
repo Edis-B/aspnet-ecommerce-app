@@ -43,12 +43,5 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return RedirectToAction("Index", "Profile");
         }
-        [HttpGet]
-        public async Task<OkObjectResult> GetAddress([FromRoute] int id) 
-        {
-            var result = await orderService.GetAddressByIdAsync(id);
-
-            return Ok(result);
-        }
     }
 }

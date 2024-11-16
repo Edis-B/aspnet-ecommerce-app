@@ -27,7 +27,9 @@
 
                         <div class="stock-control">
                             <button class="decrease-count-class" value="@item.ProductId" type="submit">-</button>
-                            <div class="item-quantity">@item.Quantity</div>
+                            <div class="item-quantity">
+                                <p>@item.Quantity</p>
+                            </div>
                             <button class="increase-count-class" value="@item.ProductId" type="submit">+</button>
                         </div>
 
@@ -37,6 +39,8 @@
 
                         <p>@item.Product.Name</p>
                     </div>
+
+                    <hr />
                 }
             }
             else

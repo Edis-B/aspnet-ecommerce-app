@@ -1,6 +1,7 @@
 ﻿body{
     margin-inline: 15%;
 }
+
 .user-information-content{
     flex: 2.2;
     background-color: lightgray;
@@ -12,7 +13,7 @@
 }
 
 .single-product-cell{
-    height: 150px;
+    height: 200px;
     width: 100%;
     padding: 10px;
     display: flex;
@@ -34,7 +35,7 @@
 }
 .product-image{
     height: 100%;
-    max-width: 180px;
+    width: 100%;
 }
 
 .products-details{
@@ -54,8 +55,8 @@
     justify-content: center;
     display: flex;
     flex: 4;
-    height: 100%;
-    width: 200px;
+    height: 180px;
+    width: 180px;
 }
 
 .product-name{

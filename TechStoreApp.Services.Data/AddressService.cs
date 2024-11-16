@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TechStoreApp.Common;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
@@ -17,12 +19,15 @@ namespace TechStoreApp.Services.Data
     {
         private readonly IRepository<Address, int> addressRepository;
         private readonly IUserService userService;
+
         public AddressService(IUserService _userService,
-            IRepository<Address, int> _addressRepository)
+                              IRepository<Address, int> _addressRepository)
         {
             userService = _userService;
             addressRepository = _addressRepository;
         }
+
+        [HttpPost]
         public async Task SaveAddressAsync(OrderViewModel model)
         {
             var userId = userService.GetUserId();
@@ -37,6 +42,19 @@ namespace TechStoreApp.Services.Data
             };
 
             await addressRepository.AddAsync(newAddress);
+        }
+
+        [HttpGet]
+        public async Task<Address> GetAddressByIdAsync(int id)
+        {
+            var address = await addressRepository.GetByIdAsync(id);
+
+            if (address.UserId != userService.GetUserId())
+            {
+                return null!;
+            }
+
+            return address;
         }
     }
 }

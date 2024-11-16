@@ -3,13 +3,18 @@
 }
 
 body {
-    margin-top: 100px;
+    margin-top: 120px;
     font-size: 20px;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     background-color: white;
     margin-right: 0px;
     margin-left: 0px;
     margin-bottom: 0px;
+}
+
+button {
+    font-size: 0.9rem;
+    width: auto;
 }
 
 header {
@@ -275,7 +280,6 @@ span.text-danger {
 
 .add-to-cart-button{
     height: 40px;
-    width: 100px;
     display: flex;
     flex-direction: row;
     background-color: black;

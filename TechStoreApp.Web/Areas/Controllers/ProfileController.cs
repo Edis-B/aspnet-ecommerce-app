@@ -9,12 +9,10 @@ namespace TechStoreApp.Web.Areas.Controllers
 {
     public class ProfileController : Controller
     {
-        private readonly TechStoreDbContext context;
         private readonly IProfileService profileService;
 
-        public ProfileController(TechStoreDbContext _context, IProfileService _profileService)
+        public ProfileController(IProfileService _profileService)
         {
-            context = _context;
             profileService = _profileService;
         }
         [HttpGet]

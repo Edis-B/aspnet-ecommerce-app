@@ -1,5 +1,4 @@
-﻿@page
-@using TechStoreApp.Web.ViewModels.User
+﻿@using TechStoreApp.Web.ViewModels.User
 @model LoginViewModel
 
 @{
@@ -15,7 +14,7 @@
 <div class="row">
     <div class="col-md-4">
         <section>
-            <form id="account" method="post" asp-action="Login" asp-controller="Account">
+            <form id="account" method="post">
                 <h2>Use a local account to log in.</h2>
                 <hr />
                 <input type="hidden" name="ReturnUrl" value="@ViewData["ReturnUrl"]" />
@@ -41,13 +40,10 @@
                 </div>
                 <div>
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-action="ForgotPassword" asp-controller="Account" method="get">Forgot your password?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="">Register as a new user</a>
-                    </p>
-                    <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        <a id="register" asp-action="Register" asp-controller="Account" method="get">Register as a new user</a>
                     </p>
                 </div>
             </form> 

@@ -1,7 +1,7 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
     // Address inputs
     const inputs = document.querySelectorAll('#save-address-form input');
-    const detailInput = document.querySelector('.address-details');
+    const detail = document.querySelector('.address-details');
 
     // Address hidden outputs
     const outputs = document.querySelectorAll('#send-address-form input');
@@ -29,8 +29,8 @@
             inputs[2].nextElementSibling.textContent = 'Postal Code cannot be empty';
             valid = false;
         }
-        if (!detailInput.value) {
-            detailInput.nextElementSibling.textContent = 'Address cannot be empty!';
+        if (!detail.value) {
+            detail.nextElementSibling.textContent = 'Address cannot be empty!';
             valid = false;
         }
 
@@ -55,8 +55,8 @@
             inputs[2].nextElementSibling.textContent = 'Postal Code cannot be empty';
             valid = false;
         }
-        if (!detailInput.value) {
-            detailInput.nextElementSibling.textContent = 'Address cannot be empty!';
+        if (!detail.value) {
+            detail.nextElementSibling.textContent = 'Address cannot be empty!';
             valid = false;
         }
 
@@ -65,7 +65,7 @@
             outputs[0].value = inputs[0].value;
             outputs[1].value = inputs[1].value;
             outputs[2].value = inputs[2].value;
-            outputs[3].value = detailInput.value;
+            outputs[3].value = detail.value;
 
             formSend.submit();
         }
@@ -78,12 +78,12 @@
         if (option.id == 0) {
             // Empty when choosing Empty
             inputs.forEach(input => {
-                input.value = '';
+                value = '';
             });
         }
         else {
             // Fill when choosing address
-            fetch(`/Order/GetAddress/${option.id}`, {
+            fetch(`/Address/GetAddress/${option.id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json'
@@ -95,7 +95,7 @@
                 inputs[0].value = data.country;
                 inputs[1].value = data.city;
                 inputs[2].value = data.postalCode;
-                detailInput.value = data.details;
+                detail.value = data.details;
             });
         }
     })

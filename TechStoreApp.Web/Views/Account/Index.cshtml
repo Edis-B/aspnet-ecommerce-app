@@ -1,8 +1,9 @@
 ﻿<link rel="stylesheet" href="~/css/profile-page.css"/>
 
 <form asp-controller="Account" asp-action="Logout" method="post">
-    <button type="submit" class="logout-button">Logout</button>
+    <input class="btn btn-warning btn-dark-text w-20 py-2 fw-bold rounded" type="submit" value="Logout" />
 </form>
+
 
 <div class="orders-container">
     @await Component.InvokeAsync("UserOrders")

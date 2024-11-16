@@ -22,7 +22,7 @@
     transition: box-shadow 0.3s;
     display: flex;
     width: 1000px;
-    height: 200px;
+    height: auto;
     border: solid 1px #e1e1e1;
     box-shadow: inset;
     position: relative;

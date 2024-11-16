@@ -30,9 +30,9 @@ async function postReview() {
         const commentInput = document.getElementById('review-comment-input');
         const ratingInput = document.getElementById('userRating');
 
-        const productId = productIdInput.value;
-        const comment = commentInput.value;
-        const rating = ratingInput.value;
+        const productId = productIdvalue;
+        const comment = commentvalue;
+        const rating = ratingvalue;
 
         // Validate Fields
         let check = true;
@@ -63,8 +63,8 @@ async function postReview() {
         })
 
         if (response.ok) {
-            commentInput.value = '';
-            ratingInput.value = '';
+            commentvalue = '';
+            ratingvalue = '';
 
             allStars.forEach(el => {
                 el.innerHTML = '&#9734;';
@@ -97,7 +97,7 @@ async function starAnimations() {
                 starToColor.innerHTML = '&#9734;';
             }
 
-            reviewInput.value = star.id;
+            reviewvalue = star.id;
         });
     });
 }

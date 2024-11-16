@@ -4,6 +4,7 @@ using TechStoreApp.Data.Models;
 using TechStoreApp.Data;
 using TechStoreApp.Web.ViewModels.Orders;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Services.Data;
 
 namespace TechStoreApp.Web.Areas.Controllers
 {
@@ -20,6 +21,14 @@ namespace TechStoreApp.Web.Areas.Controllers
             await addressService.SaveAddressAsync(model);
 
             return RedirectToAction("Order", "Order");
+        }
+
+        [HttpGet("Address/GetAddress/{id:int}")]
+        public async Task<IActionResult> GetAddress(int id)
+        {
+            var result = await addressService.GetAddressByIdAsync(id);
+
+            return Ok(result);
         }
     }
 }

@@ -34,8 +34,11 @@
     color: white;
     border: 1px solid black;
     width: 25px;
-    height: 27px;
+    height: 25px;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .item-quantity {
@@ -43,6 +46,13 @@
     height: 25px;
     width: 25px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-quantity p {
+    margin: 0;
 }
 
 .whole-SearchPage-body {
@@ -79,6 +89,7 @@
 }
 
 #clear-cart-form button{
+    font-size: 1rem;
     background-color: black;
     border: none;
     color: white;

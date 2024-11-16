@@ -1358,7 +1358,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// around the issue.
 			// Interestingly, IE 10 & older don't seem to have the issue.
 			input = document.createElement( "input" );
-			input.setAttribute( "name", "" );
+			setAttribute( "name", "" );
 			el.appendChild( input );
 			if ( !el.querySelectorAll( "[name='']" ).length ) {
 				rbuggyQSA.push( "\\[" + whitespace + "*name" + whitespace + "*=" +
@@ -1392,7 +1392,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 			// Support: Windows 8 Native Apps
 			// The type and name attributes are restricted during .innerHTML assignment
 			var input = document.createElement( "input" );
-			input.setAttribute( "type", "hidden" );
+			setAttribute( "type", "hidden" );
 			el.appendChild( input ).setAttribute( "name", "D" );
 
 			// Support: IE8
@@ -4916,9 +4916,9 @@ var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 	// Check state lost if the name is set (#11217)
 	// Support: Windows Web Apps (WWA)
 	// `name` and `type` must use .setAttribute for WWA (#14901)
-	input.setAttribute( "type", "radio" );
-	input.setAttribute( "checked", "checked" );
-	input.setAttribute( "name", "t" );
+	setAttribute( "type", "radio" );
+	setAttribute( "checked", "checked" );
+	setAttribute( "name", "t" );
 
 	div.appendChild( input );
 
@@ -7962,11 +7962,11 @@ jQuery.fn.delay = function( time, type ) {
 		select = document.createElement( "select" ),
 		opt = select.appendChild( document.createElement( "option" ) );
 
-	input.type = "checkbox";
+	type = "checkbox";
 
 	// Support: Android <=4.3 only
 	// Default value for a checkbox should be "on"
-	support.checkOn = input.value !== "";
+	support.checkOn = value !== "";
 
 	// Support: IE <=11 only
 	// Must access selectedIndex to make default options select
@@ -7975,9 +7975,9 @@ jQuery.fn.delay = function( time, type ) {
 	// Support: IE <=11 only
 	// An input loses its value after becoming a radio
 	input = document.createElement( "input" );
-	input.value = "t";
-	input.type = "radio";
-	support.radioValue = input.value === "t";
+	value = "t";
+	type = "radio";
+	support.radioValue = value === "t";
 } )();
 
 
@@ -8866,7 +8866,7 @@ jQuery.parseXML = function( data ) {
 	}
 
 	// Support: IE 9 - 11 only
-	// IE throws on parseFromString with invalid input.
+	// IE throws on parseFromString with invalid 
 	try {
 		xml = ( new window.DOMParser() ).parseFromString( data, "text/xml" );
 	} catch ( e ) {}
