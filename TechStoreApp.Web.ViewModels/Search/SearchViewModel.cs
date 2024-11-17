@@ -4,7 +4,7 @@ using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Web.ViewModels.Search
 {
-    public class SearchFormModel
+    public class SearchViewModel
     {
         [AllowNull]
         public string Category { get; set; }
@@ -12,6 +12,6 @@ namespace TechStoreApp.Web.ViewModels.Search
         public int CurrentPage { get; set; } = 1;
         [AllowNull]
         public string Query { get; set; }
-        public List<ResultViewModel> Results { get; set; }
+        public List<ProductViewModel> Products { get; set; }
     }
 }

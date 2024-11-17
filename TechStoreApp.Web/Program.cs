@@ -22,7 +22,9 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     {
+        options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedAccount = false;
+
 		options.Password.RequireDigit = false;
 		options.Password.RequireNonAlphanumeric = false;
 		options.Password.RequireUppercase = false;
@@ -44,18 +46,20 @@ builder.Services.AddScoped<IFavoriteService, FavoriteService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<ISearchService, SearchService>();
 
-builder.Services.AddScoped<IRepository<Address, int>, Repository<Address, int>>();
 builder.Services.AddScoped<IRepository<ApplicationUser, Guid>, Repository<ApplicationUser, Guid>>();
-builder.Services.AddScoped<IRepository<Cart, int>, Repository<Cart, int>>();
 builder.Services.AddScoped<IRepository<CartItem, object>, Repository<CartItem, object>>();
-builder.Services.AddScoped<IRepository<Category, int>, Repository<Category, int>>();
 builder.Services.AddScoped<IRepository<Favorited, object>, Repository<Favorited, object>>();
-builder.Services.AddScoped<IRepository<Order, int>, Repository<Order, int>>();
 builder.Services.AddScoped<IRepository<OrderDetail, int>, Repository<OrderDetail, int>>();
+builder.Services.AddScoped<IRepository<Category, int>, Repository<Category, int>>();
+builder.Services.AddScoped<IRepository<Address, int>, Repository<Address, int>>();
 builder.Services.AddScoped<IRepository<Product, int>, Repository<Product, int>>();
-builder.Services.AddScoped<IRepository<Review, int>, Repository<Review, int>>();
 builder.Services.AddScoped<IRepository<Status, int>, Repository<Status, int>>();
+builder.Services.AddScoped<IRepository<Review, int>, Repository<Review, int>>();
+builder.Services.AddScoped<IRepository<Order, int>, Repository<Order, int>>();
+builder.Services.AddScoped<IRepository<Cart, int>, Repository<Cart, int>>();
+
 
 builder.Services.AddScoped<ISeedDataService, SeedDataService>();
 

@@ -1,5 +1,6 @@
-﻿@using TechStoreApp.Web.ViewModels.Search
-@model SearchFormModel
+﻿@using TechStoreApp.Common
+@using TechStoreApp.Web.ViewModels.Search
+@model SearchViewModel
 
 <div class="quick-filters">
     <p style="display: block">Results for: "@Model.Query"</p>
@@ -21,30 +22,33 @@
 
 <div class="products-div">
     @{
-        <div class="single-product-cell">
-            <form class="" asp-controller="Product" asp-action="Add" method="get">
-                <button class="add-to-cart-button" type="submit">
-                    Add new item
-                </button>
-            </form>
-        </div>
-
-        if (Model.Results.Any())
+        if (User.IsInRole(GeneralConstraints.AdminRoleName))
         {
-            foreach (var item in @Model.Results)
+            <div class="single-product-cell">
+                <form class="" asp-controller="Product" asp-action="Add" method="get">
+                    <button class="add-to-cart-button" type="submit">
+                        Add new item
+                    </button>
+                </form>
+            </div>
+        }
+
+        if (Model.Products.Any())
+        {
+            foreach (var item in @Model.Products)
             {
                 <div class="single-product-cell">
-                    <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.Product.ProductId })">
-                        <img class="image-for-product" src="@item.Product.ImageUrl" data-stock="@item.Product.Stock" alt="Product image" />
+                    <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
+                        <img class="image-for-product" src="@item.ImageUrl" data-stock="@item.Stock" alt="Product image" />
                     </a>
 
                     <div class="product-details">
-                        <p class="product-details-name">@item.Product.Name</p>
-                        <p class="procuct-details-stock">Stock: @item.Product.Stock</p>
+                        <p class="product-details-name">@item.Name</p>
+                        <p class="procuct-details-stock">Stock: @item.Stock</p>
                     </div>
                     
                     <form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@item.Product.ProductId" />
+                        <input type="hidden" name="productId" value="@item.ProductId" />
                         <button class="add-to-cart-button" type="submit">
                             Add to Cart
                             <img class="cart-image" src="~/images/cart-icon-28356.png" />
@@ -52,8 +56,8 @@
                     </form>
                     
                     <div class="favorite-contain-accessories">
-                        <input type="checkbox" id="checkbox_@(item.Product.ProductId)" class="image-checkbox-input" value="@item.CheckedString" />
-                        <label for="checkbox_@(item.Product.ProductId)" class="image-checkbox-label">
+                        <input type="checkbox" id="checkbox_@(item.ProductId)" class="image-checkbox-input" value="@item.CheckedString" />
+                        <label for="checkbox_@(item.ProductId)" class="image-checkbox-label">
                             <img class="full-heart" src="~/images/Black Hollow Full.png" alt="Full Heart" />
                             <img class="hollow-heart" src="~/images/Black Hollow Heart.png" alt="Hollow Heart" />
                         </label>

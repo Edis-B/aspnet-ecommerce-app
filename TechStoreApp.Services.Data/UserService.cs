@@ -68,6 +68,8 @@ namespace TechStoreApp.Services.Data
             await userManager.AddToRoleAsync(user, "User");
 
             user.UserName = model.UserName;
+            user.Email = model.Email;
+            user.ProfilePictureUrl = model.ProfilePictureUrl;
 
             if (model.ProfilePictureUrl == null)
             {

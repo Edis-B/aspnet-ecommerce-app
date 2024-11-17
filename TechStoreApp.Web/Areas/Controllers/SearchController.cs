@@ -19,7 +19,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpGet]
         public IActionResult Search(string? query, string? category, int currentPage = 1)
         {
-            var model = new SearchFormModel
+            var model = new SearchViewModel
             {
                 Category = category,
                 CurrentPage = currentPage,

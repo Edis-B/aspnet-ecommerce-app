@@ -66,6 +66,7 @@ namespace TechStoreApp.Services.Data
                 await userManager.AddToRoleAsync(user, GeneralConstraints.AdminRoleName);
 
                 user.UserName = "Administrator";
+                user.Email = "example@gmail.com";
                 user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
 
                 var result = await userManager.CreateAsync(user, "Administrator");
