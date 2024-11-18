@@ -73,8 +73,13 @@ namespace TechStoreApp.Web.Areas.Controllers
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl)
+        public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Register", model);
+            }
+
             var result = await userService.RegisterAsync(model);
 
             if (!result.Succeeded)
@@ -160,7 +165,6 @@ namespace TechStoreApp.Web.Areas.Controllers
             };
 
             return View("ResetPassword", model);
-            
         }
 
         [HttpPost]

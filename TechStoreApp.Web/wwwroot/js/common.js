@@ -1,9 +1,10 @@
 ﻿async function redirectIfLoggedOut() {
     if (!isLogged()) {
-        var loginUrl = '/Identity/Account/Login'; // Generates the login URL
+        var loginUrl = '/Account/Login'; // Generates the login URL
         window.location.href = loginUrl;
     }
 }
+
 async function addImageStockBlocker() {
     let images = document.querySelectorAll('.image-for-product');
 
@@ -229,17 +230,23 @@ async function areYouSureWindow(message) {
         document.body.appendChild(fullscreenOverlay);
     });
 }
+
 async function addFavoriting() {
     const allCheckBoxes = document.querySelectorAll('.image-checkbox-input');
 
     allCheckBoxes.forEach((checkBox) => {
+        let heartFull = checkBox.nextElementSibling.querySelector('img');
+
         // Set the checkbox checked status based on its value
         if (checkBox.value === "checked") {
             checkBox.checked = true;
+            heartFull.style.opacity = 1;
         } else {
             checkBox.checked = false;
+            heartFull.style.opacity = 0;
         }
 
+        // Listen for changes
         checkBox.addEventListener('change', async () => {
             redirectIfLoggedOut();
 
@@ -248,6 +255,9 @@ async function addFavoriting() {
 
             // If the checkbox is checked, send a request to add to favorites
             if (checkBox.checked) {
+
+                heartFull.style.opacity = 1;
+
                 try {
                     const response = await fetch('/Favorites/AddToFavorites', {
                         method: 'POST',
@@ -274,6 +284,9 @@ async function addFavoriting() {
             }
             // If the checkbox is unchecked, send a request to remove from favorites
             else {
+
+                heartFull.style.opacity = 0;
+
                 try {
                     const response = await fetch('/Favorites/RemoveFromFavorites', {
                         method: 'DELETE',

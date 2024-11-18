@@ -204,16 +204,10 @@ span.text-danger {
     color: red;
 }
 
-.favorite-contain-accessories input:checked + label .full-heart {
-    opacity: 1;
-}
-
-.favorite-contain-accessories input:checked + label .hollow-heart {
-    opacity: 0;
-}
-
 .favorite-contain-accessories {
+    justify-content: space-around;
     position: relative;
+    display: flex;
     height: 30px;
     width: 100px;
 }
@@ -239,7 +233,6 @@ span.text-danger {
 }
 
 .full-heart {
-    transition: opacity 0.3s ease;
     opacity: 0;
 }
 
@@ -290,8 +283,13 @@ span.text-danger {
     cursor: pointer;
 }
 
-.cart-image{
+.cart-image {
     height: 100%;
     width: auto;
     margin: 10px;
+}
+
+.image-totalLikes {
+    display: flex;
+    flex-direction: row;
 }

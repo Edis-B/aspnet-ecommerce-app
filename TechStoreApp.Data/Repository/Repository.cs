@@ -36,21 +36,21 @@ namespace TechStoreApp.Data.Repository
 
         public TType GetById(TId id)
         {
-            return dbSet.Find(id);
+            return (dbSet.Find(id))!;
         }
         public TType GetById(params TId[] id)
         {
-            return dbSet.Find(id[0], id[1]);
+            return (dbSet.Find(id[0], id[1]))!;
         }
 
         public async Task<TType> GetByIdAsync(TId id)
         {
-            return await dbSet.FindAsync(id);
+            return (await dbSet.FindAsync(id))!;
         }
 
         public async Task<TType> GetByIdAsync(params TId[] id)
         {
-            return await dbSet.FindAsync(id[0], id[1]);
+            return (await dbSet.FindAsync(id[0], id[1]))!;
         }
 
         public void Add(TType item)
@@ -132,6 +132,23 @@ namespace TechStoreApp.Data.Repository
 
             return true;
         }
+
+        public bool RemoveRange(IEnumerable<TType> items)
+        {
+            dbSet.RemoveRange(items);
+            context.SaveChanges();
+
+            return true;
+        }
+
+        public async Task<bool> RemoveRangeAsync(IEnumerable<TType> items)
+        {
+            dbSet.RemoveRange(items);
+            await context.SaveChangesAsync();
+
+            return true;
+        }
+
         public bool Update(TType item)
         {
             try
@@ -165,5 +182,6 @@ namespace TechStoreApp.Data.Repository
                 return false;
             }
         }
+
     }
 }

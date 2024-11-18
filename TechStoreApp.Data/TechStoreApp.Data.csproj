@@ -45,6 +45,8 @@
     <Compile Remove="Migrations\20241027183844_DbInitialization.Designer.cs" />
     <Compile Remove="Migrations\20241111165839_Added-further-constraints.cs" />
     <Compile Remove="Migrations\20241111165839_Added-further-constraints.Designer.cs" />
+    <Compile Remove="Migrations\20241118150720_postalcoderange.cs" />
+    <Compile Remove="Migrations\20241118150720_postalcoderange.Designer.cs" />
     <Compile Remove="Migrations\TechStoreDbContextModelSnapshot.cs" />
   </ItemGroup>
 

@@ -7,7 +7,7 @@ using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Web.ViewModels.Orders
 {
-    public class MyOrderViewModel
+    public class UserOrderSingleViewModel
     {
         public int OrderId { get; set; }
         public string OrderDate { get; set; }

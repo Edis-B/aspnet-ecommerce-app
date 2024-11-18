@@ -18,7 +18,6 @@
         <div id="category-filter-div">
             <form id="filter-by-category" asp-action="Search" asp-controller="Search" method="get">
                 <input type="hidden" asp-for="@Model.Query" value="@Model.Query" />
-
                 <ul>
                     <li><button type="submit" name="Category" value="All">All products</button></li>
                     <li><button type="submit" name="Category" value="Prebuilt Configuration">Configured Systems</button></li>
@@ -35,8 +34,43 @@
             </form>
         </div>
     </div>
+
     <div class="products-wrap-div">
-         @await Component.InvokeAsync("Search", new { query = Model.Query, category = Model.Category, currentPage = Model.CurrentPage })
+        <div class="quick-filters">
+            <p style="display: block">Results for: "@Model.Query"</p>
+
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    Sort by
+                </button>
+
+                <ul class="dropdown-menu">
+                    @foreach (var option in Model.SortOptions)
+                    {
+                        if (Model.Orderby == option.OrderBy)
+                        {
+                            <li style ="background-color: gray">
+                                <a 
+                                   href="@Url.Action("Search", new { currentPage = 1, query = Model.Query, category = Model.Category, orderBy = option.OrderBy })">
+                                    @option.Text
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li style="background-color: transparent">
+                                <a 
+                                    href="@Url.Action("Search", new { currentPage = 1, query = Model.Query, category = Model.Category, orderBy = option.OrderBy })">
+                                    @option.Text
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+
+         @await Component.InvokeAsync("Search", new { model = Model })
     </div>
 </div>
 

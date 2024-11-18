@@ -9,6 +9,6 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface ISearchService
     {
-        Task<SearchViewModel> GetSearchViewModel(string category, string query, int currentPage, int pageSize);
+        Task<SearchViewModel> GetSearchViewModel(SearchViewModel model);
     }
 }

@@ -1,0 +1,21 @@
+﻿@{
+    var model = ViewData.Model;
+    var checkedString = model.checkedString;
+    var totalLikes = model.totalLikes;
+    var productId = model.productId;
+}
+
+<div class="favorite-contain-accessories">
+    <input type="checkbox" id="checkbox_@(productId)" class="image-checkbox-input" value="@checkedString" />
+
+    <div class="image-totalLikes">
+        <label for="checkbox_@(productId)" class="image-checkbox-label">
+            <img class="full-heart" src="~/images/Black Hollow Full.png" alt="Full Heart"
+                 style="opacity: @(checkedString!.ToString() == "checked" ? 1 : 0)" />
+
+            <img class="hollow-heart" src="~/images/Black Hollow Heart.png" alt="Hollow Heart" />
+        </label>
+
+        <p>@totalLikes</p>
+    </div>
+</div>

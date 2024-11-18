@@ -1,76 +1,77 @@
 ﻿document.addEventListener('DOMContentLoaded', () => {
-    // Address inputs
-    const inputs = document.querySelectorAll('#save-address-form input');
-    const detail = document.querySelector('.address-details');
+    //// Address inputs
+    //const inputs = document.querySelectorAll('#save-address-form input');
+    //const detail = document.querySelector('.address-details');
 
-    // Address hidden outputs
-    const outputs = document.querySelectorAll('#send-address-form input');
+    //// Address hidden outputs
+    //const outputs = document.querySelectorAll('#send-address-form input');
 
-    // Both Forms
-    const formSave = document.querySelector('#save-address-form');
-    const formSend = document.querySelector('#send-address-form');
+    //// Both Forms
+    //const formSave = document.querySelector('#save-address-form');
+    //const formSend = document.querySelector('#send-address-form');
+
+
+
+    //formSave.addEventListener('submit', async (event) => {
+    //    event.preventDefault();
+    //    let valid = true;
+
+    //    if (!inputs[0].value) {
+    //        inputs[0].nextElementSibling.textContent = 'Country cannot be empty!';
+    //        valid = false;
+    //    }
+    //    if (!inputs[1].value) {
+    //        inputs[1].nextElementSibling.textContent = 'City cannot be empty!';
+    //        valid = false;
+    //    }
+    //    if (!inputs[2].value) {
+    //        inputs[2].nextElementSibling.textContent = 'Postal Code cannot be empty';
+    //        valid = false;
+    //    }
+    //    if (!detail.value) {
+    //        detail.nextElementSibling.textContent = 'Address cannot be empty!';
+    //        valid = false;
+    //    }
+
+    //    if (valid) {
+    //        formSave.submit();
+    //    }
+    //})
+
+    //formSend.addEventListener('submit', async function(event) {
+    //    event.preventDefault();
+    //    let valid = true;
+
+    //    if (!inputs[0].value) {
+    //        inputs[0].nextElementSibling.textContent = 'Country cannot be empty!';
+    //        valid = false;
+    //    }
+    //    if (!inputs[1].value) {
+    //        inputs[1].nextElementSibling.textContent = 'City cannot be empty!';
+    //        valid = false;
+    //    }
+    //    if (!inputs[2].value) {
+    //        inputs[2].nextElementSibling.textContent = 'Postal Code cannot be empty';
+    //        valid = false;
+    //    }
+    //    if (!detail.value) {
+    //        detail.nextElementSibling.textContent = 'Address cannot be empty!';
+    //        valid = false;
+    //    }
+
+    //    if (valid) {
+    //        // Attach address data to model
+    //        outputs[0].value = inputs[0].value;
+    //        outputs[1].value = inputs[1].value;
+    //        outputs[2].value = inputs[2].value;
+    //        outputs[3].value = detail.value;
+
+    //        formSend.submit();
+    //    }
+    //});
 
     // Select address preset
     const select = document.getElementById('adresses');
-
-    formSave.addEventListener('submit', async (event) => {
-        event.preventDefault();
-        let valid = true;
-
-        if (!inputs[0].value) {
-            inputs[0].nextElementSibling.textContent = 'Country cannot be empty!';
-            valid = false;
-        }
-        if (!inputs[1].value) {
-            inputs[1].nextElementSibling.textContent = 'City cannot be empty!';
-            valid = false;
-        }
-        if (!inputs[2].value) {
-            inputs[2].nextElementSibling.textContent = 'Postal Code cannot be empty';
-            valid = false;
-        }
-        if (!detail.value) {
-            detail.nextElementSibling.textContent = 'Address cannot be empty!';
-            valid = false;
-        }
-
-        if (valid) {
-            formSave.submit();
-        }
-    })
-
-    formSend.addEventListener('submit', async function(event) {
-        event.preventDefault();
-        let valid = true;
-
-        if (!inputs[0].value) {
-            inputs[0].nextElementSibling.textContent = 'Country cannot be empty!';
-            valid = false;
-        }
-        if (!inputs[1].value) {
-            inputs[1].nextElementSibling.textContent = 'City cannot be empty!';
-            valid = false;
-        }
-        if (!inputs[2].value) {
-            inputs[2].nextElementSibling.textContent = 'Postal Code cannot be empty';
-            valid = false;
-        }
-        if (!detail.value) {
-            detail.nextElementSibling.textContent = 'Address cannot be empty!';
-            valid = false;
-        }
-
-        if (valid) {
-            // Attach address data to model
-            outputs[0].value = inputs[0].value;
-            outputs[1].value = inputs[1].value;
-            outputs[2].value = inputs[2].value;
-            outputs[3].value = detail.value;
-
-            formSend.submit();
-        }
-    });
-
 
     // Address selector
     select.addEventListener('change', () => {

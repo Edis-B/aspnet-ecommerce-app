@@ -49,6 +49,7 @@ namespace TechStoreApp.Services.Data
                     Price = p.Price,
                     Stock = p.Stock,
                     ImageUrl = p.ImageUrl,
+                    TotalLikes = p.Favorites.Sum(f => 1),
                     CheckedString = p.Favorites.Any(f => f.UserId == userId) ? "checked" : "unchecked"
                 })
                 .FirstOrDefaultAsync();

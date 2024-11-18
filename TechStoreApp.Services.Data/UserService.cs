@@ -30,7 +30,7 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<ApplicationUser, Guid> userRepository;
 
         public UserService(IHttpContextAccessor _httpContextAccessor,
-                           IUrlHelperFactory urlHelperFactory,
+                           IUrlHelperFactory _urlHelperFactory,
 
                            SignInManager<ApplicationUser> _signInManager,
                            UserManager<ApplicationUser> _userManager,
@@ -39,6 +39,7 @@ namespace TechStoreApp.Services.Data
         {
             signInManager = _signInManager;
             userManager = _userManager;
+            urlHelperFactory = _urlHelperFactory;
             userRepository = _userRepository;
             emailSender = _emailSender;
             httpContextAccessor = _httpContextAccessor;

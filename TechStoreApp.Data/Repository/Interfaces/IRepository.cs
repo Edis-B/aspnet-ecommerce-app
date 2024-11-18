@@ -23,6 +23,8 @@ namespace TechStoreApp.Data.Repository.Interfaces
         bool Delete(params TId[] id);
         Task<bool> DeleteAsync(TId id);
         Task<bool> DeleteAsync(params TId[] id);
+        bool RemoveRange(IEnumerable<TType> items);
+        Task<bool> RemoveRangeAsync(IEnumerable<TType> items);
         bool Update(TType item);
         Task<bool> UpdateAsync(TType item);
     }

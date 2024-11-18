@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
+using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
@@ -18,11 +21,27 @@ namespace TechStoreApp.Services.Data
 {
     public class OrderService : IOrderService
     {
-        private readonly TechStoreDbContext context;
+        private readonly IRepository<Order, int> orderRepository;
+        private readonly IRepository<ApplicationUser, Guid> userRepository;
+        private readonly IRepository<Product, int> productRepository;
+        private readonly IRepository<OrderDetail, int> orderDetailRepository;
+        private readonly IRepository<Cart, int> cartRepository;
+        private readonly IRepository<CartItem, object> cartItemRepository;
         private readonly IUserService userService;
-        public OrderService(TechStoreDbContext _context, IUserService _userService)
+        public OrderService(IRepository<Order, int> _orderRepository,
+            IRepository<ApplicationUser, Guid> _userRepository,
+            IRepository<Product, int> _productRepository,
+            IRepository<OrderDetail, int> _orderDetailRepository,
+            IRepository<Cart, int> _cartRepository,
+            IRepository<CartItem, object> _cartItemRepository,
+            IUserService _userService)
         {
-            context = _context;
+            userRepository = _userRepository;
+            orderRepository = _orderRepository;
+            productRepository = _productRepository;
+            orderDetailRepository = _orderDetailRepository;
+            cartRepository = _cartRepository;
+            cartItemRepository = _cartItemRepository;
             userService = _userService;
 
         }
@@ -30,18 +49,17 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
-            var user = await context.Users
+            var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Addresses)
                 .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
+                    .ThenInclude(c => c!.CartItems)
                         .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync();
 
             var newModel = new OrderViewModel();
 
-            newModel.UserAddresses = context.Addresses
-                .Where(a => a.UserId == userId)
+            newModel.UserAddresses = user!.Addresses
                 .Select(a => new AddressViewModel()
                 {
                     Country = a.Country,
@@ -58,10 +76,9 @@ namespace TechStoreApp.Services.Data
             }
 
             newModel.TotalCost = user.Cart.CartItems
-                .Sum(ci => ci.Product.Price * ci.Quantity);
+                .Sum(ci => ci.Product!.Price * ci.Quantity);
 
-            newModel.CartItems = await context.CartItems
-                .Where(ci => ci.CartId == user.Cart.CartId)
+            newModel.CartItems = user.Cart.CartItems
                 .Select(ci => new CartItemViewModel()
                 {
                     Quantity = ci.Quantity,
@@ -78,7 +95,7 @@ namespace TechStoreApp.Services.Data
                         ImageUrl = ci.Product.ImageUrl,
                     }
                 })
-                .ToListAsync();
+                .ToList();
 
             return newModel;
         }
@@ -86,7 +103,7 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
-            var user = await context.Users
+            var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Cart)
                      .ThenInclude(c => c.CartItems)
@@ -110,11 +127,9 @@ namespace TechStoreApp.Services.Data
             var newModel = new OrderFinalizedModel
             {
                 Address = model.Address,
-                Cart = await context.Carts
-                    .Where(c => c.UserId == userId)
-                    .Select(c => new CartViewModel()
+                Cart = new CartViewModel()
                     {
-                        CartItems = c.CartItems.Select(ci => new CartItemViewModel()
+                        CartItems = user.Cart.CartItems.Select(ci => new CartItemViewModel()
                         {
                             Quantity = ci.Quantity,
                             CartId = ci.CartId,
@@ -131,8 +146,7 @@ namespace TechStoreApp.Services.Data
                             }
                         })
                         .ToList()
-                    })
-                    .FirstOrDefaultAsync() ?? new CartViewModel(),
+                    } ?? new CartViewModel(),
                 TotalSum = totalCost,
             };
 
@@ -142,7 +156,7 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
-            var user = await context.Users
+            var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Cart)
                     .ThenInclude(c => c.CartItems)
@@ -164,8 +178,7 @@ namespace TechStoreApp.Services.Data
             };
 
             // Add order to database
-            await context.AddAsync(newOrder);
-            await context.SaveChangesAsync();
+            await orderRepository.AddAsync(newOrder);
 
             var cartItems = user.Cart.CartItems;
 
@@ -180,26 +193,47 @@ namespace TechStoreApp.Services.Data
                     UnitPrice = item.Product.Price
                 };
 
-                var productsToDecrease = await context.Products
-                    .FindAsync(item.ProductId);
+                var productsToDecrease = await productRepository
+                    .GetByIdAsync(item.ProductId);
 
                 productsToDecrease.Stock = productsToDecrease.Stock -= item.Quantity;
 
-                await context.AddAsync(newOrderDetail);
+                await orderDetailRepository.AddAsync(newOrderDetail);
             }
 
             // Remove cart entries for user
-            context.CartItems.RemoveRange(cartItems);
-            context.Carts.Remove(user.Cart);
-
-            await context.SaveChangesAsync();
+            await cartItemRepository.RemoveRangeAsync(cartItems);
+            await cartRepository.DeleteAsync(user.Cart.CartId);
         }
-        public async Task<Address> GetAddressByIdAsync(int id)
-        {
-            var address = await context.Addresses
-                .FindAsync(id);
 
-            return address;
+        public async Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync()
+        {
+            var userId = userService.GetUserId();
+
+            var orders = await orderRepository.GetAllAttached()
+                .Where(o => o.UserId == userId)
+                .Select(o => new UserOrderSingleViewModel()
+                {
+                    OrderId = o.OrderId,
+                    ShippingAddress = o.ShippingAddress!,
+                    OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
+                    OrderDetails = o.OrderDetails
+                        .Select(od => new OrderDetailViewModel()
+                        {
+                            ProductImageUrl = od.Product!.ImageUrl ?? string.Empty,
+                            ProductName = od.Product.Name,
+                            Quantity = od.Quantity,
+                            UnitPrice = od.UnitPrice
+                        })
+                        .ToList()
+                })
+                .ToListAsync();
+
+            var orderModel = new UserOrdersListViewModel();
+
+            orderModel.Orders = orders;
+
+            return orderModel;
         }
     }
 }

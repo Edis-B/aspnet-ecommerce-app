@@ -30,9 +30,9 @@ async function postReview() {
         const commentInput = document.getElementById('review-comment-input');
         const ratingInput = document.getElementById('userRating');
 
-        const productId = productIdvalue;
-        const comment = commentvalue;
-        const rating = ratingvalue;
+        const productId = productIdInput.value;
+        const comment = commentInput.value;
+        const rating = ratingInput.value;
 
         // Validate Fields
         let check = true;
@@ -97,7 +97,7 @@ async function starAnimations() {
                 starToColor.innerHTML = '&#9734;';
             }
 
-            reviewvalue = star.id;
+            reviewInput.value = star.id;
         });
     });
 }

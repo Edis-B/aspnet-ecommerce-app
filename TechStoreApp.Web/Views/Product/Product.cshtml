@@ -30,13 +30,9 @@
     </a>
 }
 
-<div class="favorite-contain-accessories">
-    <input type="checkbox" id="checkbox_@(Model.ProductId)" class="image-checkbox-input" value="@Model.CheckedString" />
-    <label for="checkbox_@(Model.ProductId)" class="image-checkbox-label">
-        <img class="full-heart" src="~/images/Black Hollow Full.png" alt="Full Heart" />
-        <img class="hollow-heart" src="~/images/Black Hollow Heart.png" alt="Hollow Heart" />
-    </label>
-</div>
+@{
+    await Html.RenderPartialAsync("_LikesProductPartial", new { productId = Model.ProductId, checkedString = Model.CheckedString, totalLikes = Model.TotalLikes });
+}
 
 <div>
     <h3 class="product-name-p">@Model.Name</h3>

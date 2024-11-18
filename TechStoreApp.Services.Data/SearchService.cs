@@ -20,8 +20,14 @@ namespace TechStoreApp.Services.Data
             favoritedRepository = _favoriteRepository;
             userService = _userService;
         }
-        public async Task<SearchViewModel> GetSearchViewModel(string category, string query, int currentPage, int pageSize)
+        public async Task<SearchViewModel> GetSearchViewModel(SearchViewModel model)
         {
+            int currentPage = model.CurrentPage;
+            string category = model.Category;
+            string orderBy = model.Orderby;
+            string query = model.Query;
+            int pageSize = 12;
+
             var userId = userService.GetUserId();
 
             var _favoritedForUser = favoritedRepository.GetAllAttached()
@@ -29,17 +35,17 @@ namespace TechStoreApp.Services.Data
 
             var productsQuery = productRepository.GetAllAttached();
 
-            if (!string.IsNullOrEmpty(category))
+            if (!string.IsNullOrEmpty(category) && category != "All")
             {
-                if (category != "All")
-                {
-                    productsQuery = productsQuery.Where(p => p.Category.Description == category);
-                }
+                productsQuery = productsQuery
+                    .Where(p => p.Category.Description == category);
             }
 
             if (!string.IsNullOrEmpty(query))
             {
-                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(query.ToLower()));
+                productsQuery = productsQuery
+                    .Where(p => p.Name.ToLower()
+                    .Contains(query.ToLower()));
             }
 
             int totalItems = productsQuery.Count();
@@ -48,6 +54,7 @@ namespace TechStoreApp.Services.Data
                .Select(p => new ProductViewModel
                {
                     ProductId = p.ProductId,
+                    TotalLikes = p.Favorites.Sum(f => 1),
                     CategoryId = p.CategoryId,
                     Name = p.Name,
                     Description = p.Description,
@@ -63,15 +70,29 @@ namespace TechStoreApp.Services.Data
 
             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            var model = new SearchViewModel
+            if (orderBy == "default")
+            {
+
+            } else if (orderBy == "priceAsc")
+            {
+                results = results.OrderBy(r => r.Price).ToList();
+            } else if (orderBy == "priceDesc")
+            {
+                results = results.OrderByDescending(r => r.Price).ToList();
+            } else if (orderBy == "likesDesc")
+            {
+                results = results.OrderByDescending(r => r.TotalLikes).ToList();
+            }
+
+            var newModel = new SearchViewModel
             {
                 Query = query,
                 Products = results,
-                TotalPages = totalPages,
                 CurrentPage = currentPage,
+                TotalPages = totalPages,
             };
 
-            return model;
+            return newModel;
         }
     }
 }

@@ -18,11 +18,11 @@ namespace TechStoreApp.Web.Views.Shared.Components
             searchService = _searchService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(string category, string query, int currentPage, int pageSize = 12)
+        public async Task<IViewComponentResult> InvokeAsync(SearchViewModel model)
         {
-            var model = await searchService.GetSearchViewModel(category, query, currentPage, pageSize);
+            var modelWithNewResults = await searchService.GetSearchViewModel(model);
 
-            return View("FilterSearch", model);
+            return View("FilterSearch", modelWithNewResults);
         }
     }
 }

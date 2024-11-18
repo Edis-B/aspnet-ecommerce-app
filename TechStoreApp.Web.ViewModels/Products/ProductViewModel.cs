@@ -13,6 +13,7 @@ namespace TechStoreApp.Web.ViewModels.Products
         public int Stock { get; set; }
         public string? ImageUrl { get; set; }
         public string CheckedString { get; set; }
+        public int TotalLikes { get; set; }
         public string DateLiked { get; set; }
         public ReviewFormModel Review { get; set; }
 

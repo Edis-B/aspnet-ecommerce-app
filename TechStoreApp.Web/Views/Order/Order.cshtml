@@ -19,7 +19,7 @@
                 }
             </select>
 
-            <form id="save-address-form" asp-action="SaveAddress" asp-controller="Address" method="post">
+            <form id="sharedForm" asp-action="SharedOrderForm" asp-controller="Order" method="post">
                 <div>
                     <label>Country</label>
                     <input type="text" asp-for="Address.Country" />
@@ -46,7 +46,7 @@
                 
                 <input type="hidden" asp-for="Address.Id"/>
 
-                <button type="submit">Save Address</button>
+                <button type="submit" name="action" value="SaveAddress">Save Address</button>
             </form>
         </div>
             
@@ -86,15 +86,8 @@
             <p class="">Total: @Model.TotalCost</p>
 
             <button class="go-back-button">Back</button>
-
-            <form id="send-address-form" method="post" asp-action="FinalizeOrder" asp-controller="Order">
-                <input type="hidden" asp-for="@Model.Address.Country">
-                <input type="hidden" asp-for="@Model.Address.City">
-                <input type="hidden" asp-for="@Model.Address.PostalCode">
-                <input type="hidden" asp-for="@Model.Address.Details">
-
-                <button type="submit" id="continue-order-button">Continue</button>
-            </form>
+            
+            <button type="submit" name="action" form="sharedForm" value="FinalizeOrder" id="continue-order-button">Continue</button>
         </div>
     </div>
 </div>

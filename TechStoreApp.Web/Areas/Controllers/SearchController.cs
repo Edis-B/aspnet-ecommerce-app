@@ -17,16 +17,23 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public IActionResult Search(string? query, string? category, int currentPage = 1)
+        public IActionResult Search(string? query, string? category, string? orderBy, int currentPage = 1)
         {
             var model = new SearchViewModel
             {
                 Category = category,
                 CurrentPage = currentPage,
+                Orderby = orderBy,
                 Query = query
             };
 
             return View(model);
         }
+
+        //[HttpGet]
+        //public IActionResult Search(SearchViewModel model)
+        //{ 
+        //    return View(model);
+        //}
     }
 }

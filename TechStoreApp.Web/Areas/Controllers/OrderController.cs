@@ -22,6 +22,26 @@ namespace TechStoreApp.Web.Areas.Controllers
         {
             orderService = _orderService;
         }
+
+        [HttpPost]
+        public IActionResult SharedOrderForm(OrderViewModel model, string action)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("Order", model);
+            }
+
+            if (action == "FinalizeOrder")
+            {
+                return RedirectToActionPreserveMethod(action, "Order", model);
+            } else if (action == "SaveAddress")
+            {
+                return RedirectToActionPreserveMethod(action, "Address", model);
+            }
+
+            return View("Order", model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Order()
         {
@@ -29,6 +49,13 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return View("Order", orderViewModel);
         }
+
+        [HttpGet]
+        public IActionResult FinalizeOrder()
+        {
+            return RedirectToAction(nameof(Order));
+        }
+
         [HttpPost]
         public async Task<IActionResult> FinalizeOrder(OrderViewModel model)
         {
@@ -36,12 +63,13 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return View("OrderFinalized", newModel);
         }
+
         [HttpPost]
         public async Task<IActionResult> SendOrder(SendOrderViewModel model)
         {
             await orderService.SendOrderAsync(model);
 
-            return RedirectToAction("Index", "Profile");
+            return RedirectToAction("Index", "Account");
         }
     }
 }
