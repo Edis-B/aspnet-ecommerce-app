@@ -1,67 +1,21 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Data.Repository;
 using TechStoreApp.Data.Repository.Interfaces;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+builder.Services.AddApplicationDatabase(builder.Configuration);
 
-builder.Services.AddDbContext<TechStoreDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddApplicationIdentity(builder.Configuration);
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddApplicationServices(typeof(ICartService));
+builder.Services.AddApplicationServicesExtra(builder.Configuration);
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-    {
-        options.User.RequireUniqueEmail = true;
-        options.SignIn.RequireConfirmedAccount = false;
+builder.Services.AddRazorPages();
 
-		options.Password.RequireDigit = false;
-		options.Password.RequireNonAlphanumeric = false;
-		options.Password.RequireUppercase = false;
-	})
-    .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<TechStoreDbContext>();
-
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = $"/Account/Login";
-});
-
-builder.Services.AddHttpContextAccessor();
-
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ICartService, CartService>();
-builder.Services.AddScoped<IAddressService, AddressService>();
-builder.Services.AddScoped<IFavoriteService, FavoriteService>();    
-builder.Services.AddScoped<IOrderService, OrderService>();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<ISearchService, SearchService>();
-
-builder.Services.AddScoped<IRepository<ApplicationUser, Guid>, Repository<ApplicationUser, Guid>>();
-builder.Services.AddScoped<IRepository<CartItem, object>, Repository<CartItem, object>>();
-builder.Services.AddScoped<IRepository<Favorited, object>, Repository<Favorited, object>>();
-builder.Services.AddScoped<IRepository<OrderDetail, int>, Repository<OrderDetail, int>>();
-builder.Services.AddScoped<IRepository<Category, int>, Repository<Category, int>>();
-builder.Services.AddScoped<IRepository<Address, int>, Repository<Address, int>>();
-builder.Services.AddScoped<IRepository<Product, int>, Repository<Product, int>>();
-builder.Services.AddScoped<IRepository<Status, int>, Repository<Status, int>>();
-builder.Services.AddScoped<IRepository<Review, int>, Repository<Review, int>>();
-builder.Services.AddScoped<IRepository<Order, int>, Repository<Order, int>>();
-builder.Services.AddScoped<IRepository<Cart, int>, Repository<Cart, int>>();
-
-
-builder.Services.AddScoped<ISeedDataService, SeedDataService>();
 
 builder.Services.AddControllersWithViews();
 
@@ -83,8 +37,6 @@ else
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
-app.UseAuthentication();
 app.UseAuthorization();
 
 using (var scope = app.Services.CreateScope())

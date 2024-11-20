@@ -1,30 +1,49 @@
 ﻿@using TechStoreApp.Web.ViewModels.Orders
 @model UserOrdersListViewModel
 
-@foreach (var order in Model.Orders)
-{
-	<div class="single-order">
+<div class="container my-4">
+    @foreach (var order in Model.Orders)
+    {
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Order ID: @order.OrderId</h5>
+                <span>@order.OrderDate</span>
+            </div>
 
-		<div class="order-head">
-			<p>Order ID: @order.OrderId</p>
+            <div class="card-body">
+                @foreach (var orderDetail in order.OrderDetails)
+                {
+                    <div class="row mb-3">
+                        <div class="col-md-2 col-sm-4 col-4">
+                            <img class="img-fluid rounded" src="@orderDetail.ProductImageUrl" alt="@orderDetail.ProductName" />
+                        </div>
+                        <div class="col-md-6 col-sm-8 col-8">
+                            <h6 class="mb-1">@orderDetail.ProductName</h6>
+                            <p class="mb-0">Quantity: @orderDetail.Quantity</p>
+                            <p class="text-muted small">Unit Price: $@orderDetail.UnitPrice</p>
+                        </div>
+                        <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+                            <p class="fw-bold mb-0">
+                                $@(orderDetail.Quantity * orderDetail.UnitPrice)
+                            </p>
+                        </div>
 
-			<p>@order.OrderDate</p>
-		</div>
-		
-		@foreach (var orderDetail in order.OrderDetails)
-		{
-			<div class="product-cell-div">
-				<img class="product-image" src="@orderDetail.ProductImageUrl" />
-				<p>@orderDetail.ProductName</p>
-				<p>@orderDetail.Quantity x $@orderDetail.UnitPrice</p>
-				
-			</div>
-		}
+                    </div>
+                }
 
-		<div class="order-footer">
-			<p>Delivery address: @order.ShippingAddress</p>
-		</div>
+            </div>
 
-	</div>
-}
+            <form asp-action="CompletedOrder" asp-controller="Order" method="get">
+                <input name="orderId" value="@order.OrderId"/>
 
+                <button type="submit">
+                    View Order
+                </button>
+            </form>
+
+            <div class="card-footer bg-light">
+                <p class="mb-0"><strong>Delivery Address:</strong> @order.ShippingAddress</p>
+            </div>
+        </div>
+    }
+</div>

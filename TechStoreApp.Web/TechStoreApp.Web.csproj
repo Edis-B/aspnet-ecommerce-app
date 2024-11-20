@@ -42,6 +42,7 @@
     <ProjectReference Include="..\TechStoreApp.Data.Models\TechStoreApp.Data.Models.csproj" />
     <ProjectReference Include="..\TechStoreApp.Data\TechStoreApp.Data.csproj" />
     <ProjectReference Include="..\TechStoreApp.Services.Data\TechStoreApp.Services.Data.csproj" />
+    <ProjectReference Include="..\TechStoreApp.Web.Infrastructure\TechStoreApp.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\TechStoreApp.Web.ViewModels\TechStoreApp.Web.ViewModels.csproj" />
   </ItemGroup>
 

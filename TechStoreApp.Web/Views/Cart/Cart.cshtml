@@ -21,6 +21,7 @@
                 foreach (var item in Model.CartItems)
                 {
                     <div class="product-div" id="@item.ProductId">
+                        
                         <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
                             <img class="image-for-product" src="@item.Product.ImageUrl" alt="Product image" />
                         </a>
@@ -38,6 +39,7 @@
                         </div>
 
                         <p>@item.Product.Name</p>
+
                     </div>
 
                     <hr />

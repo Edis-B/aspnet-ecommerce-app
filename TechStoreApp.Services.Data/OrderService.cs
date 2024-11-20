@@ -45,7 +45,7 @@ namespace TechStoreApp.Services.Data
             userService = _userService;
 
         }
-        public async Task<OrderViewModel> GetOrderViewModelAsync()
+        public async Task<OrderPageViewModel> GetOrderViewModelAsync()
         {
             var userId = userService.GetUserId();
 
@@ -57,7 +57,7 @@ namespace TechStoreApp.Services.Data
                         .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync();
 
-            var newModel = new OrderViewModel();
+            var newModel = new OrderPageViewModel();
 
             newModel.UserAddresses = user!.Addresses
                 .Select(a => new AddressViewModel()
@@ -99,7 +99,7 @@ namespace TechStoreApp.Services.Data
 
             return newModel;
         }
-        public async Task<OrderFinalizedModel> GetOrderFinalizedModelAsync(OrderViewModel model)
+        public async Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(OrderPageViewModel model)
         {
             var userId = userService.GetUserId();
 
@@ -124,7 +124,7 @@ namespace TechStoreApp.Services.Data
             var totalCost = user.Cart.CartItems
                 .Sum(ci => ci.Product.Price * ci.Quantity);
 
-            var newModel = new OrderFinalizedModel
+            var newModel = new OrderFinalizedPageViewModel
             {
                 Address = model.Address,
                 Cart = new CartViewModel()
@@ -222,6 +222,7 @@ namespace TechStoreApp.Services.Data
                         {
                             ProductImageUrl = od.Product!.ImageUrl ?? string.Empty,
                             ProductName = od.Product.Name,
+                            ProductId = od.ProductId,
                             Quantity = od.Quantity,
                             UnitPrice = od.UnitPrice
                         })
@@ -234,6 +235,31 @@ namespace TechStoreApp.Services.Data
             orderModel.Orders = orders;
 
             return orderModel;
+        }
+
+        public async Task<UserOrderSingleViewModel> GetDetailsOfOrder(int orderId)
+        {
+            var order = await orderRepository.GetAllAttached()
+                .Where(o => o.OrderId == orderId)
+                .Select(o => new UserOrderSingleViewModel()
+                {
+                    OrderId = o.OrderId,
+                    ShippingAddress = o.ShippingAddress!,
+                    OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
+                    OrderDetails = o.OrderDetails
+                        .Select(od => new OrderDetailViewModel()
+                        {
+                            ProductImageUrl = od.Product!.ImageUrl ?? string.Empty,
+                            ProductName = od.Product.Name,
+                            ProductId = od.ProductId,
+                            Quantity = od.Quantity,
+                            UnitPrice = od.UnitPrice
+                        })
+                        .ToList()
+                })
+                .FirstOrDefaultAsync();
+
+            return order;
         }
     }
 }

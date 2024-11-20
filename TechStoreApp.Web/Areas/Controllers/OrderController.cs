@@ -24,7 +24,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpPost]
-        public IActionResult SharedOrderForm(OrderViewModel model, string action)
+        public IActionResult SharedOrderForm(OrderPageViewModel model, string action)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +57,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FinalizeOrder(OrderViewModel model)
+        public async Task<IActionResult> FinalizeOrder(OrderPageViewModel model)
         {
             var newModel = await orderService.GetOrderFinalizedModelAsync(model);
 
@@ -70,6 +70,14 @@ namespace TechStoreApp.Web.Areas.Controllers
             await orderService.SendOrderAsync(model);
 
             return RedirectToAction("Index", "Account");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CompletedOrder(int orderId)
+        {
+            var model = await orderService.GetDetailsOfOrder(orderId);
+
+            return View("CompletedOrder", model);
         }
     }
 }

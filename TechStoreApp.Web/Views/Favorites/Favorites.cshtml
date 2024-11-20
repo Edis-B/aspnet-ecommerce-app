@@ -6,15 +6,15 @@
 <title>Favorites</title>
 
 <div class="main-body-container">
-    @{
-        if (Model.Products.Count != 0)
-        {
-            foreach (var item in Model.Products)
+    @if (Model.Products.Count != 0)
+    {
+        <div class="products-container">
+            @foreach (var item in Model.Products)
             {
                 <div class="row-container" id="product-id_@item.ProductId">
                     <form class="remove-from-favorites">
                         <button type="submit">
-                            <img src="~/images/black-x-symbol.png"/>
+                            <img src="~/images/black-x-symbol.png" />
                         </button>
                     </form>
 
@@ -23,7 +23,7 @@
                             <img class="image-for-product" src="@item.ImageUrl" alt="Product image" />
                         </a>
                     </div>
-                    
+
                     <p>@item.Name</p>
                     <p>Liked on: @item.DateLiked</p>
 
@@ -34,13 +34,12 @@
                             <img class="cart-image" src="~/images/cart-icon-28356.png" />
                         </button>
                     </form>
-
                 </div>
             }
-        }
-        else
-        {
-            <p>No favorited items.</p>
-        }
+        </div>
+    }
+    else
+    {
+        <p>No favorited items.</p>
     }
 </div>

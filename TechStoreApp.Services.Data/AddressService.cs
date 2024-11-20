@@ -28,7 +28,7 @@ namespace TechStoreApp.Services.Data
         }
 
         [HttpPost]
-        public async Task SaveAddressAsync(OrderViewModel model)
+        public async Task SaveAddressAsync(OrderPageViewModel model)
         {
             var userId = userService.GetUserId();
 

@@ -10,7 +10,7 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface IAddressService
     {
-        Task SaveAddressAsync(OrderViewModel model);
+        Task SaveAddressAsync(OrderPageViewModel model);
 
         Task<Address> GetAddressByIdAsync(int id);
     }

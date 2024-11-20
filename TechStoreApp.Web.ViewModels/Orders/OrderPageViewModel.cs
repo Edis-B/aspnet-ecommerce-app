@@ -4,7 +4,7 @@ using TechStoreApp.Web.ViewModels.Cart;
 
 namespace TechStoreApp.Web.ViewModels.Orders
 {
-    public class OrderViewModel
+    public class OrderPageViewModel
     {
         public List<AddressViewModel> UserAddresses { get; set; } = new List<AddressViewModel>();
         public List<CartItemViewModel> CartItems { get; set; } = new List<CartItemViewModel>();

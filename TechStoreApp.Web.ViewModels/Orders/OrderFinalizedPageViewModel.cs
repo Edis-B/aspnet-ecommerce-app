@@ -2,7 +2,7 @@
 
 namespace TechStoreApp.Web.ViewModels.Orders
 {
-    public class OrderFinalizedModel
+    public class OrderFinalizedPageViewModel
     {
         public CartViewModel Cart { get; set; }
 

@@ -7,6 +7,6 @@ namespace TechStoreApp.Web.ViewModels.Header
     public class UserModel
     {
         public ProfileViewModel User { get; set; }
-        public List<OrderViewModel> MyProperty { get; set; }
+        public List<OrderPageViewModel> MyProperty { get; set; }
     }
 }

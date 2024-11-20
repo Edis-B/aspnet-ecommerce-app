@@ -13,10 +13,10 @@ public partial class OrderDetail
     public int OrderDetailId { get; set; }
 
     [Required]
-    public int? OrderId { get; set; }
+    public int OrderId { get; set; }
 
     [Required]
-    public int? ProductId { get; set; }
+    public int ProductId { get; set; }
 
     [Range(EntityValidationConstraints.OrderDetail.minQuantityCount /*0*/, int.MaxValue)]
     public int Quantity { get; set; }

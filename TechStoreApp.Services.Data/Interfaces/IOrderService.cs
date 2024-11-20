@@ -11,9 +11,10 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface IOrderService
     {
-        Task<OrderViewModel> GetOrderViewModelAsync();
-        Task<OrderFinalizedModel> GetOrderFinalizedModelAsync(OrderViewModel model);
+        Task<OrderPageViewModel> GetOrderViewModelAsync();
+        Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(OrderPageViewModel model);
         Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync();
+        Task<UserOrderSingleViewModel> GetDetailsOfOrder(int orderId);
         Task SendOrderAsync(SendOrderViewModel model);
     }
 }

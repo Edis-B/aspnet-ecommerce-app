@@ -24,7 +24,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View("Index");
         }
@@ -39,7 +39,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Login(string ReturnUrl)
+        public IActionResult Login(string ReturnUrl)
         {
             var model = new LoginViewModel { ReturnUrl = ReturnUrl };
 
@@ -66,7 +66,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Register(string returnUrl)
+        public IActionResult Register(string returnUrl)
         {
             return View("Register");
         }
@@ -122,7 +122,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ForgotPassword()
+        public IActionResult ForgotPassword()
         {
             var model = new ForgotPasswordViewModel();
 
@@ -152,13 +152,13 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ResetPassword(string code = null)
+        public IActionResult ResetPassword(string? code = null)
         {
             if (code == null)
             {
                 return BadRequest("A code must be supplied for password reset.");
             }
-            
+
             var model = new ResetPasswordViewModel()
             {
                 Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))

@@ -63,6 +63,7 @@ namespace TechStoreApp.Services.Data
                     Name = f.Product.Name,
                     ImageUrl = f.Product.ImageUrl,
                     DateLiked = f.FavoritedAt.ToString("dd/MM/yyyy"),
+                    TotalLikes = f.Product.Favorites.Sum(f => 1)
                 })
                 .ToListAsync();
 

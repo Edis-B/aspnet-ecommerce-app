@@ -16,7 +16,7 @@ namespace TechStoreApp.Web.Areas.Controllers
             addressService = _addressService;
         }
         [HttpPost]
-        public async Task<IActionResult> SaveAddress(OrderViewModel model)
+        public async Task<IActionResult> SaveAddress(OrderPageViewModel model)
         {
             await addressService.SaveAddressAsync(model);
 
