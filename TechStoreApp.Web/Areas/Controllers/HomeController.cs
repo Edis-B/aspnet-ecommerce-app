@@ -21,30 +21,6 @@ namespace TechStoreApp.Web.Areas.Controllers
             return View();
         }
 
-        public IActionResult Cart()
-        {
-            return View();
-        }
-
-        public IActionResult Favorites()
-        {
-            return View();
-        }
-
-        public IActionResult Register()
-        {
-            return Redirect("../Identity/Account/Register");
-        }
-
-        public IActionResult Login()
-        {
-            return Redirect("../Identity/Account/Login");
-        }
-        public IActionResult Logout()
-        {
-            return Redirect("../Identity/Account/Logout");
-        }
-
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

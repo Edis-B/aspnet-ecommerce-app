@@ -11,7 +11,8 @@ namespace TechStoreApp.Web.ViewModels.Orders
     {
         public int OrderId { get; set; }
         public string OrderDate { get; set; }
-        public List<OrderDetailViewModel> OrderDetails { get; set; }
         public string ShippingAddress { get; set; }
+        public double TotalPrice { get; set; }
+        public List<OrderDetailViewModel> OrderDetails { get; set; }
     }
 }

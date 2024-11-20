@@ -72,10 +72,14 @@ namespace TechStoreApp.Web.Areas.Controllers
             return RedirectToAction("Index", "Account");
         }
 
-        [HttpGet]
+        [HttpGet("Order/CompletedOrder/{orderId:int}")]
         public async Task<IActionResult> CompletedOrder(int orderId)
         {
             var model = await orderService.GetDetailsOfOrder(orderId);
+
+            if (model == null) {
+                return RedirectToAction("Index", "Home");
+            }
 
             return View("CompletedOrder", model);
         }

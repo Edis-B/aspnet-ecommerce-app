@@ -33,16 +33,15 @@
 
             </div>
 
-            <form asp-action="CompletedOrder" asp-controller="Order" method="get">
-                <input name="orderId" value="@order.OrderId"/>
-
-                <button type="submit">
-                    View Order
-                </button>
-            </form>
 
             <div class="card-footer bg-light">
                 <p class="mb-0"><strong>Delivery Address:</strong> @order.ShippingAddress</p>
+
+                <form asp-action="CompletedOrder" asp-controller="Order" asp-route-orderId="@order.OrderId" method="get" class="mt-3">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="bi bi-eye"></i> View Order
+                    </button>
+                </form>
             </div>
         </div>
     }

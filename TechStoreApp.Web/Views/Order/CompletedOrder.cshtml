@@ -19,6 +19,33 @@
         text-align: center;
         margin-bottom: 20px;
     }
+
+    .product-item {
+        display: flex;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #e9ecef;
+    }
+
+    .product-item:last-child {
+        border-bottom: none;
+    }
+
+    .product-image {
+        width: 60px;
+        height: 60px;
+        margin-right: 15px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+
+    .product-details {
+        flex: 1;
+    }
+
+    .product-price {
+        font-weight: bold;
+    }
 </style>
 
 <body>
@@ -29,27 +56,30 @@
             </div>
             <div class="mb-4">
                 <h5 class="fw-bold">Order Summary</h5>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Item 1
-                        <span>$10.00</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Item 2
-                        <span>$15.00</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        Total
-                        <span class="fw-bold">$25.00</span>
-                    </li>
-                </ul>
+                <div class="product-list">
+                    @foreach (var product in Model.OrderDetails)
+                    {
+                        <div class="product-item">
+                            <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })">
+                                <img src="@product.ProductImageUrl" alt="@product." class="product-image" />
+                            </a>
+
+                            <div class="product-details">
+                                <p class="mb-1"><strong>@product.ProductName</strong></p>
+                                <p class="mb-1">Quantity: @product.Quantity</p>
+                                <p class="mb-1 product-price">Price: $@product.UnitPrice</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                    <h5 class="fw-bold">Total</h5>
+                    <h5 class="fw-bold">$@Model.TotalPrice</h5>
+                </div>
             </div>
             <div class="mb-4">
                 <h5 class="fw-bold">Shipping Address</h5>
-                <p class="mb-1">John Doe</p>
-                <p class="mb-1">123 Main Street</p>
-                <p class="mb-1">Cityville, State 12345</p>
-                <p>United States</p>
+                <p class="mb-1">@Model.ShippingAddress</p>
             </div>
             <div class="text-center">
                 <button class="btn btn-success" disabled>Order Confirmed</button>

@@ -241,11 +241,23 @@ namespace TechStoreApp.Services.Data
         {
             var order = await orderRepository.GetAllAttached()
                 .Where(o => o.OrderId == orderId)
+                .FirstOrDefaultAsync();
+
+            var userId = userService.GetUserId();
+
+            if (order == null || order.UserId != userId)
+            {
+                return null!;
+            }
+
+            var orderViewModel = await orderRepository.GetAllAttached()
+                .Where(o => o.OrderId == orderId)
                 .Select(o => new UserOrderSingleViewModel()
                 {
                     OrderId = o.OrderId,
                     ShippingAddress = o.ShippingAddress!,
                     OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
+                    TotalPrice = (double)o.TotalAmount,
                     OrderDetails = o.OrderDetails
                         .Select(od => new OrderDetailViewModel()
                         {
@@ -259,7 +271,8 @@ namespace TechStoreApp.Services.Data
                 })
                 .FirstOrDefaultAsync();
 
-            return order;
+            
+            return orderViewModel;
         }
     }
 }
