@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechStoreApp.Data", "TechSt
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechStoreApp.Services.Data", "TechStoreApp.Services.Data\TechStoreApp.Services.Data.csproj", "{6BB135F0-8B6D-4EC0-91A1-72CC464DC0FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechStoreApp.Web.Infrastructure", "TechStoreApp.Web.Infrastructure\TechStoreApp.Web.Infrastructure.csproj", "{3A42A35B-44E9-4974-80BC-2683364B0A60}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechStoreApp.Web.Infrastructure", "TechStoreApp.Web.Infrastructure\TechStoreApp.Web.Infrastructure.csproj", "{3A42A35B-44E9-4974-80BC-2683364B0A60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

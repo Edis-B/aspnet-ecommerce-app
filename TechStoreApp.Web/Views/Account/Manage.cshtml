@@ -1,0 +1,47 @@
+﻿@using TechStoreApp.Web.ViewModels.User
+@model ManageUsersViewModel
+
+<head>
+    <link rel="stylesheet" href="~/css/manage-page.css"/>
+</head>
+
+<div>
+    <form id="searchForm" asp-action="Manage" asp-controller="Account" method="get">
+        <input type="text" name="email" placeholder="Email"/>
+        <input type="text" name="userName" placeholder="User Name" />
+        <input type="hidden" />
+
+        <button type="submit">Search</button>
+    </form>
+
+    @for (int i = 1; i <= Model.TotalPages; i++) // Assuming pages start from 1
+    {
+        if (Model.Page == i)
+        {
+            <a class="page-selector" id="page-@i" style="background-color: gray"
+               href="@Url.Action("Manage", new { page = i, userName = Model.UserNameQuery, email = Model.EmailQuery })">@i</a>
+        }
+        else
+        {
+            <a class="page-selector" id="page-@i"
+               href="@Url.Action("Manage", new { page = i, userName = Model.UserNameQuery, email = Model.EmailQuery })">@i</a>
+        }
+    }
+</div>
+
+<div class="container user-grid">
+    <div class="row">
+        @foreach (var profile in Model.Users)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+                <div class="user-card">
+                    <img src="@profile.ProfilePictureUrl" alt="Profile Picture">
+                    <h1>@profile.UserName</h1>
+                    <p><strong>Email:</strong> @profile.Email</p>
+                    <p><strong>User ID:</strong> @profile.UserId</p>
+                    <a href="/admin/edit-user/@profile.UserId" class="btn btn-primary btn-edit">Edit User</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

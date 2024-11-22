@@ -11,5 +11,7 @@ namespace TechStoreApp.Services.Data.Interfaces
     public interface IProfileService
     {
         Task<ProfileViewModel> GetUserProfilePictureUrlAsync();
+
+        Task<ManageUsersViewModel> GetAllUsersAsync(string? userName, string? email, int page, int itemsPerPage);
     }
 }

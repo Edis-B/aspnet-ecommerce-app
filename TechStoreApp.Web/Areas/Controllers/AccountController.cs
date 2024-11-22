@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
-using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Shared;
 using System.Text;
-using System.Text.Encodings.Web;
-using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.User;
-using static TechStoreApp.Common.EntityValidationConstraints;
+using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Web.Areas.Controllers
 {
@@ -18,9 +12,12 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService userService;
-        public AccountController(IUserService _userService)
+        private readonly IProfileService profileService;
+        public AccountController(IUserService _userService,
+            IProfileService _profileService)
         {
             userService = _userService;
+            profileService = _profileService;
         }
 
         [HttpGet]
@@ -28,6 +25,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         {
             return View("Index");
         }
+
 
         [ValidateAntiForgeryToken]
         [HttpPost]

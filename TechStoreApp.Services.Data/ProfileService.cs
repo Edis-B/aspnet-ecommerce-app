@@ -25,6 +25,53 @@ namespace TechStoreApp.Services.Data
             userRepository = _userRepository;
             userService = _userService;
         }
+
+        public async Task<ManageUsersViewModel> GetAllUsersAsync(string? userName, string? email, int page, int itemsPerPage)
+        {
+            var users = userRepository.GetAllAttached();
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                users = users
+                    .Where(u => u.Email!.ToLower().Contains(email.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                users = users
+                    .Where(u => u.UserName!.ToLower().Contains(userName.ToLower()));
+            }
+
+            var models = await users
+                .Select(u => new UsersDetailsViewModel()
+                {
+                    UserId = u.Id.ToString(),
+                    Email = u.Email!,
+                    UserName = u.UserName!,
+                    ProfilePictureUrl = u.ProfilePictureUrl!
+                })
+                .ToListAsync();
+
+            int totalPages = (int)Math.Ceiling((double)models.Count() / itemsPerPage);
+
+            models = models
+                .Skip((page - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToList();
+
+            var newModel = new ManageUsersViewModel()
+            {
+                ItemsPerPage = itemsPerPage,
+                TotalPages = totalPages,
+                Page = page,
+                Users = models,
+                EmailQuery = email,
+                UserNameQuery = userName
+            };
+
+            return newModel;
+        }
+
         public async Task<ProfileViewModel> GetUserProfilePictureUrlAsync()
         {
             var userId = userService.GetUserId();
@@ -39,5 +86,6 @@ namespace TechStoreApp.Services.Data
 
             return model;
         }
+
     }
 }
