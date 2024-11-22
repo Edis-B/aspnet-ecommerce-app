@@ -45,17 +45,10 @@
                         <p class="procuct-details-stock">Stock: @item.Stock</p>
                         <p class="procuct-details-price">Price: $@item.Price</p>
                     </div>
-                    
-                    <form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@item.ProductId" />
-
-                        <button class="add-to-cart-button" type="submit">
-                            Add to Cart
-                            <img class="cart-image" src="~/images/cart-icon-28356.png" />
-                        </button>
-                    </form>
 
                     @{
+                        await Html.RenderPartialAsync("_AddToCartPartial", new { productId = item.ProductId });
+
                         await Html.RenderPartialAsync("_LikesProductPartial", new { productId = item.ProductId, checkedString = item.CheckedString, totalLikes = item.TotalLikes });
                     }
                 </div>

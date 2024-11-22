@@ -155,6 +155,7 @@ namespace TechStoreApp.Services.Data
             var result = await userManager.ResetPasswordAsync(user, resetToken, model.Password);
             return IdentityResult.Success;
         }
+        
 
         public ApplicationUser CreateUser()
         {

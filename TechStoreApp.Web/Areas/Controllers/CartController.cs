@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using NuGet.Versioning;
 using System.Security.Claims;
 using TechStoreApp.Data;
@@ -19,16 +20,31 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class CartController : Controller
     {
         private readonly ICartService cartService;
+        private readonly IRequestService requestService;
 
-        public CartController(ICartService _cartService)
+        public CartController(ICartService _cartService,
+            IRequestService _requestService)
         {
             cartService = _cartService;
+            requestService = _requestService;
         }
         
         [HttpPost]
-        public async Task<JsonResult> AddToCart([FromBody] AddToCartViewModel model)
+        public async Task<IActionResult> AddToCart(ProductIdFormModel model)
         {
-            return await cartService.AddToCartAsync(model);
+            if (requestService.IsAjaxRequest(Request))
+            {
+                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                var response = await cartService.AddToCartAsync(model);
+
+                return response;
+            }
+            else
+            {
+                var response = await cartService.AddToCartAsync(model);
+
+                return RedirectToAction("Cart", "Cart");
+            }
         }
 
         [HttpGet]
@@ -38,16 +54,74 @@ namespace TechStoreApp.Web.Areas.Controllers
 
             return View(usersCartItems);
         }
-        [HttpPut]
-        public async Task<JsonResult> IncreaseCount([FromBody] CartFormModel model)
+
+        [HttpPost]
+        public async Task<IActionResult> IncreaseCount(ProductIdFormModel model)
         {
-            return await cartService.IncreaseCountAsync(model);
+            if (requestService.IsAjaxRequest(Request))
+            {
+                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                var response = await cartService.IncreaseCountAsync(model);
+
+                return response;
+            }
+            else
+            {
+                var response = await cartService.IncreaseCountAsync(model);
+
+                return RedirectToAction("Cart", "Cart");
+            }
         }
 
-        [HttpPut]
-        public async Task<JsonResult> DecreaseCount([FromBody] CartFormModel model)
+        [HttpPost]
+        public async Task<IActionResult> DecreaseCount(ProductIdFormModel model)
         {
-            return await cartService.DecreaseCountAsync(model);
+            if (requestService.IsAjaxRequest(Request))
+            {
+                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                var response = await cartService.DecreaseCountAsync(model);
+
+                return response;
+            } 
+            else
+            {
+                var response = await cartService.DecreaseCountAsync(model);
+
+                return RedirectToAction("Cart", "Cart");
+            }
+        }
+        [HttpDelete]
+        public async Task<IActionResult> RemoveFromCart(ProductIdFormModel model)
+        {
+            if (requestService.IsAjaxRequest(Request))
+            {
+                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                var response = await cartService.RemoveFromCartAsync(model);
+
+                return response;
+            }
+            else
+            {
+                var response = await cartService.RemoveFromCartAsync(model);
+
+                return RedirectToAction("Cart", "Cart");
+            }
+        }
+        [HttpDelete]
+        public async Task<IActionResult> ClearCart()
+        {
+            if (requestService.IsAjaxRequest(Request))
+            {
+                var response = await cartService.ClearCartAsync();
+
+                return response;
+            }
+            else
+            {
+                var response = await cartService.ClearCartAsync();
+
+                return RedirectToAction("Cart", "Cart");
+            }
         }
 
         [HttpGet]
@@ -56,15 +130,6 @@ namespace TechStoreApp.Web.Areas.Controllers
         {
             return await cartService.GetCartItemsCountAsync();
         }
-        [HttpDelete]
-        public async Task<JsonResult> RemoveFromCart([FromBody] RemoveFromCartViewModel model)
-        {
-            return await cartService.RemoveFromCartAsync(model);
-        }
-        [HttpDelete]
-        public async Task<JsonResult> ClearCart()
-        {
-            return await cartService.ClearCartAsync();
-        }
+
     }
 }

@@ -1,0 +1,13 @@
+﻿@{
+    var model = ViewData.Model;
+    var productId = model.productId;
+}
+
+<form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
+    <input type="hidden" name="productId" value="@productId" />
+
+    <button class="add-to-cart-button" type="submit">
+        Add to Cart
+        <img class="cart-image" src="~/images/cart-icon-28356.png" />
+    </button>
+</form>

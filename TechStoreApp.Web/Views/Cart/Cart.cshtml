@@ -27,11 +27,21 @@
                         </a>
 
                         <div class="stock-control">
-                            <button class="decrease-count-class" value="@item.ProductId" type="submit">-</button>
+                            <form asp-action="DecreaseCount" asp-controller="Cart" method="post">
+                                <input type="hidden" name="productId" value="@item.ProductId"/>
+
+                                <button class="decrease-count-class" value="@item.ProductId" type="submit">-</button>                       
+                            </form>
+
                             <div class="item-quantity">
                                 <p>@item.Quantity</p>
                             </div>
-                            <button class="increase-count-class" value="@item.ProductId" type="submit">+</button>
+
+                            <form asp-action="IncreaseCount" asp-controller="Cart" method="post">
+                                <input type="hidden" name="productId" value="@item.ProductId" />
+
+                                <button class="increase-count-class" value="@item.ProductId" type="submit">+</button>
+                            </form>
                         </div>
 
 						<div class="trash-can-div">
@@ -55,9 +65,9 @@
     <div class="order-contents">
         @if (Model.CartItems != null && Model.CartItems.Any())
         {
-            <a asp-action="Order" asp-controller="Order">TO THE ORDER</a>
+            <a asp-action="Order" asp-controller="Order" class="order-button">TO THE ORDER</a>
         } else {
-            <a asp-action="Search" asp-controller="Search">TO PRODUCTS</a>
+            <a asp-action="Search" asp-controller="Search" class="order-button">TO PRODUCTS</a>
         }
     </div>
 </div>

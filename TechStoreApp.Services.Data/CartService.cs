@@ -34,12 +34,17 @@ namespace TechStoreApp.Services.Data
             productRepository = _productRepository;
             userService = _userService;
         }
-        public async Task<JsonResult> AddToCartAsync(AddToCartViewModel model)
+        public async Task<JsonResult> AddToCartAsync(ProductIdFormModel model)
         {
             int productId = model.ProductId;
             string userId = userService.GetUserId();
 
             var product = await productRepository.GetByIdAsync(productId);
+
+            if (product == null)
+            {
+                return new JsonResult(new { success = false, message = "Error - product not found" });
+            }
 
             if (product.Stock <= 0)
             {
@@ -118,7 +123,8 @@ namespace TechStoreApp.Services.Data
                         .Select(p => new ProductViewModel()
                         {
                             ProductId = p.ProductId,
-                            ImageUrl = p.ImageUrl
+                            ImageUrl = p.ImageUrl,
+                            Name = p.Name
                         })
                         .FirstOrDefault() ?? new ProductViewModel()
                 })
@@ -132,7 +138,7 @@ namespace TechStoreApp.Services.Data
             return newViewModel;
         }
 
-        public async Task<JsonResult> IncreaseCountAsync(CartFormModel model)
+        public async Task<JsonResult> IncreaseCountAsync(ProductIdFormModel model)
         {
             var product = await productRepository.GetByIdAsync(model.ProductId);
 
@@ -164,7 +170,7 @@ namespace TechStoreApp.Services.Data
             return new JsonResult(new { success = true, newQuantity = theCartItem.Quantity, message = "Successfully increased items!" });
         }
 
-        public async Task<JsonResult> DecreaseCountAsync(CartFormModel model)
+        public async Task<JsonResult> DecreaseCountAsync(ProductIdFormModel model)
         {
             var userId = userService.GetUserId();
 
@@ -174,8 +180,23 @@ namespace TechStoreApp.Services.Data
                     .ThenInclude(c => c.CartItems)
                 .FirstOrDefaultAsync();
 
+            if (user!.Cart == null || user.Cart.CartItems == null)
+            {
+                return new JsonResult(new { success = false, message = "Error - User cart not found" });
+            }
+
             var theCartItem = user.Cart.CartItems
                 .FirstOrDefault(ci => ci.ProductId == model.ProductId);
+
+            if (theCartItem == null)
+            {
+                return new JsonResult(new { success = false, message = "Error - Item in cart not found" });
+            }
+
+            if (theCartItem.Quantity <= 1)
+            {
+                await RemoveFromCartAsync(model);
+            }
 
             theCartItem.Quantity--;
             await cartItemRepository.UpdateAsync(theCartItem);
@@ -209,7 +230,7 @@ namespace TechStoreApp.Services.Data
             return new JsonResult(new { total = totalItems });
         }
 
-        public async Task<JsonResult> RemoveFromCartAsync(RemoveFromCartViewModel model)
+        public async Task<JsonResult> RemoveFromCartAsync(ProductIdFormModel model)
         {
             var userId = userService.GetUserId();
 

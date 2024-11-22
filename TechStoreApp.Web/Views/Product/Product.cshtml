@@ -10,35 +10,37 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-<div class="div-image-container">
-    <img class="image-for-product" src="@Model.ImageUrl" data-stock="@Model.Stock" />
-</div>
+<div class="product-details-container">
+    <div class="div-image-container">
+        <img class="image-for-product" src="@Model.ImageUrl" data-stock="@Model.Stock" />
+    </div>
 
-<form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
-    <input type="hidden" name="productId" value="@Model.ProductId" />
-    <button class="add-to-cart-button" type="submit">
-        Add to Cart
-        <img class="cart-image" src="~/images/cart-icon-28356.png" />
-    </button>
-</form>
+    <div class="product-info">
+        <h3 class="product-name-p">@Model.Name</h3>
+        <p class="product-description-p">@Model.Description</p>
+        <p class="product-price-p">@Model.Price</p>
+        <p class="product-stock-p">@Model.Stock</p>
 
-@if (User.IsInRole(GeneralConstraints.AdminRoleName))
-{
-    <a class="edit-button" asp-controller="Product" asp-action="Edit" asp-route-productId="@Model.ProductId">
-        Edit
-        <img src="~/images/clipboard.png"/>
-    </a>
-}
+        <form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
+            <input type="hidden" name="productId" value="@Model.ProductId" />
+            <button class="add-to-cart-button" type="submit">
+                Add to Cart
+                <img class="cart-image" src="~/images/cart-icon-28356.png" />
+            </button>
+        </form>
 
-@{
-    await Html.RenderPartialAsync("_LikesProductPartial", new { productId = Model.ProductId, checkedString = Model.CheckedString, totalLikes = Model.TotalLikes });
-}
+        @if (User.IsInRole(GeneralConstraints.AdminRoleName))
+        {
+            <a class="edit-button" asp-controller="Product" asp-action="Edit" asp-route-productId="@Model.ProductId">
+                Edit
+                <img src="~/images/clipboard.png" />
+            </a>
+        }
 
-<div>
-    <h3 class="product-name-p">@Model.Name</h3>
-    <p class="product-description-p">@Model.Description</p>
-    <p class="product-price-p">@Model.Price</p>
-    <p class="product-stock-p">@Model.Stock</p>
+        @{
+            await Html.RenderPartialAsync("_LikesProductPartial", new { productId = Model.ProductId, checkedString = Model.CheckedString, totalLikes = Model.TotalLikes });
+        }
+    </div>
 </div>
 
 <div class="review-section">
