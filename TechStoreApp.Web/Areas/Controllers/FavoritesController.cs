@@ -1,10 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Security.Claims;
-using TechStoreApp.Data;
-using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Favorites;
 using TechStoreApp.Web.ViewModels.Products;
@@ -15,25 +10,54 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class FavoritesController : Controller
     {
         private readonly IFavoriteService favoriteService;
-        public FavoritesController(IFavoriteService _favoriteService)
+        private readonly IRequestService requestService;
+        public FavoritesController(IFavoriteService _favoriteService,
+            IRequestService _requestService)
         {
             favoriteService = _favoriteService;
+            requestService = _requestService;
         }
         [HttpPost]
-        public async Task<JsonResult> AddToFavorites([FromBody] FavoriteFormModel model)
+        public async Task<IActionResult> AddToFavorites(ProductIdFormModel model)
         {
-            return await favoriteService.AddToFavoritesAsync(model);
+            if (requestService.IsAjaxRequest(Request))
+            {
+                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                var response = await favoriteService.AddToFavoritesAsync(model);
+
+                return response; 
+            }
+            else
+            {
+                var response = await favoriteService.AddToFavoritesAsync(model);
+
+                return RedirectToAction("Favorites", "Favorites");
+            }
         }
 
         [HttpDelete]
-        public async Task<IActionResult> RemoveFromFavorites([FromBody] FavoriteFormModel model)
+        public async Task<IActionResult> RemoveFromFavorites(ProductIdFormModel model)
         {
-            return await favoriteService.RemoveFromFavoritesAsync(model);
+            if (requestService.IsAjaxRequest(Request))
+            {
+                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+
+                var response = await favoriteService.RemoveFromFavoritesAsync(model);
+                return response;
+            }
+            else
+            {
+                var response = await favoriteService.RemoveFromFavoritesAsync(model);
+
+                return RedirectToAction("Favorites", "Favorites");
+            }
         }
         [HttpGet]
         public async Task<IActionResult> Favorites(FavoriteViewModel model)
         {
-            return View(await favoriteService.GetUserFavoritesAsync());
+            var newModel = await favoriteService.GetUserFavoritesAsync();
+
+            return View(newModel);
         }
     }
 }

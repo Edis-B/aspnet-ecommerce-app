@@ -12,7 +12,7 @@
             @foreach (var item in Model.Products)
             {
                 <div class="row-container" id="product-id_@item.ProductId">
-                    <form class="remove-from-favorites">
+                    <form asp-action="RemoveFromFavorites" asp-controller="Favorites" class="remove-from-favorites">
                         <button type="submit">
                             <img src="~/images/black-x-symbol.png" />
                         </button>

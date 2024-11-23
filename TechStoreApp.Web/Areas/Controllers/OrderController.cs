@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using System.Security.Policy;
-using TechStoreApp.Data;
-using TechStoreApp.Data.Models;
+using Newtonsoft.Json;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.ViewModels;
+using TechStoreApp.Web.Utilities;
 using TechStoreApp.Web.ViewModels.Address;
-using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Orders;
-using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Web.Areas.Controllers
 {
@@ -18,34 +12,47 @@ namespace TechStoreApp.Web.Areas.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService orderService;
-        public OrderController(IOrderService _orderService)
+        private readonly ICartService cartService;
+
+        public OrderController(IOrderService _orderService, 
+            ICartService _cartService)
         {
             orderService = _orderService;
+            cartService = _cartService;
         }
 
         [HttpPost]
-        public IActionResult SharedOrderForm(OrderPageViewModel model, string action)
+        public async Task<IActionResult> SharedOrderForm(OrderPageViewModel model, string action)
         {
             if (!ModelState.IsValid)
             {
+                var address = model.Address;
+
+                // Repopulate other data
+                model = await orderService.GetOrderViewModelAsync(null);
+                model.Address = address;
+
                 return View("Order", model);
             }
 
             if (action == "FinalizeOrder")
             {
-                return RedirectToActionPreserveMethod(action, "Order", model);
+                TempData["Model"] = JsonConvert.SerializeObject(model.Address);
+                return RedirectToActionPreserveMethod("FinalizeOrder", "Order");
+
             } else if (action == "SaveAddress")
             {
-                return RedirectToActionPreserveMethod(action, "Address", model);
+                TempData["Model"] = JsonConvert.SerializeObject(model.Address);
+                return RedirectToActionPreserveMethod("SaveAddress", "Address");
             }
 
             return View("Order", model);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Order()
+        public async Task<IActionResult> Order(int? addressId)
         {
-            var orderViewModel = await orderService.GetOrderViewModelAsync();
+            var orderViewModel = await orderService.GetOrderViewModelAsync(addressId);
 
             return View("Order", orderViewModel);
         }
@@ -57,8 +64,11 @@ namespace TechStoreApp.Web.Areas.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> FinalizeOrder(OrderPageViewModel model)
+        public async Task<IActionResult> FinalizeOrder(AddressFormModel model)
         {
+            // TempData from SharedForm
+            model = TempDataUtility.GetTempData<AddressFormModel>(TempData, "Model") ?? model;
+
             var newModel = await orderService.GetOrderFinalizedModelAsync(model);
 
             return View("OrderFinalized", newModel);

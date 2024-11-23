@@ -117,10 +117,12 @@ form#clear-cart-form button:hover {
     font-weight: bold;
 }
 
-.trash-can-div {
+.trash-can-button {
     display: flex;
     align-items: center;
     justify-content: center;
+    border: none;
+    background-color: transparent;
 }
 
 .trash-can {
@@ -130,9 +132,9 @@ form#clear-cart-form button:hover {
     transition: transform 0.2s ease;
 }
 
-    .trash-can:hover {
-        transform: scale(1.1);
-    }
+.trash-can:hover {
+    transform: scale(1.1);
+}
 
 .order-contents {
     width: 25%;

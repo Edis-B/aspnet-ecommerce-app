@@ -31,7 +31,6 @@ namespace TechStoreApp.Services.Data
         }
         public async Task SeedAllMissingData()
         {
-            // awaiting disrupts db flow and breaks the data
             await SeedRoles();
             await SeedAccounts();
             await SeedCategories();

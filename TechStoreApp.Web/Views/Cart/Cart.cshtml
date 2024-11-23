@@ -7,7 +7,7 @@
 <div class="whole-SearchPage-body">
 	<div class="main-body-id">
         <div id="cart-header">
-            <form id="clear-cart-form">
+            <form id="clear-cart-form" asp-action="ClearCart" asp-controller="Cart" method="post">
                 <button type="submit">
                     Empty whole cart
                     <img src="~/images/trash-bin-white.png">
@@ -44,9 +44,14 @@
                             </form>
                         </div>
 
-						<div class="trash-can-div">
-                            <img class="trash-can" src="https://icons.veryicon.com/png/o/miscellaneous/flat-wireframe-library/trash-bin-3.png" />
-                        </div>
+                        <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                            <input type="hidden" name="productId" value="@item.ProductId" />
+
+						    <button class="trash-can-button" type="submit">
+                                <img class="trash-can" 
+                                    src="https://icons.veryicon.com/png/o/miscellaneous/flat-wireframe-library/trash-bin-3.png" />
+                            </button>
+                        </form>
 
                         <p>@item.Product.Name</p>
 

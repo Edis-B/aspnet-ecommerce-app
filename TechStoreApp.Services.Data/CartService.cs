@@ -10,6 +10,7 @@ using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
+using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Products;
 

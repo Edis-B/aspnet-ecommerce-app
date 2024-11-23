@@ -14,7 +14,7 @@ namespace TechStoreApp.Web.ViewModels.Address
         public string Details { get; set; }
         [Required(ErrorMessage = "Postal code field is required!")]
         [Range(minPostalCode, maxPostalCode, ErrorMessage = "Postal code must be between 0 and 10000!")]
-        public int PostalCode { get; set; }
+        public string PostalCode { get; set; }
         public int? Id { get; set; }
     }
 }

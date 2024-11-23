@@ -11,6 +11,7 @@ using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Orders;
 
 namespace TechStoreApp.Services.Data
@@ -28,17 +29,17 @@ namespace TechStoreApp.Services.Data
         }
 
         [HttpPost]
-        public async Task SaveAddressAsync(OrderPageViewModel model)
+        public async Task SaveAddressAsync(AddressFormModel model)
         {
             var userId = userService.GetUserId();
 
             var newAddress = new Address
             {
                 UserId = userId,
-                City = model.Address.City,
-                Country = model.Address.Country,
-                Details = model.Address.Details,
-                PostalCode = model.Address.PostalCode,
+                City = model.City,
+                Country = model.Country,
+                Details = model.Details,
+                PostalCode = int.Parse(model.PostalCode),
             };
 
             await addressRepository.AddAsync(newAddress);

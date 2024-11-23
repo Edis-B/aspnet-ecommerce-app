@@ -25,7 +25,7 @@ namespace TechStoreApp.Services.Data
             favoritedRepository = _favoritedRepository;
             userService = _userService;
         }
-        public async Task<JsonResult> AddToFavoritesAsync(FavoriteFormModel model)
+        public async Task<JsonResult> AddToFavoritesAsync(ProductIdFormModel model)
         {
             string userId = userService.GetUserId();
 
@@ -40,7 +40,7 @@ namespace TechStoreApp.Services.Data
 
             return new JsonResult(new { message = "Successfully added to favorites" });
         }
-        public async Task<JsonResult> RemoveFromFavoritesAsync(FavoriteFormModel model)
+        public async Task<JsonResult> RemoveFromFavoritesAsync(ProductIdFormModel model)
         {
             string userId = userService.GetUserId();
 

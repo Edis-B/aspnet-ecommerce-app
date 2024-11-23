@@ -1,13 +1,104 @@
-﻿.item-info-container{
-    display: block;
-    width: 80%;
-    height: 200px;
+﻿body {
+    font-family: Arial, sans-serif;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    color: #333;
 }
 
-.item-info-container img{
-    height: 100%;
+.order-details {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.item-info-container p{
-    display: inline;
+    .order-details h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        color: #444;
+        text-align: center;
+    }
+
+.item-info-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    border-bottom: 1px solid #ddd;
 }
+
+    .item-info-container:last-child {
+        border-bottom: none;
+    }
+
+    .item-info-container img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+    }
+
+    .item-info-container p {
+        margin: 0 0.5rem;
+        font-size: 1rem;
+        color: #555;
+    }
+
+        .item-info-container p.total {
+            font-weight: bold;
+            color: #222;
+        }
+
+.total-price {
+    text-align: right;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #ddd;
+}
+
+.delivery-address-details {
+    margin-top: 2rem;
+    padding: 1rem;
+    background: #f7f7f7;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+    .delivery-address-details p {
+        margin: 0.5rem 0;
+        font-size: 1rem;
+        color: #444;
+    }
+
+#send-order-div {
+    text-align: center;
+    margin-top: 2rem;
+}
+
+#send-order-form button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+    #send-order-form button:hover {
+        background: #0056b3;
+    }
+
+    #send-order-form button:focus {
+        outline: none;
+        box-shadow: 0 0 4px #0056b3;
+    }

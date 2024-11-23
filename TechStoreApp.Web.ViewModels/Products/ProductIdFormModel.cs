@@ -1,4 +1,4 @@
-﻿namespace TechStoreApp.Web.ViewModels.Cart
+﻿namespace TechStoreApp.Web.ViewModels.Products
 {
     public class ProductIdFormModel
     {

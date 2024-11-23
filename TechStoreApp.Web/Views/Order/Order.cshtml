@@ -10,37 +10,47 @@
         <div class="delivery-address-div">
             <p>Select delivery address:</p>
             <select id="adresses">
-                <option>Empty</option>
-                @{
-                    foreach (var address in Model.UserAddresses)
-                    {
-                        <option id="@address.Id">@address.Details</option>
-                    }
+                <form asp-action="Order" asp-controller="Order">
+                    <input type="hidden" name="addressId" value="@int.Parse("0")"/>
+                    <button type="submit">Empty</button>
+                </form>
+                    
+                @foreach (var address in Model.AllUserAddresses) 
+                {
+                    <form asp-action="Order" asp-controller="Order">
+                        <input type="hidden" name="addressId" value="@address.Id" />
+                        <button id="@address.Id" type="submit">@address.Details</button>
+                    </form>
                 }
+                
             </select>
 
             <form id="sharedForm" asp-action="SharedOrderForm" asp-controller="Order" method="post">
                 <div>
                     <label>Country</label>
-                    <input type="text" asp-for="Address.Country" />
+                    <input type="text" asp-for="Address.Country"
+                           placeholder="Country..."/>
                     <span asp-validation-for="Address.Country" class="text-danger"></span>
                 </div>
 
                 <div>
                     <label>City</label>
-                    <input type="text" asp-for="Address.City" />
+                    <input type="text" asp-for="Address.City"
+                           placeholder="City..."/>
                     <span asp-validation-for="Address.City" class="text-danger"></span>
                 </div>
                 
                 <div>
                     <label>Postal Code</label>
-                    <input type="text" asp-for="Address.PostalCode" />
+                    <input type="text" asp-for="Address.PostalCode"
+                        placeholder="Postal Code..."/>
                     <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
                 </div>
                 
                 <div>
                     <label>Address Details</label>
-                    <textarea type="text" asp-for="Address.Details" class="address-details" ></textarea>
+                    <textarea type="text" asp-for="Address.Details" class="address-details"
+                        placeholder="Address Details..."></textarea>
                     <span asp-validation-for="Address.Details" class="text-danger"></span>
                 </div>
                 

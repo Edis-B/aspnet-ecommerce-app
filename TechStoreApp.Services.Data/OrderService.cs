@@ -45,9 +45,9 @@ namespace TechStoreApp.Services.Data
             userService = _userService;
 
         }
-        public async Task<OrderPageViewModel> GetOrderViewModelAsync()
+        public async Task<OrderPageViewModel> GetOrderViewModelAsync(int? addressId)
         {
-            var userId = userService.GetUserId();
+            string? userId = userService.GetUserId();
 
             var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
@@ -59,21 +59,37 @@ namespace TechStoreApp.Services.Data
 
             var newModel = new OrderPageViewModel();
 
-            newModel.UserAddresses = user!.Addresses
-                .Select(a => new AddressViewModel()
-                {
-                    Country = a.Country,
-                    City = a.City,
-                    PostalCode = a.PostalCode,
-                    Details = a.Details,
-                    Id = a.AddressId
-                })
-                .ToList();
-
-            if (user.Cart == null || !user.Cart.CartItems.Any())
+            if ((user!).Cart == null || !(user.Cart.CartItems.Any()))
             {
                 return newModel;
             }
+
+            // Also check if user is owner of address
+            if (addressId != null && !user.Addresses.Any(a => a.AddressId == addressId))
+            {
+                newModel.Address = user.Addresses
+                    .Select(a => new AddressFormModel()
+                    {
+                        Country = a.Country,
+                        City = a.City,
+                        PostalCode = a.PostalCode.ToString(),
+                        Details = a.Details,
+                        Id = a.AddressId,
+                    })
+                    .FirstOrDefault()!;
+            }
+
+            newModel.AllUserAddresses = user!.Addresses
+                .Select(a => new AddressViewModel()
+                {
+                    //Country = a.Country,
+                    //City = a.City,
+                    //PostalCode = a.PostalCode,
+                    Details = a.Details,
+                    Id = a.AddressId,
+                })
+                .ToList();
+
 
             newModel.TotalCost = user.Cart.CartItems
                 .Sum(ci => ci.Product!.Price * ci.Quantity);
@@ -86,7 +102,7 @@ namespace TechStoreApp.Services.Data
                     ProductId = ci.ProductId,
                     Product = new ProductViewModel()
                     {
-                        ProductId = ci.Product.ProductId,
+                        ProductId = ci.Product!.ProductId,
                         CategoryId = ci.Product.CategoryId,
                         Name = ci.Product.Name,
                         Price = ci.Product.Price,
@@ -99,7 +115,7 @@ namespace TechStoreApp.Services.Data
 
             return newModel;
         }
-        public async Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(OrderPageViewModel model)
+        public async Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(AddressFormModel model)
         {
             var userId = userService.GetUserId();
 
@@ -110,23 +126,12 @@ namespace TechStoreApp.Services.Data
                         .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync();
 
-
-            var newAddress = new AddressFormModel
-            {
-                Country = model.Address.Country,
-                City = model.Address.City,
-                PostalCode = model.Address.PostalCode,
-                Details = model.Address.Details
-            };
-
-            model.Address = newAddress;
-
             var totalCost = user.Cart.CartItems
                 .Sum(ci => ci.Product.Price * ci.Quantity);
 
             var newModel = new OrderFinalizedPageViewModel
             {
-                Address = model.Address,
+                Address = model,
                 Cart = new CartViewModel()
                     {
                         CartItems = user.Cart.CartItems.Select(ci => new CartItemViewModel()

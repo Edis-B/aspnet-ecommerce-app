@@ -90,7 +90,7 @@ namespace TechStoreApp.Web.Areas.Controllers
                 return RedirectToAction("Cart", "Cart");
             }
         }
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> RemoveFromCart(ProductIdFormModel model)
         {
             if (requestService.IsAjaxRequest(Request))
@@ -107,7 +107,7 @@ namespace TechStoreApp.Web.Areas.Controllers
                 return RedirectToAction("Cart", "Cart");
             }
         }
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> ClearCart()
         {
             if (requestService.IsAjaxRequest(Request))
