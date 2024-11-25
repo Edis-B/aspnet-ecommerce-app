@@ -5,11 +5,13 @@ using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Web.Areas.Admin.Controllers
 {
-    public class AccountController : Controller
+    [Area(AdminRoleName)]
+    [Authorize(Roles = AdminRoleName)]
+    public class UserManagementController : Controller
     {
         private readonly IUserService userService;
         private readonly IProfileService profileService;
-        public AccountController(IUserService _userService,
+        public UserManagementController(IUserService _userService,
             IProfileService _profileService)
         {
             userService = _userService;
@@ -17,7 +19,6 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = AdminRoleName)]
         public async Task<IActionResult> Manage(string? userName, string? email, int page = 1, int itemsPerPage = 12)
         {
             var model = await profileService.GetAllUsersAsync(userName, email, page, itemsPerPage);

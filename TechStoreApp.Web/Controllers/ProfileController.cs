@@ -5,7 +5,7 @@ using TechStoreApp.Data;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.User;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     public class ProfileController : Controller
     {
@@ -18,7 +18,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = await  profileService.GetUserProfilePictureUrlAsync();
+            var model = await profileService.GetUserProfilePictureUrlAsync();
 
             return View("Index", model);
         }

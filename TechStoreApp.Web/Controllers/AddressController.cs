@@ -9,7 +9,7 @@ using TechStoreApp.Web.ViewModels.Address;
 using Newtonsoft.Json;
 using TechStoreApp.Web.Utilities;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     public class AddressController : Controller
     {

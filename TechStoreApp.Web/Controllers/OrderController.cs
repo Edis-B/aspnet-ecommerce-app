@@ -6,7 +6,7 @@ using TechStoreApp.Web.Utilities;
 using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Orders;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     [Authorize]
     public class OrderController : Controller
@@ -14,7 +14,7 @@ namespace TechStoreApp.Web.Areas.Controllers
         private readonly IOrderService orderService;
         private readonly ICartService cartService;
 
-        public OrderController(IOrderService _orderService, 
+        public OrderController(IOrderService _orderService,
             ICartService _cartService)
         {
             orderService = _orderService;
@@ -40,7 +40,8 @@ namespace TechStoreApp.Web.Areas.Controllers
                 TempData["Model"] = JsonConvert.SerializeObject(model.Address);
                 return RedirectToActionPreserveMethod("FinalizeOrder", "Order");
 
-            } else if (action == "SaveAddress")
+            }
+            else if (action == "SaveAddress")
             {
                 TempData["Model"] = JsonConvert.SerializeObject(model.Address);
                 return RedirectToActionPreserveMethod("SaveAddress", "Address");
@@ -87,7 +88,8 @@ namespace TechStoreApp.Web.Areas.Controllers
         {
             var model = await orderService.GetDetailsOfOrder(orderId);
 
-            if (model == null) {
+            if (model == null)
+            {
                 return RedirectToAction("Index", "Home");
             }
 

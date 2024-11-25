@@ -6,7 +6,7 @@ using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.User;
 using static TechStoreApp.Common.GeneralConstraints;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
@@ -25,7 +25,6 @@ namespace TechStoreApp.Web.Areas.Controllers
         {
             return View("Index");
         }
-
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -112,7 +111,7 @@ namespace TechStoreApp.Web.Areas.Controllers
                 };
 
                 return View("SentEmailViewModel", emailModel);
-            } 
+            }
             else
             {
                 return View("Error");
@@ -171,7 +170,7 @@ namespace TechStoreApp.Web.Areas.Controllers
             if (!ModelState.IsValid)
             {
                 return View("ResetPassword", model);
-            } 
+            }
 
             var result = await userService.ResetPasswordAsync(model);
 

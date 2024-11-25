@@ -4,7 +4,7 @@ using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Favorites;
 using TechStoreApp.Web.ViewModels.Products;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     [Authorize]
     public class FavoritesController : Controller
@@ -25,7 +25,7 @@ namespace TechStoreApp.Web.Areas.Controllers
                 model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
                 var response = await favoriteService.AddToFavoritesAsync(model);
 
-                return response; 
+                return response;
             }
             else
             {

@@ -6,7 +6,7 @@ using System.Security.Claims;
 using TechStoreApp.Web.ViewModels.Search;
 using TechStoreApp.Data;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     public class SearchController : Controller
     {

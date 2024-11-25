@@ -46,6 +46,11 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}"
+);
+
+app.MapControllerRoute(
     name: "Default",
     pattern: "{controller=Home}/{action=Index}"
 );

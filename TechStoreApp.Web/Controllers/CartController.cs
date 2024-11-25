@@ -14,7 +14,7 @@ using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Products;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     [Authorize]
     public class CartController : Controller
@@ -28,7 +28,7 @@ namespace TechStoreApp.Web.Areas.Controllers
             cartService = _cartService;
             requestService = _requestService;
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> AddToCart(ProductIdFormModel model)
         {
@@ -82,7 +82,7 @@ namespace TechStoreApp.Web.Areas.Controllers
                 var response = await cartService.DecreaseCountAsync(model);
 
                 return response;
-            } 
+            }
             else
             {
                 var response = await cartService.DecreaseCountAsync(model);

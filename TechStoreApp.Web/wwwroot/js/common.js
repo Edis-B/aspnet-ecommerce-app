@@ -255,9 +255,8 @@ async function addFavoriting() {
 
             // If the checkbox is checked, send a request to add to favorites
             if (checkBox.checked) {
-
+                // true
                 heartFull.style.opacity = 1;
-
                 try {
                     const response = await fetch('/Favorites/AddToFavorites', {
                         method: 'POST',
@@ -276,6 +275,9 @@ async function addFavoriting() {
 
                     const data = await response.json();
 
+                    let pLikeCounter = checkBox.parentElement.querySelector('.total-likes-for-pr');
+                    pLikeCounter.innerHTML = Number(pLikeCounter.innerHTML) + 1;
+
                     showPopup(data.message);
                 } catch (error) {
                     // Handle any errors that occurred during the fetch call
@@ -284,9 +286,8 @@ async function addFavoriting() {
             }
             // If the checkbox is unchecked, send a request to remove from favorites
             else {
-
+                //false
                 heartFull.style.opacity = 0;
-
                 try {
                     const response = await fetch('/Favorites/RemoveFromFavorites', {
                         method: 'DELETE',
@@ -304,6 +305,9 @@ async function addFavoriting() {
                     }
 
                     const data = await response.json();
+
+                    let pLikeCounter = checkBox.parentElement.querySelector('.total-likes-for-pr');
+                    pLikeCounter.innerHTML = Number(pLikeCounter.innerHTML) - 1;
 
                     showPopup(data.message);
                 } catch (error) {

@@ -5,9 +5,9 @@ using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
-    
+
     public class ProductController : Controller
     {
         private readonly IProductService productService;

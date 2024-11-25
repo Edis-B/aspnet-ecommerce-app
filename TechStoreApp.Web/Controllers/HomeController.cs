@@ -5,7 +5,7 @@ using TechStoreApp.Data;
 using TechStoreApp.Data.Data;
 using TechStoreApp.Web.ViewModels;
 
-namespace TechStoreApp.Web.Areas.Controllers
+namespace TechStoreApp.Web.Controllers
 {
     public class HomeController : Controller
     {

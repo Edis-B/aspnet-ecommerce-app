@@ -8,7 +8,7 @@
 
 @if (User.IsInRole(AdminRoleName))
 {
-    <form asp-area="Admin" asp-controller="Account" asp-action="Manage" method="get">
+    <form asp-area="Admin" asp-controller="UserManagement" asp-action="Manage" method="get">
         <input class="btn btn-warning btn-dark-text w-20 py-2 fw-bold rounded" type="submit" value="Manage users' accounts" />
     </form>
 }
