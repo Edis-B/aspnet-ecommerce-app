@@ -44,7 +44,7 @@
                             </form>
                         </div>
 
-                        <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                        <form asp-action="RemoveFromCart" asp-controller="Cart" method="post" class="remove-from-cart-form">
                             <input type="hidden" name="productId" value="@item.ProductId" />
 
 						    <button class="trash-can-button" type="submit">

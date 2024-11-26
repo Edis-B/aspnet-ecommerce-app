@@ -21,7 +21,7 @@ async function removeFromFavorites() {
                 productId = containerDiv.id.split('_')[1];
 
                 const response = await fetch('/Favorites/RemoveFromFavorites', {
-                    method: 'DELETE',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },

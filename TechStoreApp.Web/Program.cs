@@ -3,6 +3,7 @@ using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Data.Repository;
 using TechStoreApp.Data.Repository.Interfaces;
+using TechStoreApp.Web.Infrastructure.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,11 +40,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 
-using (var scope = app.Services.CreateScope())
-{
-    var seedDataService = scope.ServiceProvider.GetRequiredService<ISeedDataService>();
-    await seedDataService.SeedAllMissingData();
-}
+await WebApplicationBuilderExtensions.SeedDefaultData(app.Services);
 
 app.MapControllerRoute(
     name: "areas",

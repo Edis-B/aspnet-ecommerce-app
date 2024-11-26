@@ -13,7 +13,7 @@
 
 <body>
     <header>
-        <a class="header-logo" asp-controller="Home" asp-action="Index">
+        <a class="header-logo" asp-controller="Home" asp-action="Index" asp-area="">
             <img style="height: 100%" alt="Logo" src="~/images/Logo.png" />
         </a>
 
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="menu-popup-div">
-                    <form id="filter-by-category-header" asp-controller="Search" asp-action="Search" method="get">
+                    <form id="filter-by-category-header" asp-controller="Search" asp-action="Search" asp-area="" method="get">
                         <ul>
                             <li><button type="submit" name="Category" value="All">All products</button></li>
                             <hr />
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <form class="lupa-bar-form" asp-controller="Search" asp-action="Search" method="get">
+            <form class="lupa-bar-form" asp-controller="Search" asp-action="Search" asp-area="" method="get">
                 <input name="query" class="header-search-bar" type="text" placeholder="Search for products...">
                 <button type="submit" class="header-search-button">
                     <img style="height: 100%" src="~/images/magnifying-glass-icon-11.png">
@@ -69,25 +69,25 @@
             @{
                 if (!User.Identity.IsAuthenticated)
                 {
-                    <a class="header-login-button" asp-controller="Account" asp-action="Login" method="get">
+                    <a class="header-login-button" asp-controller="Account" asp-action="Login" asp-area="" method="get">
                         Login
                     </a>
                 }
                 else
                 {
-                    @await Component.InvokeAsync("UserProfile")
+                    @await Component.InvokeAsync("UserProfileAdmin")
                 }
             }
             <div id="cart-decoration">
-                <a class="header-cart-img" asp-controller="Cart" asp-action="Cart">
+                <a class="header-cart-img" asp-controller="Cart" asp-action="Cart" asp-area="">
                     <img style="height: 100%" src="~/images/cart-icon-28356.png">
                 </a>
                 <span id="cart-item-count"></span>
             </div>
-            <a class="header-heart-img" asp-controller="Favorites" asp-action="Favorites">
+            <a class="header-heart-img" asp-controller="Favorites" asp-action="Favorites" asp-area="">
                 <img style="height: 100%" src="~/images/Heart-icon.png">
             </a>
-            <a class="header-phone-img" asp-controller="Home" asp-action="Cart">
+            <a class="header-phone-img" asp-controller="Home" asp-action="Cart" asp-area="">
                 <img style="height: 100%" src="~/images/phone-icon-946.png">
             </a>
         </div>

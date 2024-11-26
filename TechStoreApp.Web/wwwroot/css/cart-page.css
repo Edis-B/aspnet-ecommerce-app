@@ -24,6 +24,7 @@
 }
 
 #cart-header form button[type="submit"] {
+    height: auto;
     background-color: #dc3545;
     color: white;
     border: none;
@@ -42,8 +43,7 @@
 }
 
 #cart-header form button[type="submit"] img {
-    width: 16px;
-    height: auto;
+    height: 50px;
 }
 
 

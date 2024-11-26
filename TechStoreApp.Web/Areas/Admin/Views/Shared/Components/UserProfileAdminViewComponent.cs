@@ -3,27 +3,25 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TechStoreApp.Data;
-using TechStoreApp.Data.Models;
-using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Web.ViewModels.Header;
 using TechStoreApp.Web.ViewModels.User;
 
-namespace TechStoreApp.Web.Views.Shared.Components
+namespace TechStoreApp.Web.Areas.Admin.Views.Shared.Components
 {
-    public class UserProfileViewComponent : ViewComponent
+    public class UserProfileAdminViewComponent : ViewComponent
     {
-        private readonly IRepository<ApplicationUser, Guid> userRepository;
+        private readonly TechStoreDbContext _context;
 
-        public UserProfileViewComponent(IRepository<ApplicationUser, Guid> _userRepository)
+        public UserProfileAdminViewComponent(TechStoreDbContext context)
         {
-            userRepository = _userRepository;
+            _context = context;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
 
             var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await userRepository.GetAllAttached()
+            var user = await _context.Users
                 .Where(u => u.Id == userId)
                 .Select(u => new ProfileViewModel()
                 {
@@ -36,7 +34,7 @@ namespace TechStoreApp.Web.Views.Shared.Components
                 User = user
             };
 
-            return View("UserProfile", userModel);
+            return View("UserProfileAdmin", userModel);
         }
 
     }

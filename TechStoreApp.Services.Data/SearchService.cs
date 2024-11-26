@@ -75,13 +75,19 @@ namespace TechStoreApp.Services.Data
 
             } else if (orderBy == "priceAsc")
             {
-                results = results.OrderBy(r => r.Price).ToList();
+                results = results
+                    .OrderBy(r => r.Price)
+                    .ToList();
             } else if (orderBy == "priceDesc")
             {
-                results = results.OrderByDescending(r => r.Price).ToList();
+                results = results
+                    .OrderByDescending(r => r.Price)
+                    .ToList();
             } else if (orderBy == "likesDesc")
             {
-                results = results.OrderByDescending(r => r.TotalLikes).ToList();
+                results = results
+                    .OrderByDescending(r => r.TotalLikes)
+                    .ToList();
             }
 
             var newModel = new SearchViewModel

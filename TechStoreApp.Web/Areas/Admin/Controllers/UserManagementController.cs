@@ -25,5 +25,41 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
 
             return View("Manage", model);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            var result  = await profileService.DeleteUserAsync(userId);
+
+            if (!result.Errors.Any()) { 
+                return RedirectToAction("Manage"); 
+            }
+            
+            return View("Error");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveRole(string userId, string role)
+        {
+            var result = await profileService.RemoveRoleRemoveRoleAsync(userId, role);
+
+            if (!result.Errors.Any()) {
+                return RedirectToAction("Manage"); 
+            }
+
+            return View("Error");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AssignRole(string userId, string role)
+        {
+            var result = await profileService.AssignRoleAssignRoleAsync(userId, role);
+
+            if (!result.Errors.Any()) {
+                return RedirectToAction("Manage"); 
+            }
+
+            return View("Error");
+        }
     }
 }

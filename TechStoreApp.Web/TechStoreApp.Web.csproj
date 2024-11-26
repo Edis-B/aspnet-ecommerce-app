@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Admin\Views\Shared\_ViewStart.cshtml" />
     <Content Remove="Views\Shared\_ViewStart.cshtml" />
   </ItemGroup>
 
@@ -51,6 +52,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <None Include="Views\Account\ConfirmEmail.cshtml" />
     <None Include="Views\Account\ForgotPassword.cshtml" />
     <None Include="Views\Account\Logout.cshtml" />

@@ -8,12 +8,12 @@ namespace TechStoreApp.Web.ViewModels.User
 {
     public class ManageUsersViewModel
     {
-        public List<UsersDetailsViewModel> Users { get; set; }
         public int Page { get; set; }
         public int TotalPages { get; set; }
         public int ItemsPerPage { get; set; }
         public string? UserNameQuery { get; set; }
         public string? EmailQuery { get; set; }
+        public List<UsersDetailsViewModel> Users { get; set; }
 
     }
 }

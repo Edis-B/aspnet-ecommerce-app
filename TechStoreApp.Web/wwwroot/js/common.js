@@ -290,7 +290,7 @@ async function addFavoriting() {
                 heartFull.style.opacity = 0;
                 try {
                     const response = await fetch('/Favorites/RemoveFromFavorites', {
-                        method: 'DELETE',
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },

@@ -35,7 +35,7 @@ namespace TechStoreApp.Web.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> RemoveFromFavorites(ProductIdFormModel model)
         {
             if (requestService.IsAjaxRequest(Request))

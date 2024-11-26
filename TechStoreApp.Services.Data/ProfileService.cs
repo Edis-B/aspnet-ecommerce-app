@@ -1,12 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
@@ -18,12 +11,51 @@ namespace TechStoreApp.Services.Data
     {
 
         private readonly IRepository<ApplicationUser, Guid> userRepository;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
         public ProfileService(IRepository<ApplicationUser, Guid> _userRepository,
+            UserManager<ApplicationUser> _userManager,
+            RoleManager<IdentityRole> _roleManager,
             IUserService _userService)
         {
             userRepository = _userRepository;
+            roleManager = _roleManager;
+            userManager = _userManager;
             userService = _userService;
+        }
+
+        public async Task<IdentityResult> RemoveRoleRemoveRoleAsync(string userId, string role)
+        {
+            var user = await GetUserFromIdAsync(userId);
+            if (user == null)
+            {
+                return IdentityResult.Failed();
+            }
+
+            return await userManager.RemoveFromRoleAsync(user, role);
+        }
+
+        public async Task<IdentityResult> AssignRoleAssignRoleAsync(string userId, string role)
+        {
+            var user = await GetUserFromIdAsync(userId);
+            if (user == null)
+            {
+                return IdentityResult.Failed();
+            }
+
+            return await userManager.AddToRoleAsync(user, role);
+        }
+
+        public async Task<IdentityResult> DeleteUserAsync(string userId)
+        {
+            var user = await GetUserFromIdAsync(userId);
+            if (user == null)
+            {
+                return IdentityResult.Failed();
+            }
+
+            return await userManager.DeleteAsync(user);
         }
 
         public async Task<ManageUsersViewModel> GetAllUsersAsync(string? userName, string? email, int page, int itemsPerPage)
@@ -42,19 +74,27 @@ namespace TechStoreApp.Services.Data
                     .Where(u => u.UserName!.ToLower().Contains(userName.ToLower()));
             }
 
-            var models = await users
-                .Select(u => new UsersDetailsViewModel()
+            var usersList = await users.ToListAsync();
+            var usersModels = new List<UsersDetailsViewModel>();
+            var allRoles = roleManager.Roles.Select(r => r.ToString()).ToList();
+            foreach (var u in usersList)
+            {
+                var roles = await userManager.GetRolesAsync(u);
+                var missingRoles = allRoles.Except(roles).ToList();
+                usersModels.Add(new UsersDetailsViewModel
                 {
                     UserId = u.Id.ToString(),
                     Email = u.Email!,
                     UserName = u.UserName!,
-                    ProfilePictureUrl = u.ProfilePictureUrl!
-                })
-                .ToListAsync();
+                    ProfilePictureUrl = u.ProfilePictureUrl!,
+                    UserRoles = roles.ToList(),
+                    MissingRoles = missingRoles,
+                });
+            }
 
-            int totalPages = (int)Math.Ceiling((double)models.Count() / itemsPerPage);
+            int totalPages = (int)Math.Ceiling((double)usersModels.Count() / itemsPerPage);
 
-            models = models
+            usersModels = usersModels
                 .Skip((page - 1) * itemsPerPage)
                 .Take(itemsPerPage)
                 .ToList();
@@ -64,9 +104,9 @@ namespace TechStoreApp.Services.Data
                 ItemsPerPage = itemsPerPage,
                 TotalPages = totalPages,
                 Page = page,
-                Users = models,
                 EmailQuery = email,
-                UserNameQuery = userName
+                UserNameQuery = userName,
+                Users = usersModels,
             };
 
             return newModel;
@@ -87,5 +127,13 @@ namespace TechStoreApp.Services.Data
             return model;
         }
 
+        public async Task<ApplicationUser> GetUserFromIdAsync(string id)
+        {
+            return await userRepository
+                .GetAllAttached()
+                .Where(u => u.Id == id)
+                .FirstOrDefaultAsync();
+
+        }
     }
 }

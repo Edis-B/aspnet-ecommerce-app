@@ -17,12 +17,16 @@ async function clearCartForm() {
 
         if (confirmation) {
             const response = await fetch('/Cart/ClearCart', {
-                method: 'DELETE'
+                'method': 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
             });
 
             const data = await response.json();
 
-            console.log(data);
+            showPopup(data.message);
+            setCartItemsCount();
 
             location.reload();
         }
@@ -30,19 +34,21 @@ async function clearCartForm() {
 }
 
 async function trashCans() {
-    const trashCans = document.querySelectorAll('.trash-can');
+    const forms = document.querySelectorAll('.remove-from-cart-form');
 
-    trashCans.forEach(trashCan => {
-        trashCan.addEventListener('click', async function () {
+    forms.forEach(form => {
+        form.addEventListener('submit', async function (event) {
             try {
+                event.preventDefault();
+
                 const confirmation = await areYouSureWindow('Are you sure you want to remove this product from your cart?');
 
                 if (confirmation) {
 
-                    const productDiv = trashCan.closest('.product-div');
+                    const productDiv = form.closest('.product-div');
 
                     const response = await fetch('/Cart/RemoveFromCart', {
-                        method: 'DELETE',
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
@@ -83,11 +89,13 @@ async function increaseCount() {
                 const quantityDiv = itemContainer.querySelector('.item-quantity');
 
                 const response = await fetch('/Cart/IncreaseCount', {
-                    method: 'PUT',
+                    method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ ProductId: increaseCountBtn.value })
+                    body: JSON.stringify({
+                        ProductId: increaseCountBtn.value
+                    })
                 })
 
                 const data = await response.json();
@@ -133,7 +141,7 @@ async function decreaseCount() {
                 if (answer) {
                     try {
                         const response = await fetch('/Cart/RemoveFromCart', {
-                            method: 'DELETE',
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
@@ -159,7 +167,7 @@ async function decreaseCount() {
             } else {
                 try {
                     const response = await fetch('/Cart/DecreaseCount', {
-                        method: 'PUT',
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
