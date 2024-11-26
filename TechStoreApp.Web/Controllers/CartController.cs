@@ -1,17 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using NuGet.Versioning;
-using System.Security.Claims;
-using TechStoreApp.Data;
-using TechStoreApp.Data.Models;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.ViewModels;
-using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Web.Controllers
