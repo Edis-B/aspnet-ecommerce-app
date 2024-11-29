@@ -12,13 +12,13 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<Category, int> categoryRepository;
         private readonly IRepository<Product, int> productRepository;
         private readonly IRepository<Status, int> statusRepository;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
         public SeedDataService(IRepository<Category, int> _categoryRepository,
             IRepository<Product, int> _productRepository,
             IRepository<Status, int> _statusRepository,
-            RoleManager<IdentityRole> _roleManager,
+            RoleManager<ApplicationRole> _roleManager,
             UserManager<ApplicationUser> _userManager,
             IUserService _userService)
         {
@@ -41,11 +41,11 @@ namespace TechStoreApp.Services.Data
         {
             if (!roleManager.Roles.Any())
             {
-                var roles = new List<IdentityRole>
+                var roles = new List<ApplicationRole>
                 {
-                    new IdentityRole { Name = GeneralConstraints.AdminRoleName },
-                    new IdentityRole { Name = "User" },
-                    new IdentityRole { Name = "Moderator" }
+                    new ApplicationRole { Name = GeneralConstraints.AdminRoleName },
+                    new ApplicationRole { Name = "User" },
+                    new ApplicationRole { Name = "Moderator" }
                 };
 
                 foreach (var role in roles)
@@ -62,13 +62,16 @@ namespace TechStoreApp.Services.Data
             {
                 var user = userService.CreateUser();
 
-                await userManager.AddToRoleAsync(user, GeneralConstraints.AdminRoleName);
-
                 user.UserName = "Administrator";
                 user.Email = "example@gmail.com";
                 user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
 
                 var result = await userManager.CreateAsync(user, "Administrator");
+
+                if (result.Succeeded)
+                {
+                    await userManager.AddToRoleAsync(user, GeneralConstraints.AdminRoleName);
+                }
             }
         }
 

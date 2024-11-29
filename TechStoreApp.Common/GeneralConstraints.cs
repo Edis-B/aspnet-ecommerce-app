@@ -9,5 +9,10 @@ namespace TechStoreApp.Common
     public static class GeneralConstraints
     {
         public const string AdminRoleName = "Admin";
+        public const string MyCookieName = ".MyCustomCookie";
+        public const string IsAdminAttr = "IsAdmin";
+        public const string SecretCookieProtectionKey = "MySecureCookieProtectionKey";
+        public const int CookieDurationRememberMe = 7;
+        public const int SlidingExpirationInMinutes = 30;
     }
 }

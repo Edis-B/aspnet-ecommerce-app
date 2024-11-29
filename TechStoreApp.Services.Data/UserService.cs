@@ -1,21 +1,19 @@
-﻿using Azure.Core;
+﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Claims;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Encodings.Web;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.User;
+using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Services.Data
 {
@@ -37,12 +35,13 @@ namespace TechStoreApp.Services.Data
                            IRepository<ApplicationUser, Guid> _userRepository,
                            IEmailSender<ApplicationUser> _emailSender)
         {
+            httpContextAccessor = _httpContextAccessor;
+            urlHelperFactory = _urlHelperFactory;
+
             signInManager = _signInManager;
             userManager = _userManager;
-            urlHelperFactory = _urlHelperFactory;
             userRepository = _userRepository;
             emailSender = _emailSender;
-            httpContextAccessor = _httpContextAccessor;
         }
 
         public async Task LogoutAsync()
@@ -52,15 +51,30 @@ namespace TechStoreApp.Services.Data
         public async Task<Microsoft.AspNetCore.Identity.SignInResult> SignInAsync(LoginViewModel model)
         {
             bool rememberMe = model.RememberMe;
-            bool shouldLockout = false;
             var userName = model.UserName;
             var password = model.Password;
+            bool shouldLockout = false;
 
-            return await signInManager.PasswordSignInAsync(
-                userName, 
+            var signInResult = await signInManager.PasswordSignInAsync(
+                userName,
                 password,
                 rememberMe,
                 shouldLockout);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = rememberMe,
+                ExpiresUtc = rememberMe
+                    ? DateTime.UtcNow.AddDays(CookieDurationRememberMe) 
+                    : (DateTime?)null,
+            };
+
+            var user = await signInManager.UserManager.FindByNameAsync(model.UserName);
+
+            // Sign the user in with the custom properties
+            await signInManager.SignInAsync(user, authProperties);
+
+            return signInResult;
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
@@ -93,7 +107,7 @@ namespace TechStoreApp.Services.Data
                 return IdentityResult.Failed(new IdentityError { Description = "Code is required." });
             }
 
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userManager.FindByIdAsync(userId.ToString());
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await userManager.ConfirmEmailAsync(user!, code);
@@ -155,22 +169,29 @@ namespace TechStoreApp.Services.Data
             var result = await userManager.ResetPasswordAsync(user, resetToken, model.Password);
             return IdentityResult.Success;
         }
-        
 
         public ApplicationUser CreateUser()
         {
             return Activator.CreateInstance<ApplicationUser>();
         }
 
-        public string GetUserId()
+        public Guid GetUserId()
         {
-            return httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            string userId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            
+            return userId == null ? default : Guid.Parse(userId);
         }
 
-        public async Task<ApplicationUser> GetUserByTheirIdAsync(string Id)
+        public async Task<ApplicationUser> GetUserByTheirIdAsync(Guid Id)
         {
             return await userRepository
-                .GetByIdAsync(Guid.Parse(Id))!;
+                .GetByIdAsync(Id)!;
+        }
+
+        public async Task<bool> IsUserAdmin(Guid userId)
+        {
+            var user = await userRepository.GetByIdAsync(userId);
+            return await userManager.IsInRoleAsync(user, AdminRoleName);
         }
     }
 }

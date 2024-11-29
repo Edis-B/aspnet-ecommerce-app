@@ -12,12 +12,12 @@ namespace TechStoreApp.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService userService;
-        private readonly IProfileService profileService;
+        private readonly ICookieService cookieService;
         public AccountController(IUserService _userService,
-            IProfileService _profileService)
+            ICookieService _cookieService)
         {
             userService = _userService;
-            profileService = _profileService;
+            cookieService = _cookieService;
         }
 
         [HttpGet]
@@ -31,6 +31,8 @@ namespace TechStoreApp.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await userService.LogoutAsync();
+
+            var test = Request.Cookies[MyCookieName];
 
             return RedirectToAction("Index", "Home");
         }
@@ -48,7 +50,7 @@ namespace TechStoreApp.Web.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var signInStatus = await userService.SignInAsync(model);
-
+            await cookieService.AttachIsUserAdminToCookie(HttpContext);
             if (!signInStatus.Succeeded)
             {
                 return View("Login", model);

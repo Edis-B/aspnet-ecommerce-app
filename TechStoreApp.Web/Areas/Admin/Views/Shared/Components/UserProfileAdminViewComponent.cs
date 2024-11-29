@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TechStoreApp.Data;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Header;
 using TechStoreApp.Web.ViewModels.User;
 
@@ -10,31 +11,21 @@ namespace TechStoreApp.Web.Areas.Admin.Views.Shared.Components
 {
     public class UserProfileAdminViewComponent : ViewComponent
     {
-        private readonly TechStoreDbContext _context;
+        private readonly IUserService userService;
+        private readonly IProfileService profileService;
 
-        public UserProfileAdminViewComponent(TechStoreDbContext context)
+        public UserProfileAdminViewComponent(IUserService _userService,
+            IProfileService _profileService)
         {
-            _context = context;
+            userService = _userService;
+            profileService = _profileService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            var model = await profileService.GetUserProfilePictureUrlAsync();
 
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await _context.Users
-                .Where(u => u.Id == userId)
-                .Select(u => new ProfileViewModel()
-                {
-                    ProfilePictureUrl = u.ProfilePictureUrl!
-                })
-                .FirstOrDefaultAsync();
-
-            var userModel = new UserModel()
-            {
-                User = user
-            };
-
-            return View("UserProfileAdmin", userModel);
+            return View("UserProfileAdmin", model);
         }
 
     }

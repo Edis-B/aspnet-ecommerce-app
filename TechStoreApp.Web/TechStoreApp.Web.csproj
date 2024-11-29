@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-TechStoreApp.Web-2ec51791-b9ff-4e60-a137-3c59aa6fbeb2</UserSecretsId>
+	<InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>

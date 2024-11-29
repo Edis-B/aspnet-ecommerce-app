@@ -5,7 +5,7 @@ using TechStoreApp.Common;
 
 namespace TechStoreApp.Data.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUser : IdentityUser<Guid>
     {
         [MaxLength(EntityValidationConstraints.User.maxPfpImageUrlStringLength)]
         public string? ProfilePictureUrl { get; set; }

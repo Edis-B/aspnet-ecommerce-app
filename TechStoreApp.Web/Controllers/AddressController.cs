@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
-using TechStoreApp.Data.Models;
-using TechStoreApp.Data;
-using TechStoreApp.Web.ViewModels.Orders;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Services.Data;
 using TechStoreApp.Web.ViewModels.Address;
-using Newtonsoft.Json;
-using TechStoreApp.Web.Utilities;
+using TechStoreApp.Web.Infrastructure;
 
 namespace TechStoreApp.Web.Controllers
 {

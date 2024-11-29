@@ -7,6 +7,9 @@ using TechStoreApp.Data.Repository;
 using TechStoreApp.Data;
 using TechStoreApp.Services.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using static TechStoreApp.Common.GeneralConstraints;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -22,7 +25,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.SignIn.RequireConfirmedAccount = false;
@@ -32,6 +35,13 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<TechStoreDbContext>();
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.SlidingExpiration = true; // Enable sliding expiration
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(SlidingExpirationInMinutes); // Set expiration window to 30 minutes
+                });
 
             services.AddScoped<IRepository<Address, int>, Repository<Address, int>>();
             services.AddScoped<IRepository<ApplicationUser, Guid>, Repository<ApplicationUser, Guid>>();
@@ -52,8 +62,15 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             services.ConfigureApplicationCookie(options =>
             {
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.Name = MyCookieName;
+
                 options.LoginPath = $"/Account/Login";
             });
+
+            services.AddDataProtection();
 
             return services;
         }

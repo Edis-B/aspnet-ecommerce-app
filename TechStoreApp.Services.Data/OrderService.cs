@@ -47,7 +47,7 @@ namespace TechStoreApp.Services.Data
         }
         public async Task<OrderPageViewModel> GetOrderViewModelAsync(int? addressId)
         {
-            string? userId = userService.GetUserId();
+            var userId = userService.GetUserId();
 
             var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
@@ -201,7 +201,19 @@ namespace TechStoreApp.Services.Data
                 var productsToDecrease = await productRepository
                     .GetByIdAsync(item.ProductId);
 
+                // Lower stock
                 productsToDecrease.Stock = productsToDecrease.Stock -= item.Quantity;
+                await productRepository.UpdateAsync(productsToDecrease);
+
+                // Reduce stock to limit if anyone's cart is over the limit
+                var othersItems = cartItemRepository.GetAllAttached()
+                    .Where(ci => ci.ProductId == item.ProductId)
+                    .Where(ci => ci.Quantity >= productsToDecrease.Stock);
+                foreach (var otherItem in othersItems)
+                {
+                    otherItem.Quantity = productsToDecrease.Stock;
+                    await cartItemRepository.UpdateAsync(otherItem);
+                }
 
                 await orderDetailRepository.AddAsync(newOrderDetail);
             }

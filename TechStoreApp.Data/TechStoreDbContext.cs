@@ -8,7 +8,7 @@ using TechStoreApp.Data.Data;
 
 namespace TechStoreApp.Data;
 
-public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser>
+public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
 {
     public TechStoreDbContext(DbContextOptions<TechStoreDbContext> options)
         : base(options)

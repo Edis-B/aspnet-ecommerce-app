@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TechStoreApp.Web.ViewModels.User
 {
-    public class ProfileViewModel
+    public class PfpViewModel
     {
         public string ProfilePictureUrl { get; set; }
     }

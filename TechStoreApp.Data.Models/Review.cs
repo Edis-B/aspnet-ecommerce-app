@@ -17,7 +17,7 @@ public partial class Review
     public int ProductId { get; set; }
 
     [Required]
-    public string UserId { get; set; }
+    public Guid UserId { get; set; }
 
     [Required]
     [Range(EntityValidationConstraints.Review.minRating, EntityValidationConstraints.Review.maxRating)]

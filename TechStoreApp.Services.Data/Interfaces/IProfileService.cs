@@ -15,6 +15,6 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<IdentityResult> AssignRoleAssignRoleAsync(string userId, string role);
         Task<IdentityResult> RemoveRoleRemoveRoleAsync(string userId, string role);
         Task<IdentityResult> DeleteUserAsync(string userId);
-        Task<ProfileViewModel> GetUserProfilePictureUrlAsync();
+        Task<PfpViewModel> GetUserProfilePictureUrlAsync();
     }
 }

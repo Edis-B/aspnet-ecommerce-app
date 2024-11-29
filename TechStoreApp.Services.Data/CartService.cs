@@ -38,7 +38,7 @@ namespace TechStoreApp.Services.Data
         public async Task<JsonResult> AddToCartAsync(ProductIdFormModel model)
         {
             int productId = model.ProductId;
-            string userId = userService.GetUserId();
+            var userId = userService.GetUserId();
 
             var product = await productRepository.GetByIdAsync(productId);
 
@@ -208,6 +208,7 @@ namespace TechStoreApp.Services.Data
         public async Task<JsonResult> GetCartItemsCountAsync()
         {
             var userId = userService.GetUserId();
+
             var user = await userRepository
                 .GetAllAttached()
                 .Where(u => u.Id == userId)

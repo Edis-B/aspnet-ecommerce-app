@@ -63,8 +63,8 @@ async function trashCans() {
                     showPopup(data.message);
                     setCartItemsCount();
 
-                    // Find and remove product div
-                    // const productDiv = document.querySelector(`.product-div[id="${decreaseCountBtn.value}"]`);
+                    //Find and remove product div
+                    const productDiv = document.querySelector(`.product-div[id="${decreaseCountBtn.value}"]`);
                     productDiv.nextElementSibling.remove();
                     productDiv.remove();
                 }
@@ -156,7 +156,7 @@ async function decreaseCount() {
                         setCartItemsCount();
 
                         // Find and remove product div
-                        const productDiv = document.querySelector(`.product-div[id="${decreaseCountBtn.value}"]`);
+                        const productDiv = decreaseCountBtn.closest('.product-div');
                         productDiv.remove();
 
                     } catch (error) {

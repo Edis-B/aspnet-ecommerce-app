@@ -11,12 +11,12 @@ namespace TechStoreApp.Services.Data
     {
 
         private readonly IRepository<ApplicationUser, Guid> userRepository;
-        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly RoleManager<ApplicationRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
         public ProfileService(IRepository<ApplicationUser, Guid> _userRepository,
             UserManager<ApplicationUser> _userManager,
-            RoleManager<IdentityRole> _roleManager,
+            RoleManager<ApplicationRole> _roleManager,
             IUserService _userService)
         {
             userRepository = _userRepository;
@@ -27,7 +27,7 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IdentityResult> RemoveRoleRemoveRoleAsync(string userId, string role)
         {
-            var user = await GetUserFromIdAsync(userId);
+            var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
             {
                 return IdentityResult.Failed();
@@ -38,7 +38,7 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IdentityResult> AssignRoleAssignRoleAsync(string userId, string role)
         {
-            var user = await GetUserFromIdAsync(userId);
+            var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
             {
                 return IdentityResult.Failed();
@@ -49,7 +49,7 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IdentityResult> DeleteUserAsync(string userId)
         {
-            var user = await GetUserFromIdAsync(userId);
+            var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
             {
                 return IdentityResult.Failed();
@@ -112,13 +112,13 @@ namespace TechStoreApp.Services.Data
             return newModel;
         }
 
-        public async Task<ProfileViewModel> GetUserProfilePictureUrlAsync()
+        public async Task<PfpViewModel> GetUserProfilePictureUrlAsync()
         {
             var userId = userService.GetUserId();
 
             var model = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
-                .Select(u => new ProfileViewModel()
+                .Select(u => new PfpViewModel()
                 {
                     ProfilePictureUrl = u.ProfilePictureUrl,
                 })
@@ -127,13 +127,14 @@ namespace TechStoreApp.Services.Data
             return model;
         }
 
-        public async Task<ApplicationUser> GetUserFromIdAsync(string id)
+        public async Task<ApplicationUser> GetUserFromIdAsync(Guid id)
         {
-            return await userRepository
+            var user = await userRepository
                 .GetAllAttached()
                 .Where(u => u.Id == id)
                 .FirstOrDefaultAsync();
 
+            return user!;
         }
     }
 }

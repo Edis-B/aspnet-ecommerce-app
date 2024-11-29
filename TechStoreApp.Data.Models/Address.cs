@@ -14,7 +14,7 @@ namespace TechStoreApp.Data.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int AddressId { get; set; }
 
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Required]
         [MinLength(minCountryStringLength)]

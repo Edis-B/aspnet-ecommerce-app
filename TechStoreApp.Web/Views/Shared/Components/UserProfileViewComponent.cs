@@ -5,6 +5,7 @@ using System.Security.Claims;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Header;
 using TechStoreApp.Web.ViewModels.User;
 
@@ -12,32 +13,18 @@ namespace TechStoreApp.Web.Views.Shared.Components
 {
     public class UserProfileViewComponent : ViewComponent
     {
-        private readonly IRepository<ApplicationUser, Guid> userRepository;
+        private readonly IProfileService profileService;
 
-        public UserProfileViewComponent(IRepository<ApplicationUser, Guid> _userRepository)
+        public UserProfileViewComponent(IProfileService _profileService)
         {
-            userRepository = _userRepository;
+            profileService = _profileService;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
+            var model  = await profileService.GetUserProfilePictureUrlAsync();
 
-            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var user = await userRepository.GetAllAttached()
-                .Where(u => u.Id == userId)
-                .Select(u => new ProfileViewModel()
-                {
-                    ProfilePictureUrl = u.ProfilePictureUrl!
-                })
-                .FirstOrDefaultAsync();
-
-            var userModel = new UserModel()
-            {
-                User = user
-            };
-
-            return View("UserProfile", userModel);
+            return View("UserProfile", model);
         }
-
     }
 }

@@ -13,7 +13,7 @@ public partial class Cart
     public int CartId { get; set; }
 
     [Required]
-    public string UserId { get; set; }
+    public Guid UserId { get; set; }
 
     public DateTime UpdateDate { get; set; }
 

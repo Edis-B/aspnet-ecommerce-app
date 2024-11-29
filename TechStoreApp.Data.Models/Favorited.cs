@@ -11,7 +11,7 @@ namespace TechStoreApp.Data.Models
     public class Favorited
     {
         [Key]
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
 
         [Key]
         public int ProductId { get; set; }

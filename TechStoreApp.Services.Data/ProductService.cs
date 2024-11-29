@@ -162,5 +162,37 @@ namespace TechStoreApp.Services.Data
             return newModel;
 
         }
+
+        public IEnumerable<ProductViewModel> GetAllProducts()
+        {
+            var result = productRepository.GetAllAttached()
+                .Select(p => new ProductViewModel()
+                {
+                    CategoryId = p.CategoryId,
+                    Name = p.Name,
+                    Description= p.Description,
+                    Price = p.Price,
+                    Stock= p.Stock,
+                    ImageUrl = p.ImageUrl,  
+                    TotalLikes = p.Favorites.Count()
+                });
+
+            return result;
+        }
+
+        public IEnumerable<ReviewViewModel> GetProductReviews(int productId)
+        {
+            var result = reviewRepository.GetAllAttached()
+                .Where(r => r.ProductId == productId)
+                .Select(r => new ReviewViewModel()
+                {
+                    Comment = r.Comment,
+                    ProductId = productId,
+                    Author = r.User!.UserName!,
+                    Rating = r.Rating,
+                });
+
+            return result;
+        }
     }
 }
