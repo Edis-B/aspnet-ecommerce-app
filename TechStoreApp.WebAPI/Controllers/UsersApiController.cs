@@ -31,8 +31,27 @@ namespace TechStoreApp.WebAPI.Controllers
         }
 
         [AdminCookieOnly]
-        [HttpPost(action)]
+        [HttpGet(action)]
         [ProducesResponseType((typeof(IEnumerable<UserDetailsApiViewModel>)), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetUserByTheirId(string userId)
+        {
+            var canParse = Guid.TryParse(userId, out var id);
+
+            if (!canParse) return BadRequest("Guid is not valid!");
+
+            var user = await profileService.GetUserByTheirIdAsync(userId);
+
+            if (user == null) return BadRequest("User not found!");
+
+            return Ok(user);
+        }
+
+        [AdminCookieOnly]
+        [HttpPost(action)]
+        [ProducesResponseType((typeof(string)), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -55,7 +74,7 @@ namespace TechStoreApp.WebAPI.Controllers
 
         [AdminCookieOnly]
         [HttpPost(action)]
-        [ProducesResponseType((typeof(IEnumerable<UserDetailsApiViewModel>)), StatusCodes.Status200OK)]
+        [ProducesResponseType((typeof(string)), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]

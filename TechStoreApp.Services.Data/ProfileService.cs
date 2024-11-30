@@ -175,5 +175,24 @@ namespace TechStoreApp.Services.Data
             return user!;
         }
 
+        public async Task<UserDetailsApiViewModel> GetUserByTheirIdAsync(string userId)
+        {
+            var user = await GetUserFromIdAsync(Guid.Parse(userId));
+
+            if (user == null)
+            {
+                return default!;
+            }
+
+            return new UserDetailsApiViewModel()
+            {
+                UserId = user.Id.ToString(),
+                Email = user.Email!,
+                UserName = user.UserName!,
+                ProfilePictureUrl = user.ProfilePictureUrl!,
+                Roles = (await userManager.GetRolesAsync(user))
+                    .ToList()
+            };
+        }
     }
 }

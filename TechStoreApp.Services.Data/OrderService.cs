@@ -1,18 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using TechStoreApp.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
+using TechStoreApp.Web.ViewModels.ApiViewModels.Orders;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Orders;
 using TechStoreApp.Web.ViewModels.Products;
@@ -43,7 +35,6 @@ namespace TechStoreApp.Services.Data
             cartRepository = _cartRepository;
             cartItemRepository = _cartItemRepository;
             userService = _userService;
-
         }
         public async Task<OrderPageViewModel> GetOrderViewModelAsync(int? addressId)
         {
@@ -115,6 +106,7 @@ namespace TechStoreApp.Services.Data
 
             return newModel;
         }
+
         public async Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(AddressFormModel model)
         {
             var userId = userService.GetUserId();
@@ -157,6 +149,7 @@ namespace TechStoreApp.Services.Data
 
             return newModel;
         }
+
         public async Task SendOrderAsync(SendOrderViewModel model)
         {
             var userId = userService.GetUserId();
@@ -290,6 +283,59 @@ namespace TechStoreApp.Services.Data
 
             
             return orderViewModel;
+        }
+
+        public async Task<IEnumerable<OrderApiViewModel>> GetAllOrders()
+        {
+            var orders = orderRepository.GetAllAttached();
+
+            var result = await orders
+                .Select(o => new OrderApiViewModel()
+                {
+                    OrderId = o.OrderId,
+                    UserId = o.UserId.ToString(),
+                    UserName = o.User.UserName!,
+                    TotalPrice = (double)o.TotalAmount,
+                    OrderStatus = o.Status.Description,
+                    Products = o.OrderDetails.Select(o => new OrderDetailApiViewModel()
+                    {
+                        OrderDetailId = o.OrderDetailId,
+                        ProductId = o.ProductId,
+                        ProductName = o.Product!.Name,
+                        Quantity = o.Quantity,
+                        UnitPrice = (double)o.UnitPrice
+                    })
+                })
+                .ToListAsync();
+
+            return result;
+        }
+
+        public async Task<IEnumerable<OrderApiViewModel>> GetAllOrdersByUserId(string userId)
+        {
+            var orders = orderRepository.GetAllAttached();
+
+            var result = await orders
+                .Where(o => o.UserId.ToString() == userId)
+                .Select(o => new OrderApiViewModel()
+                {
+                    OrderId = o.OrderId,
+                    UserId = o.UserId.ToString(),
+                    UserName = o.User.UserName!,
+                    TotalPrice = (double)o.TotalAmount,
+                    OrderStatus = o.Status.Description,
+                    Products = o.OrderDetails.Select(o => new OrderDetailApiViewModel()
+                    {
+                        OrderDetailId = o.OrderDetailId,
+                        ProductId = o.ProductId,
+                        ProductName = o.Product!.Name,
+                        Quantity = o.Quantity,
+                        UnitPrice = (double)o.UnitPrice
+                    })
+                })
+                .ToListAsync();
+
+            return result;
         }
     }
 }

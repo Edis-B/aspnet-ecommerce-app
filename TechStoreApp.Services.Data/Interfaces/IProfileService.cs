@@ -19,5 +19,6 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<PfpViewModel> GetUserProfilePictureUrlAsync();
         // Api
         Task<IEnumerable<UserDetailsApiViewModel>> GetAllUsersAsync();
+        Task<UserDetailsApiViewModel> GetUserByTheirIdAsync(string userId);
     }
 }
