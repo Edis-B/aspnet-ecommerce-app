@@ -21,7 +21,7 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Manage(string? userName, string? email, int page = 1, int itemsPerPage = 12)
         {
-            var model = await profileService.GetAllUsersAsync(userName, email, page, itemsPerPage);
+            var model = await profileService.GetAllUsersPageAsync(userName, email, page, itemsPerPage);
 
             return View("Manage", model);
         }

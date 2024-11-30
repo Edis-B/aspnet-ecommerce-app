@@ -19,7 +19,7 @@ namespace TechStoreApp.Services.Data
 {
     public class UserService : IUserService
     {
-        private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly HttpContext httpContext;
         private readonly IUrlHelperFactory urlHelperFactory;
 
         private readonly UserManager<ApplicationUser> userManager;
@@ -35,7 +35,7 @@ namespace TechStoreApp.Services.Data
                            IRepository<ApplicationUser, Guid> _userRepository,
                            IEmailSender<ApplicationUser> _emailSender)
         {
-            httpContextAccessor = _httpContextAccessor;
+            httpContext = _httpContextAccessor.HttpContext!;
             urlHelperFactory = _urlHelperFactory;
 
             signInManager = _signInManager;
@@ -47,7 +47,15 @@ namespace TechStoreApp.Services.Data
         public async Task LogoutAsync()
         {
             await signInManager.SignOutAsync();
+
+            if (httpContext.Request.Cookies.Any())
+            {
+                httpContext.Response.Cookies.Delete(MyCookieName);
+                httpContext.Response.Cookies.Delete(IsAdminAttr);
+            }
+            
         }
+
         public async Task<Microsoft.AspNetCore.Identity.SignInResult> SignInAsync(LoginViewModel model)
         {
             bool rememberMe = model.RememberMe;
@@ -80,7 +88,7 @@ namespace TechStoreApp.Services.Data
         public async Task<IdentityResult> RegisterAsync(RegisterViewModel model)
         {
             var user = CreateUser();
-            await userManager.AddToRoleAsync(user, "User");
+
 
             user.UserName = model.UserName;
             user.Email = model.Email;
@@ -92,6 +100,8 @@ namespace TechStoreApp.Services.Data
             }
 
             var result = await userManager.CreateAsync(user, model.Password);
+
+            await userManager.AddToRoleAsync(user, "User");
 
             return result;
         }
@@ -134,7 +144,7 @@ namespace TechStoreApp.Services.Data
             var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
             resetToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(resetToken));
 
-            var actionContext = new ActionContext(httpContextAccessor.HttpContext,
+            var actionContext = new ActionContext(httpContext,
                 new RouteData(), 
                 new ActionDescriptor());
 
@@ -177,7 +187,7 @@ namespace TechStoreApp.Services.Data
 
         public Guid GetUserId()
         {
-            string userId = httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            string userId = httpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier)!;
             
             return userId == null ? default : Guid.Parse(userId);
         }

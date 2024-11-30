@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using static TechStoreApp.Common.GeneralConstraints;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -41,6 +42,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 {
                     options.SlidingExpiration = true; // Enable sliding expiration
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(SlidingExpirationInMinutes); // Set expiration window to 30 minutes
+                    
                 });
 
             services.AddScoped<IRepository<Address, int>, Repository<Address, int>>();
@@ -64,13 +66,18 @@ namespace Microsoft.Extensions.DependencyInjection
             {
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-                options.Cookie.SameSite = SameSiteMode.Strict;
+                options.Cookie.SameSite = SameSiteMode.Lax;
                 options.Cookie.Name = MyCookieName;
+                options.Cookie.Domain = DomainStr;
+                options.Cookie.Path = "/";
 
                 options.LoginPath = $"/Account/Login";
             });
 
-            services.AddDataProtection();
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(@"C:\Keys"))
+                .DisableAutomaticKeyGeneration()
+                .SetApplicationName("MyTechStoreApp"); ;
 
             return services;
         }

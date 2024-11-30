@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
-namespace TechStoreApp.Web.Infrastructure
+namespace TechStoreApp.Web.Infrastructure.Utilities
 {
     public static class TempDataUtility
     {

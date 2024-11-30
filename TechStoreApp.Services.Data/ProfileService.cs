@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.ViewModels.ApiViewModels.Users;
 using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Services.Data
@@ -33,6 +35,11 @@ namespace TechStoreApp.Services.Data
                 return IdentityResult.Failed();
             }
 
+            if (!await userManager.IsInRoleAsync(user, role))
+            {
+                return IdentityResult.Failed();
+            }
+
             return await userManager.RemoveFromRoleAsync(user, role);
         }
 
@@ -40,6 +47,11 @@ namespace TechStoreApp.Services.Data
         {
             var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
+            {
+                return IdentityResult.Failed();
+            }
+
+            if (!await roleManager.RoleExistsAsync(role))
             {
                 return IdentityResult.Failed();
             }
@@ -58,7 +70,7 @@ namespace TechStoreApp.Services.Data
             return await userManager.DeleteAsync(user);
         }
 
-        public async Task<ManageUsersViewModel> GetAllUsersAsync(string? userName, string? email, int page, int itemsPerPage)
+        public async Task<ManageUsersViewModel> GetAllUsersPageAsync(string? userName, string? email, int page, int itemsPerPage)
         {
             var users = userRepository.GetAllAttached();
 
@@ -112,6 +124,32 @@ namespace TechStoreApp.Services.Data
             return newModel;
         }
 
+        public async Task<IEnumerable<UserDetailsApiViewModel>> GetAllUsersAsync()
+        {
+            var users = userRepository.GetAllAttached();
+
+            List<UserDetailsApiViewModel> results = new List<UserDetailsApiViewModel>();
+
+            foreach (var user in users)
+            {
+                var newUser = new UserDetailsApiViewModel()
+                {
+                    UserId = user.Id.ToString(),
+                    Email = user.Email!,
+                    UserName = user.UserName!,
+                    ProfilePictureUrl = user.ProfilePictureUrl!,
+                    
+                };
+
+                var res = await userManager.GetRolesAsync(user);
+                newUser.Roles = res.ToList();
+
+                results.Add(newUser);
+            }
+
+            return results;
+        }
+
         public async Task<PfpViewModel> GetUserProfilePictureUrlAsync()
         {
             var userId = userService.GetUserId();
@@ -136,5 +174,6 @@ namespace TechStoreApp.Services.Data
 
             return user!;
         }
+
     }
 }

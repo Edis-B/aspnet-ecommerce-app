@@ -9,7 +9,7 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface ICookieService
     {
-        public void AppendToCookie(string newKey, string newValue, HttpContext context);
-        public Task AttachIsUserAdminToCookie(HttpContext context);
+        public void AppendToCookie(string newKey, string newValue, TimeSpan? duration = null);
+        public Task AttachIsUserAdminToCookie(bool rememberMe);
     }
 }

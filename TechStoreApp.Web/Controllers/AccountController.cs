@@ -32,8 +32,6 @@ namespace TechStoreApp.Web.Controllers
         {
             await userService.LogoutAsync();
 
-            var test = Request.Cookies[MyCookieName];
-
             return RedirectToAction("Index", "Home");
         }
 
@@ -50,7 +48,9 @@ namespace TechStoreApp.Web.Controllers
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             var signInStatus = await userService.SignInAsync(model);
-            await cookieService.AttachIsUserAdminToCookie(HttpContext);
+
+            await cookieService.AttachIsUserAdminToCookie(model.RememberMe);
+
             if (!signInStatus.Succeeded)
             {
                 return View("Login", model);

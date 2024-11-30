@@ -10,14 +10,17 @@ namespace TechStoreApp.Services.Data
     {
         private readonly IUserService userService;
         private readonly IDataProtector protector;
+        private readonly HttpContext context;
 
         public CookieService(IUserService _userService,
-            IDataProtectionProvider dataProtectionProvider) 
+            IDataProtectionProvider dataProtectionProvider,
+            IHttpContextAccessor httpContextAccessor) 
         {
             protector = dataProtectionProvider.CreateProtector(SecretCookieProtectionKey);
             userService = _userService;
+            context = httpContextAccessor.HttpContext!;
         }
-        public void AppendToCookie(string newKey, string newValue, HttpContext context)
+        public void AppendToCookie(string newKey, string newValue, TimeSpan? duration = null)
         {
             var protectedCookie = context.Request.Cookies[IsAdminAttr];
 
@@ -43,21 +46,42 @@ namespace TechStoreApp.Services.Data
             var updatedCookieValue = JsonSerializer.Serialize(cookieData);
             var protectedValue = protector.Protect(updatedCookieValue);
 
-            context.Response.Cookies.Append(IsAdminAttr, protectedValue, new CookieOptions
+
+            var cookieOptions = new CookieOptions
             {
                 HttpOnly = true,
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
-            });
+
+                // Enable crosssite requests for Api
+                SameSite = SameSiteMode.None,
+                Domain = DomainStr,
+                Path = "/"
+            };
+
+            if (duration.HasValue)
+            {
+                cookieOptions.Expires = DateTime.UtcNow.Add(duration.Value);
+            }
+
+            context.Response.Cookies.Append(IsAdminAttr, protectedValue, cookieOptions);
         }
 
-        public async Task AttachIsUserAdminToCookie(HttpContext context)
+        public async Task AttachIsUserAdminToCookie(bool rememberMe)
         {
-            var isAdmin = await userService.IsUserAdmin(userService.GetUserId());
+            var userId = userService.GetUserId();
+            var isAdmin = await userService.IsUserAdmin(userId);
 
             string newKey = IsAdminAttr;
             string newValue = isAdmin.ToString();
-            this.AppendToCookie(newKey, newValue, context);
+
+            if (rememberMe)
+            {
+                this.AppendToCookie(newKey, newValue, TimeSpan.FromDays(CookieDurationRememberMe));
+            }
+            else
+            {
+                this.AppendToCookie(newKey, newValue);
+            }
         }
     }
 }

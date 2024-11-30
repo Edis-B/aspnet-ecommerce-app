@@ -67,8 +67,9 @@ namespace TechStoreApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> FinalizeOrder(AddressFormModel model)
         {
-            // TempData from SharedForm
-            model = TempDataUtility.GetTempData<AddressFormModel>(TempData, "Model") ?? model;
+            // TempData from SharedForm Redirection
+            model = TempDataUtility
+                .GetTempData<AddressFormModel>(TempData, "Model") ?? model;
 
             var newModel = await orderService.GetOrderFinalizedModelAsync(model);
 

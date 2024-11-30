@@ -1,18 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Category;
 using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
+using TechStoreApp.Web.ViewModels.ApiViewModels.Products;
 
 namespace TechStoreApp.Services.Data
 {
@@ -163,33 +156,50 @@ namespace TechStoreApp.Services.Data
 
         }
 
-        public IEnumerable<ProductViewModel> GetAllProducts()
+        public IEnumerable<ProductApiViewModel> GetAllProducts()
         {
             var result = productRepository.GetAllAttached()
-                .Select(p => new ProductViewModel()
+                .Select(p => new ProductApiViewModel()
                 {
+                    ProductId = p.ProductId,    
                     CategoryId = p.CategoryId,
                     Name = p.Name,
                     Description= p.Description,
                     Price = p.Price,
                     Stock= p.Stock,
                     ImageUrl = p.ImageUrl,  
-                    TotalLikes = p.Favorites.Count()
+                    TotalLikes = p.Favorites.Count()    
                 });
 
             return result;
         }
 
-        public IEnumerable<ReviewViewModel> GetProductReviews(int productId)
+        public IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName = null, int? categoryId = null)
         {
-            var result = reviewRepository.GetAllAttached()
-                .Where(r => r.ProductId == productId)
-                .Select(r => new ReviewViewModel()
+            Console.WriteLine(productName);
+
+            var query = productRepository.GetAllAttached();
+
+            if (productName != null)
+            {
+                query = query.Where(p => p.Name.Contains(productName!));             
+            }
+
+            if (categoryId != null)
+            {
+                query = query.Where(p => p.CategoryId == categoryId);
+            }
+
+            var result = query.Select(p => new ProductApiViewModel()
                 {
-                    Comment = r.Comment,
-                    ProductId = productId,
-                    Author = r.User!.UserName!,
-                    Rating = r.Rating,
+                    ProductId = p.ProductId,
+                    CategoryId = p.CategoryId,
+                    Name = p.Name,
+                    Description = p.Description,
+                    Price = p.Price,
+                    Stock = p.Stock,
+                    ImageUrl = p.ImageUrl,
+                    TotalLikes = p.Favorites.Count()
                 });
 
             return result;

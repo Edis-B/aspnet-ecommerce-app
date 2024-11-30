@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TechStoreApp.Web.ViewModels.ApiViewModels.Products;
 using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
 
@@ -17,8 +18,8 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task EditProductAsync(EditProductViewModel model);
         Task CreateAndAddReviewToDBAsync(ReviewFormModel model);
         AddProductViewModel GetAddProductViewModel();
-
-        IEnumerable<ProductViewModel> GetAllProducts();
-        IEnumerable<ReviewViewModel> GetProductReviews(int productId);
+        // Api
+        IEnumerable<ProductApiViewModel> GetAllProducts();
+        IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName, int? categoryId);
     }
 }

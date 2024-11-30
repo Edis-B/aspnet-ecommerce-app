@@ -22,9 +22,9 @@ internal class Program
 
         builder.Services.AddCors(cfg =>
         {
-            cfg.AddPolicy("AllowAll", policyBld =>
+            cfg.AddPolicy("AllowAll", builder =>
             {
-                policyBld
+                builder
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowAnyOrigin();
@@ -35,10 +35,10 @@ internal class Program
                 cfg.AddPolicy("AllowMyServer", policyBld =>
                 {
                     policyBld
+                        .WithOrigins(techstoreWebAppOrigin)
                         .AllowAnyHeader()
                         .AllowAnyMethod()
-                        .AllowCredentials()
-                        .WithOrigins(techstoreWebAppOrigin);
+                        .AllowCredentials();
                 });
             }
         });
