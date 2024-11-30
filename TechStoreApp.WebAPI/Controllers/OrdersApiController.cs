@@ -1,5 +1,7 @@
 ﻿using CinemaApp.Web.Infrastructure.Attributes;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
+using TechStoreApp.Services.Data;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.ApiViewModels.Orders;
 
@@ -9,9 +11,12 @@ namespace TechStoreApp.WebAPI.Controllers
     {
         private const string action = "[action]";
         private readonly IOrderService orderService;
-        public OrdersApiController(IOrderService _orderService)
+        private readonly IUserService userService;
+        public OrdersApiController(IOrderService _orderService, 
+            IUserService _userService)
         {
             orderService = _orderService;
+            userService = _userService;
         }
 
         [HttpGet(action)]
@@ -39,9 +44,14 @@ namespace TechStoreApp.WebAPI.Controllers
 
         public async Task<IActionResult> GetAllOrdersByUser(string userId)
         {
+            if (!await userService.DoesUserExistId(userId))
+            {
+                return NotFound("User with such id does not exist");
+            }
+
             var orders = await orderService.GetAllOrdersByUserId(userId);
 
-            if (!orders.Any()) return NotFound("User does not have any orders!");
+            if (!orders.Any()) return NotFound("User does not have any orders!");      
 
             return Ok(orders);
         }

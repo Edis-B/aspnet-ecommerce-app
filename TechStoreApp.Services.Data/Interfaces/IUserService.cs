@@ -6,7 +6,6 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface IUserService
     {
-        Guid GetUserId();
         Task LogoutAsync();
         Task<SignInResult> SignInAsync(LoginViewModel model);
         Task<IdentityResult> RegisterAsync(RegisterViewModel model);
@@ -14,7 +13,9 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<IdentityResult> ForgotPasswordAsync(ForgotPasswordViewModel model);
         Task<IdentityResult> ResetPasswordAsync(ResetPasswordViewModel model);
         Task<ApplicationUser> GetUserByTheirIdAsync(Guid Id);
-        ApplicationUser CreateUser();
         Task<bool> IsUserAdmin(Guid userId);
+        Task<bool> DoesUserExistId(string userId);
+        ApplicationUser CreateUser();
+        Guid GetUserId();
     }
 }

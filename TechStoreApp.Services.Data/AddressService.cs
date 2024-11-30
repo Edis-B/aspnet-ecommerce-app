@@ -1,18 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-using TechStoreApp.Common;
-using TechStoreApp.Data;
+﻿using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Address;
-using TechStoreApp.Web.ViewModels.Orders;
+using TechStoreApp.Web.ViewModels.ApiViewModels.Addresses;
 
 namespace TechStoreApp.Services.Data
 {
@@ -28,7 +19,6 @@ namespace TechStoreApp.Services.Data
             addressRepository = _addressRepository;
         }
 
-        [HttpPost]
         public async Task SaveAddressAsync(AddressFormModel model)
         {
             var userId = userService.GetUserId();
@@ -45,7 +35,6 @@ namespace TechStoreApp.Services.Data
             await addressRepository.AddAsync(newAddress);
         }
 
-        [HttpGet]
         public async Task<Address> GetAddressByIdAsync(int id)
         {
             var address = await addressRepository.GetByIdAsync(id);
@@ -56,6 +45,26 @@ namespace TechStoreApp.Services.Data
             }
 
             return address;
+        }
+
+        public async Task<IEnumerable<AddressApiViewModel>> GetAddressesByUser(string userId)
+        {
+
+            var addresses = await addressRepository
+                .GetAllAttached()
+                .Where(a => a.UserId.ToString() == userId)
+                .Select(a => new AddressApiViewModel()
+                {
+                    City = a.City,
+                    Country = a.Country,    
+                    PostalCode= a.PostalCode,
+                    Details = a.Details,
+                    UserId = a.UserId.ToString(),
+                    UserName = a.User.UserName!
+                })
+                .ToListAsync();
+
+            return addresses;
         }
     }
 }

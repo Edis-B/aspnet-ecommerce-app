@@ -282,58 +282,34 @@ namespace TechStoreApp.Services.Data
                 .FirstOrDefaultAsync();
 
             
-            return orderViewModel;
+            return orderViewModel!;
         }
 
         public async Task<IEnumerable<OrderApiViewModel>> GetAllOrders()
         {
-            var orders = orderRepository.GetAllAttached();
-
-            var result = await orders
-                .Select(o => new OrderApiViewModel()
-                {
-                    OrderId = o.OrderId,
-                    UserId = o.UserId.ToString(),
-                    UserName = o.User.UserName!,
-                    TotalPrice = (double)o.TotalAmount,
-                    OrderStatus = o.Status.Description,
-                    Products = o.OrderDetails.Select(o => new OrderDetailApiViewModel()
-                    {
-                        OrderDetailId = o.OrderDetailId,
-                        ProductId = o.ProductId,
-                        ProductName = o.Product!.Name,
-                        Quantity = o.Quantity,
-                        UnitPrice = (double)o.UnitPrice
-                    })
-                })
+            var orders = await orderRepository.GetAllAttached()
+                .Include(o => o.User)
+                .Include(o => o.Status)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
                 .ToListAsync();
+
+            var result = orders.Select(o => new OrderApiViewModel(o));
 
             return result;
         }
 
         public async Task<IEnumerable<OrderApiViewModel>> GetAllOrdersByUserId(string userId)
         {
-            var orders = orderRepository.GetAllAttached();
-
-            var result = await orders
-                .Where(o => o.UserId.ToString() == userId)
-                .Select(o => new OrderApiViewModel()
-                {
-                    OrderId = o.OrderId,
-                    UserId = o.UserId.ToString(),
-                    UserName = o.User.UserName!,
-                    TotalPrice = (double)o.TotalAmount,
-                    OrderStatus = o.Status.Description,
-                    Products = o.OrderDetails.Select(o => new OrderDetailApiViewModel()
-                    {
-                        OrderDetailId = o.OrderDetailId,
-                        ProductId = o.ProductId,
-                        ProductName = o.Product!.Name,
-                        Quantity = o.Quantity,
-                        UnitPrice = (double)o.UnitPrice
-                    })
-                })
+            var orders = await orderRepository.GetAllAttached()
+                .Where(o => o.UserId == Guid.Parse(userId))
+                .Include(o => o.User)
+                .Include(o => o.Status)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
                 .ToListAsync();
+
+            var result = orders.Select(o => new OrderApiViewModel(o));
 
             return result;
         }

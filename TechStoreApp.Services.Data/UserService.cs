@@ -200,8 +200,20 @@ namespace TechStoreApp.Services.Data
 
         public async Task<bool> IsUserAdmin(Guid userId)
         {
-            var user = await userRepository.GetByIdAsync(userId);
-            return await userManager.IsInRoleAsync(user, AdminRoleName);
+            var user = await userManager.FindByIdAsync(userId.ToString());
+
+            return await userManager.IsInRoleAsync(user!, AdminRoleName);
+        }
+
+        public async Task<bool> DoesUserExistId(string userId)
+        {
+            var canParse = Guid.TryParse(userId, out  Guid id);
+
+            if (!canParse) return false;
+
+            var user = await userManager.FindByIdAsync(userId);
+
+            return user != null;
         }
     }
 }
