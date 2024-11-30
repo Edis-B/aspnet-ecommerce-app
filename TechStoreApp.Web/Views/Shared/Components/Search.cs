@@ -1,19 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Security.Claims;
-using TechStoreApp.Data;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.ViewModels.Header;
-using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Search;
 
 namespace TechStoreApp.Web.Views.Shared.Components
 {
-    public class SearchViewComponent : ViewComponent
+    [ViewComponent]
+    public class Search : ViewComponent
     {
         private readonly ISearchService searchService;
-        public SearchViewComponent(ISearchService _searchService)
+        public Search(ISearchService _searchService)
         {
             searchService = _searchService;
         }

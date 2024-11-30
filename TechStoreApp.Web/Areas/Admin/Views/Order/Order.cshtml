@@ -1,0 +1,11 @@
+﻿@model string
+
+ <link rel="stylesheet" href="~/css/profile-page.css" />
+
+<form asp-action="Manage" asp-controller="UserManagement" asp-area="Admin" method="get">
+    <button class="btn btn-primary btn-sm" type="submit">Back</button>
+</form>
+
+<div class="orders-container">
+    @await Component.InvokeAsync("UserOrdersAdmin", Model.ToString())
+</div>

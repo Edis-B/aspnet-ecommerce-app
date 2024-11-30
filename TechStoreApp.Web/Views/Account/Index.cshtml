@@ -1,18 +1,19 @@
 ﻿@using static TechStoreApp.Common.GeneralConstraints
 
 <link rel="stylesheet" href="~/css/profile-page.css"/>
-
-<form asp-controller="Account" asp-action="Logout" method="post">
-    <input class="btn btn-warning btn-dark-text w-20 py-2 fw-bold rounded" type="submit" value="Logout" />
-</form>
-
-@if (User.IsInRole(AdminRoleName))
-{
-    <form asp-area="Admin" asp-controller="UserManagement" asp-action="Manage" method="get">
-        <input class="btn btn-warning btn-dark-text w-20 py-2 fw-bold rounded" type="submit" value="Manage users' accounts" />
+<div class="d-inline">
+    <form asp-controller="Account" asp-action="Logout" method="post">
+        <input class="btn btn-warning btn-dark-text w-20 py-2 fw-bold rounded" type="submit" value="Logout" />
     </form>
-}
 
+
+    @if (User.IsInRole(AdminRoleName))
+    {
+        <form asp-area="Admin" asp-controller="UserManagement" asp-action="Manage" method="get">
+            <input class="btn btn-warning btn-dark-text w-20 py-2 fw-bold rounded" type="submit" value="Manage users' accounts" />
+        </form>
+    }
+</div>
 <div class="orders-container">
     @await Component.InvokeAsync("UserOrders")
 </div>

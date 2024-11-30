@@ -74,6 +74,11 @@
                         <input type="hidden" name="userId" value="@profile.UserId" />
                         <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
+
+                    <form method="get" asp-action="GetUserOrders" asp-controller="Order" asp-area="Admin" class="d-inline m-3">
+                        <input type="hidden" name="userId" value="@profile.UserId" />
+                        <button type="submit" class="btn btn-danger btn-sm">Manage orders</button>
+                    </form>
                 </div>
             </div>
         }

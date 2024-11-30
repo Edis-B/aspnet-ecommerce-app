@@ -216,12 +216,15 @@ namespace TechStoreApp.Services.Data
             await cartRepository.DeleteAsync(user.Cart.CartId);
         }
 
-        public async Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync()
+        public async Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync(string? userId = null)
         {
-            var userId = userService.GetUserId();
+            var orders = orderRepository.GetAllAttached();
 
-            var orders = await orderRepository.GetAllAttached()
-                .Where(o => o.UserId == userId)
+            userId = userId ?? userService.GetUserId().ToString();
+
+            orders = orders.Where(o => o.UserId.ToString() == userId);
+
+            var results = await orders
                 .Select(o => new UserOrderSingleViewModel()
                 {
                     OrderId = o.OrderId,
@@ -240,9 +243,10 @@ namespace TechStoreApp.Services.Data
                 })
                 .ToListAsync();
 
-            var orderModel = new UserOrdersListViewModel();
-
-            orderModel.Orders = orders;
+            var orderModel = new UserOrdersListViewModel()
+            {
+                Orders = results
+            };
 
             return orderModel;
         }
@@ -257,7 +261,10 @@ namespace TechStoreApp.Services.Data
 
             if (order == null || order.UserId != userId)
             {
-                return null!;
+                if (!await userService.IsUserAdmin(userId))
+                {
+                    return null!;
+                }
             }
 
             var orderViewModel = await orderRepository.GetAllAttached()

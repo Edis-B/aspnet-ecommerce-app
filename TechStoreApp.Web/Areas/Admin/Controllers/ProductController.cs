@@ -18,7 +18,6 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
 
         }
         [HttpGet]
-        [Authorize(Roles = AdminRoleName)]
         [Route("Product/Edit/{productId:int}")]
         public async Task<IActionResult> Edit(int productId)
         {
@@ -33,7 +32,6 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = AdminRoleName)]
         public async Task<IActionResult> EditPost(EditProductViewModel model)
         {
             await productService.EditProductAsync(model);
@@ -42,7 +40,6 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = AdminRoleName)]
         public IActionResult Add()
         {
             var newViewModel = productService.GetAddProductViewModel();
@@ -51,7 +48,6 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = AdminRoleName)]
         public async Task<IActionResult> Add(AddProductViewModel model)
         {
             int newProductId = await productService.AddProductAsync(model);
