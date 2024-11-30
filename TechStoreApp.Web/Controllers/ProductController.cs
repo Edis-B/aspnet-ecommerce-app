@@ -4,7 +4,7 @@ using TechStoreApp.Common;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
-
+using static TechStoreApp.Common.GeneralConstraints;
 namespace TechStoreApp.Web.Controllers
 {
 
@@ -23,47 +23,6 @@ namespace TechStoreApp.Web.Controllers
 
             return View("Product", product);
         }
-
-        [HttpGet]
-        [Authorize(Roles = GeneralConstraints.AdminRoleName)]
-        [Route("Product/Edit/{productId:int}")]
-        public async Task<IActionResult> Edit(int productId)
-        {
-            var viewModel = await productService.GetEditProductViewModelAsync(productId);
-
-            if (viewModel == null)
-            {
-                return View("Error");
-            }
-
-            return View("Edit", viewModel);
-        }
-
-        [HttpPost]
-        [Authorize(Roles = GeneralConstraints.AdminRoleName)]
-        public async Task<IActionResult> EditPost(EditProductViewModel model)
-        {
-            await productService.EditProductAsync(model);
-
-            return RedirectToAction(nameof(RedirectToDetails), new { productId = model.ProductId });
-        }
-
-        [HttpGet]
-        public IActionResult Add()
-        {
-            var newViewModel = productService.GetAddProductViewModel();
-
-            return View("Add", newViewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Add(AddProductViewModel model)
-        {
-            int newProductId = await productService.AddProductAsync(model);
-
-            return RedirectToAction(nameof(RedirectToDetails), new { productId = newProductId });
-        }
-
 
         [HttpPost]
         public async Task<JsonResult> CreateReview([FromBody] ReviewFormModel model)

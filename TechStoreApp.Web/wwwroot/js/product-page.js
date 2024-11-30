@@ -5,8 +5,8 @@
     addFavoriting();
 
     starAnimations();
-    postReview();
     addImageStockBlocker();
+    postReview();
 });
 
 async function postReview() {
@@ -34,22 +34,6 @@ async function postReview() {
         const comment = commentInput.value;
         const rating = ratingInput.value;
 
-        // Validate Fields
-        let check = true;
-        if (!comment || comment.length < 10) {
-            displayValidationError('Comment must be at least 10 characters long.', 'Comment');
-            check = false;
-        }
-
-        if (!rating) {
-            displayValidationError('Please select rating!', 'Rating');
-            check = false;
-        }
-
-        if (!check) {
-            return;
-        }
-
         const response = await fetch('/Product/CreateReview', {
             method: 'POST',
             headers: {
@@ -63,12 +47,7 @@ async function postReview() {
         })
 
         if (response.ok) {
-            commentvalue = '';
-            ratingvalue = '';
-
-            allStars.forEach(el => {
-                el.innerHTML = '&#9734;';
-            });
+            location.reload();
         }
     })
 }

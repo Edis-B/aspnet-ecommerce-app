@@ -40,7 +40,7 @@ namespace TechStoreApp.WebAPI.Controllers
         {
             if (userId == null || roleName == null)
             {
-                return NotFound();
+                return NotFound("userId and roleName must not be null");
             }
 
             var users = await profileService.AssignRoleAssignRoleAsync(userId, roleName);

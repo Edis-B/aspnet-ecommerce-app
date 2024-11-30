@@ -27,6 +27,8 @@ namespace TechStoreApp.WebAPI.Controllers
         {
             var products = productService.GetAllProducts();
 
+            if (!products.Any()) return NotFound("No product found!");
+
             return Ok(products);
         }
 
@@ -40,21 +42,25 @@ namespace TechStoreApp.WebAPI.Controllers
         {
             var products = productService.GetAllProductsByQuery(productName, categoryId);
 
+            if (!products.Any()) return NotFound("No product found!");
+
             return Ok(products);
         }
 
-        //[HttpPost(action)]
-        //[AdminCookieOnly]
-        //[ProducesResponseType((typeof(IEnumerable<ProductApiViewModel>)), StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [AdminCookieOnly]
+        [HttpPost(action)]
+        [ProducesResponseType((typeof(IEnumerable<ProductApiViewModel>)), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        //public IActionResult AddNewProductToStore(string? productName, int? categoryId)
-        //{
-        //    var products = productService.GetAllProductsByQuery(productName, categoryId);
+        public async Task<IActionResult> AddNewProductToStore(AddProductViewModel model)
+        {
+            var productId = await productService.AddProductAsync(model);
 
-        //    return Ok(products);
-        //}
+            if (productId < 0) return BadRequest();
+
+            return Ok($"Added product with id: {productId}");
+        }
     }
 }

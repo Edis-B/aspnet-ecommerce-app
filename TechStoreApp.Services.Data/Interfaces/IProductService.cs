@@ -13,11 +13,17 @@ namespace TechStoreApp.Services.Data.Interfaces
     public interface IProductService
     {
         Task<ProductViewModel> GetProductViewModelAsync(int productId);
+
+        // Edit product
         Task<EditProductViewModel> GetEditProductViewModelAsync(int productId);
-        Task<int> AddProductAsync(AddProductViewModel model);
         Task EditProductAsync(EditProductViewModel model);
-        Task CreateAndAddReviewToDBAsync(ReviewFormModel model);
+
+        // Add product
         AddProductViewModel GetAddProductViewModel();
+        Task<int> AddProductAsync(AddProductViewModel model);
+
+        Task CreateAndAddReviewToDBAsync(ReviewFormModel model);
+        
         // Api
         IEnumerable<ProductApiViewModel> GetAllProducts();
         IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName, int? categoryId);

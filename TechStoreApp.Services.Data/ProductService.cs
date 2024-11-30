@@ -176,7 +176,7 @@ namespace TechStoreApp.Services.Data
 
         public IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName = null, int? categoryId = null)
         {
-            Console.WriteLine(productName);
+            productName = productName!.ToLower();
 
             var query = productRepository.GetAllAttached();
 

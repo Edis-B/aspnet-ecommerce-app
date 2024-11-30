@@ -23,7 +23,7 @@
         if (User.IsInRole(GeneralConstraints.AdminRoleName))
         {
             <div class="single-product-cell">
-                <form class="" asp-controller="Product" asp-action="Add" method="get">
+                <form class="" asp-controller="Product" asp-action="Add" asp-area="Admin" method="get">
                     <button class="add-to-cart-button" type="submit">
                         Add new item
                     </button>

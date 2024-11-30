@@ -31,7 +31,7 @@
 
         @if (User.IsInRole(GeneralConstraints.AdminRoleName))
         {
-            <a class="edit-button" asp-controller="Product" asp-action="Edit" asp-route-productId="@Model.ProductId">
+            <a class="edit-button" asp-controller="Product" asp-action="Edit" asp-area="Admin" asp-route-productId="@Model.ProductId">
                 Edit
                 <img src="~/images/clipboard.png" />
             </a>
