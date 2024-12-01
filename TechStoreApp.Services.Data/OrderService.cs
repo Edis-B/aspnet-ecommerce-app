@@ -8,6 +8,7 @@ using TechStoreApp.Web.ViewModels.ApiViewModels.Orders;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Orders;
 using TechStoreApp.Web.ViewModels.Products;
+using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Services.Data
 {
@@ -20,13 +21,15 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<Cart, int> cartRepository;
         private readonly IRepository<CartItem, object> cartItemRepository;
         private readonly IUserService userService;
+        private readonly IRepository<Status, int> statusRepository;
         public OrderService(IRepository<Order, int> _orderRepository,
             IRepository<ApplicationUser, Guid> _userRepository,
             IRepository<Product, int> _productRepository,
             IRepository<OrderDetail, int> _orderDetailRepository,
             IRepository<Cart, int> _cartRepository,
             IRepository<CartItem, object> _cartItemRepository,
-            IUserService _userService)
+            IUserService _userService,
+            IRepository<Status, int> _statusRepository)
         {
             userRepository = _userRepository;
             orderRepository = _orderRepository;
@@ -35,6 +38,7 @@ namespace TechStoreApp.Services.Data
             cartRepository = _cartRepository;
             cartItemRepository = _cartItemRepository;
             userService = _userService;
+            statusRepository = _statusRepository;
         }
         public async Task<OrderPageViewModel> GetOrderViewModelAsync(int? addressId)
         {
@@ -202,6 +206,7 @@ namespace TechStoreApp.Services.Data
                 var othersItems = cartItemRepository.GetAllAttached()
                     .Where(ci => ci.ProductId == item.ProductId)
                     .Where(ci => ci.Quantity >= productsToDecrease.Stock);
+
                 foreach (var otherItem in othersItems)
                 {
                     otherItem.Quantity = productsToDecrease.Stock;
@@ -255,6 +260,7 @@ namespace TechStoreApp.Services.Data
         {
             var order = await orderRepository.GetAllAttached()
                 .Where(o => o.OrderId == orderId)
+                .Include(o => o.Status)
                 .FirstOrDefaultAsync();
 
             var userId = userService.GetUserId();
@@ -288,7 +294,15 @@ namespace TechStoreApp.Services.Data
                 })
                 .FirstOrDefaultAsync();
 
-            
+            orderViewModel!.CurrentStatus = new KeyValuePair<string, int>(order!.Status.Description, order.StatusId);
+
+            var allStatuses = await statusRepository.GetAllAttached().ToListAsync();
+
+            orderViewModel!.Statuses = allStatuses
+                .Where(s => s.StatusId != orderViewModel.CurrentStatus.Value)
+                .Select(s => new KeyValuePair<string, int>(s.Description, s.StatusId))
+                .ToList();
+
             return orderViewModel!;
         }
 

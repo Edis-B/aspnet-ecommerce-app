@@ -62,9 +62,24 @@ namespace TechStoreApp.Services.Data
         public async Task<IdentityResult> DeleteUserAsync(string userId)
         {
             var user = await GetUserFromIdAsync(Guid.Parse(userId));
+            
             if (user == null)
             {
-                return IdentityResult.Failed();
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "InvalidUserId",
+                    Description = "The provided user ID is not valid."
+                });
+            }
+
+
+            if (userService.GetUserId() == Guid.Parse(userId))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Code = "UserNotFound",
+                    Description = "The user does not exist."
+                });
             }
 
             return await userManager.DeleteAsync(user);

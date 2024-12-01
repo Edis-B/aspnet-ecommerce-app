@@ -1,13 +1,20 @@
-﻿@using TechStoreApp.Web.ViewModels.Orders
+﻿@using static TechStoreApp.Common.GeneralConstraints
+@using TechStoreApp.Web.ViewModels.Orders
 @model UserOrderSingleViewModel
 
 <link rel="stylesheet" href="~/css/completed-order-page.css"/>
+
+@if (User.IsInRole(AdminRoleName))
+{
+    <p>Admin View</p>
+}
 
 <div class="container">
     <div class="order-card">
         <div class="order-header">
             <h1 class="h3">Order Details</h1>
         </div>
+
         <div class="mb-4">
             <h5 class="fw-bold">Order Summary</h5>
             <div class="product-list">
@@ -31,12 +38,32 @@
                 <h5 class="fw-bold">$@Model.TotalPrice</h5>
             </div>
         </div>
+
         <div class="mb-4">
             <h5 class="fw-bold">Shipping Address</h5>
             <p class="mb-1">@Model.ShippingAddress</p>
         </div>
+
         <div class="text-center">
             <button class="btn btn-success" disabled>Order Confirmed</button>
         </div>
+
+        @if (User.IsInRole(AdminRoleName))
+        {
+            <div>
+                <form asp-action="EditStatusOfOrder" asp-controller="Status" method="post">
+                    <input name="orderId" type="hidden" value="@Model.OrderId"/>
+                    <select name="statusId">
+                        <option  value="@Model.CurrentStatus.Value">@Model.CurrentStatus.Key</option>
+                        @foreach (var status in Model.Statuses)
+                        {
+                            <option value="@status.Value">@status.Key</option>
+                        }
+                    </select>
+
+                    <button type="submit">Update status</button>
+                </form>
+            </div>
+        }
     </div>
 </div>

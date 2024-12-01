@@ -23,6 +23,7 @@ namespace TechStoreApp.WebAPI.Controllers
         [AdminCookieOnly]
         [ProducesResponseType((typeof(IEnumerable<OrderApiViewModel>)), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
@@ -39,6 +40,7 @@ namespace TechStoreApp.WebAPI.Controllers
         [AdminCookieOnly]
         [ProducesResponseType((typeof(IEnumerable<OrderApiViewModel>)), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
