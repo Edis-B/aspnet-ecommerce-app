@@ -225,9 +225,11 @@ namespace TechStoreApp.Services.Data
         {
             var orders = orderRepository.GetAllAttached();
 
-            userId = userId ?? userService.GetUserId().ToString();
+            userId = userId 
+                ?? userService.GetUserId().ToString();
 
-            orders = orders.Where(o => o.UserId.ToString() == userId);
+            orders = orders
+                .Where(o => o.UserId.ToString() == userId);
 
             var results = await orders
                 .Select(o => new UserOrderSingleViewModel()
