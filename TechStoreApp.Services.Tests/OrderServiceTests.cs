@@ -41,6 +41,7 @@ namespace TechStoreApp.Services.Tests
         private List<Product> testProducts;
         private List<OrderDetail> testOrderDetails;
         private List<Address> testAddresses;
+        private List<Status> testStatuses;
 
         void InitializeOrderService()
         {
@@ -100,20 +101,26 @@ namespace TechStoreApp.Services.Tests
                 new ApplicationUser { Id = userId, Cart = testCarts.FirstOrDefault() }
             };
 
-            testOrders = new List<Order>
-            {
-                new Order { OrderId = 1, UserId = userId, TotalAmount = 50, ShippingAddress = "123TestSt" }
-            };
 
             testOrderDetails = new List<OrderDetail>
             {
-                new OrderDetail { OrderId = 1, ProductId = 1, Quantity = 2, UnitPrice = 10 },
-                new OrderDetail { OrderId = 1, ProductId = 2, Quantity = 1, UnitPrice = 20 }
+                new OrderDetail { OrderId = 1, ProductId = 1, Quantity = 2, UnitPrice = 10, Product = testProducts[0] },
+                new OrderDetail { OrderId = 1, ProductId = 2, Quantity = 1, UnitPrice = 20, Product = testProducts[1] }
             };
 
             testAddresses = new List<Address>
             {
                 new Address { AddressId = 1, City = "TestCity", Country = "TestCountry", Details = "TestDetails", PostalCode = 1111, UserId = userId, User = testUsers[0] }
+            };
+
+            testStatuses = new List<Status>
+            {
+                new Status { StatusId = 1, Description = "Order Received" }
+            };
+
+            testOrders = new List<Order>
+            {
+                new Order { OrderId = 1, UserId = userId, TotalAmount = 50, ShippingAddress = "123TestSt", Status = testStatuses.First(), OrderDetails = testOrderDetails}
             };
         }
 
@@ -308,7 +315,6 @@ namespace TechStoreApp.Services.Tests
         public async Task GetUserOrdersListViewModelAsync_ShouldReturnUserOrders()
         {
             // Arrange
-            mockUserService.Setup(us => us.GetUserId()).Returns(userId);
             mockOrderRepository
                 .Setup(or => or.GetAllAttached())
                 .Returns(testOrders.AsQueryable().BuildMock());
@@ -354,6 +360,63 @@ namespace TechStoreApp.Services.Tests
                     }
                 }
             });
+        }
+        [Test]
+        public async Task GetDetailsOfOrder_ReturnsCorrectOrderModel()
+        {
+            // Arrange
+            mockOrderRepository
+                .Setup(or => or.GetAllAttached())
+                .Returns(testOrders.AsQueryable().BuildMock());
+
+            mockStatusRepository
+                .Setup(or => or.GetAllAttached())
+                .Returns(testStatuses.AsQueryable().BuildMock());
+
+            // Act
+            InitializeOrderService();
+            var result = await orderService.GetDetailsOfOrder(1);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                // Ensure the result is not null
+                Assert.That(result, Is.Not.Null);
+
+                // Verify basic order details
+                Assert.That(result.OrderId, Is.EqualTo(1));
+                Assert.That(result.ShippingAddress, Is.EqualTo("123TestSt"));
+                Assert.That(result.OrderDate, Is.Not.Null.And.Matches(@"\d{2}/\d{2}/\d{4}")); // Format dd/MM/yyyy
+                Assert.That(result.TotalPrice, Is.EqualTo(50)); // 2 * 10 + 1 * 20
+
+                // Verify the order details count
+                Assert.That(result.OrderDetails.Count, Is.EqualTo(2));
+
+                // Verify details for the first product
+                var detail1 = result.OrderDetails.FirstOrDefault(d => d.ProductId == 1);
+                Assert.That(detail1, Is.Not.Null);
+                Assert.That(detail1.ProductId, Is.EqualTo(1));
+                Assert.That(detail1.ProductName, Is.EqualTo("TestProduct1"));
+                Assert.That(detail1.ProductImageUrl, Is.EqualTo("testimage1.jpg"));
+                Assert.That(detail1.Quantity, Is.EqualTo(2));
+                Assert.That(detail1.UnitPrice, Is.EqualTo(10));
+
+                // Verify details for the second product
+                var detail2 = result.OrderDetails.FirstOrDefault(d => d.ProductId == 2);
+
+                Assert.That(detail2, Is.Not.Null);
+                Assert.That(detail2.ProductId, Is.EqualTo(2));
+                Assert.That(detail2.ProductName, Is.EqualTo("TestProduct2"));
+                Assert.That(detail2.ProductImageUrl, Is.EqualTo("testimage2.jpg"));
+                Assert.That(detail2.Quantity, Is.EqualTo(1));
+                Assert.That(detail2.UnitPrice, Is.EqualTo(20));
+
+                // Status check (if part of the result)
+                Assert.That(result.CurrentStatus.Key, Is.EqualTo("Order Received"));
+                Assert.That(result.CurrentStatus.Value, Is.EqualTo(1));
+                
+            });
+
         }
     }
 }

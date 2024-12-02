@@ -263,6 +263,8 @@ namespace TechStoreApp.Services.Data
             var order = await orderRepository.GetAllAttached()
                 .Where(o => o.OrderId == orderId)
                 .Include(o => o.Status)
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
                 .FirstOrDefaultAsync();
 
             var userId = userService.GetUserId();
@@ -275,30 +277,30 @@ namespace TechStoreApp.Services.Data
                 }
             }
 
-            var orderViewModel = await orderRepository.GetAllAttached()
-                .Where(o => o.OrderId == orderId)
-                .Select(o => new UserOrderSingleViewModel()
-                {
-                    OrderId = o.OrderId,
-                    ShippingAddress = o.ShippingAddress!,
-                    OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
-                    TotalPrice = (double)o.TotalAmount,
-                    OrderDetails = o.OrderDetails
-                        .Select(od => new OrderDetailViewModel()
-                        {
-                            ProductImageUrl = od.Product!.ImageUrl ?? string.Empty,
-                            ProductName = od.Product.Name,
-                            ProductId = od.ProductId,
-                            Quantity = od.Quantity,
-                            UnitPrice = od.UnitPrice
-                        })
-                        .ToList()
-                })
-                .FirstOrDefaultAsync();
+            var orderViewModel = new UserOrderSingleViewModel
+            {
+                OrderId = order!.OrderId,
+                ShippingAddress = order.ShippingAddress!,
+                OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
+                TotalPrice = (double)order.TotalAmount,
+                OrderDetails = order.OrderDetails
+                    .Select(od => new OrderDetailViewModel
+                    {
+                        ProductImageUrl = od.Product?.ImageUrl ?? string.Empty,
+                        ProductName = od.Product?.Name ?? string.Empty,
+                        ProductId = od.ProductId,
+                        Quantity = od.Quantity,
+                        UnitPrice = od.UnitPrice
+                    })
+                    .ToList()
+            };
 
-            orderViewModel!.CurrentStatus = new KeyValuePair<string, int>(order!.Status.Description, order.StatusId);
 
-            var allStatuses = await statusRepository.GetAllAttached().ToListAsync();
+            orderViewModel!.CurrentStatus = new KeyValuePair<string, int>(order!.Status.Description, order.Status.StatusId);
+
+            var allStatuses = await statusRepository
+                .GetAllAttached()
+                .ToListAsync();
 
             orderViewModel!.Statuses = allStatuses
                 .Where(s => s.StatusId != orderViewModel.CurrentStatus.Value)
