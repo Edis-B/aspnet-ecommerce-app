@@ -31,7 +31,7 @@ namespace TechStoreApp.WebAPI.Controllers
                 return NotFound("User with such id does not exist");
             }
 
-            var results = await addressService.GetAddressesByUser(userId);
+            var results = await addressService.GetAddressesByUserId(userId);
 
             if (!results.Any())
             {

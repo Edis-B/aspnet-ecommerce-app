@@ -14,9 +14,9 @@ namespace TechStoreApp.Services.Data.Interfaces
     public interface IAddressService
     {
         Task SaveAddressAsync(AddressFormModel model);
-        Task<Address> GetAddressByIdAsync(int id);
+        Task<AddressViewModel> GetAddressByIdAsync(int id);
 
         // Api
-        Task<IEnumerable<AddressApiViewModel>> GetAddressesByUser(string userId);
+        Task<IEnumerable<AddressApiViewModel>> GetAddressesByUserId(string userId);
     }
 }

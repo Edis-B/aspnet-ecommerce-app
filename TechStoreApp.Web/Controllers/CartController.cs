@@ -9,12 +9,15 @@ namespace TechStoreApp.Web.Controllers
     public class CartController : Controller
     {
         private readonly ICartService cartService;
+        private readonly ICartItemService cartItemService;
         private readonly IRequestService requestService;
 
         public CartController(ICartService _cartService,
+            ICartItemService _cartItemService,
             IRequestService _requestService)
         {
             cartService = _cartService;
+            cartItemService = _cartItemService;
             requestService = _requestService;
         }
 
@@ -50,13 +53,13 @@ namespace TechStoreApp.Web.Controllers
             if (requestService.IsAjaxRequest(Request))
             {
                 model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
-                var response = await cartService.IncreaseCountAsync(model);
+                var response = await cartItemService.IncreaseCountAsync(model);
 
                 return response;
             }
             else
             {
-                var response = await cartService.IncreaseCountAsync(model);
+                var response = await cartItemService.IncreaseCountAsync(model);
 
                 return RedirectToAction("Cart", "Cart");
             }
@@ -68,13 +71,13 @@ namespace TechStoreApp.Web.Controllers
             if (requestService.IsAjaxRequest(Request))
             {
                 model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
-                var response = await cartService.DecreaseCountAsync(model);
+                var response = await cartItemService.DecreaseCountAsync(model);
 
                 return response;
             }
             else
             {
-                var response = await cartService.DecreaseCountAsync(model);
+                var response = await cartItemService.DecreaseCountAsync(model);
 
                 return RedirectToAction("Cart", "Cart");
             }
@@ -85,13 +88,13 @@ namespace TechStoreApp.Web.Controllers
             if (requestService.IsAjaxRequest(Request))
             {
                 model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
-                var response = await cartService.RemoveFromCartAsync(model);
+                var response = await cartItemService.RemoveFromCartAsync(model);
 
                 return response;
             }
             else
             {
-                var response = await cartService.RemoveFromCartAsync(model);
+                var response = await cartItemService.RemoveFromCartAsync(model);
 
                 return RedirectToAction("Cart", "Cart");
             }
@@ -117,7 +120,7 @@ namespace TechStoreApp.Web.Controllers
         [AllowAnonymous]
         public async Task<JsonResult> GetCartItemsCount()
         {
-            return await cartService.GetCartItemsCountAsync();
+            return await cartItemService.GetCartItemsCountAsync();
         }
 
     }

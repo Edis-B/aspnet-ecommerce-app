@@ -8,6 +8,7 @@ namespace TechStoreApp.Web.ViewModels.ApiViewModels.Addresses
 {
     public class AddressApiViewModel
     {
+        public int AddressId { get; set; }
         public string UserId { get; set; }
         public string UserName { get; set; }
         public string Country { get; set; }

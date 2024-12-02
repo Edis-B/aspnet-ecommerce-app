@@ -64,7 +64,6 @@ async function trashCans() {
                     setCartItemsCount();
 
                     //Find and remove product div
-                    const productDiv = document.querySelector(`.product-div[id="${decreaseCountBtn.value}"]`);
                     productDiv.nextElementSibling.remove();
                     productDiv.remove();
                 }

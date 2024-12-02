@@ -35,21 +35,9 @@ namespace TechStoreApp.Services.Data
             await addressRepository.AddAsync(newAddress);
         }
 
-        public async Task<Address> GetAddressByIdAsync(int id)
+
+        public async Task<IEnumerable<AddressApiViewModel>> GetAddressesByUserId(string userId)
         {
-            var address = await addressRepository.GetByIdAsync(id);
-
-            if (address.UserId != userService.GetUserId())
-            {
-                return null!;
-            }
-
-            return address;
-        }
-
-        public async Task<IEnumerable<AddressApiViewModel>> GetAddressesByUser(string userId)
-        {
-
             var addresses = await addressRepository
                 .GetAllAttached()
                 .Where(a => a.UserId.ToString() == userId)
@@ -65,6 +53,29 @@ namespace TechStoreApp.Services.Data
                 .ToListAsync();
 
             return addresses;
+        }
+        public async Task<AddressViewModel> GetAddressByIdAsync(int id)
+        {
+            var address = await addressRepository
+                .GetAllAttached()
+                .Include(a => a.User)
+                .FirstOrDefaultAsync(a => a.AddressId == id);
+
+            if (address == null || address.UserId != userService.GetUserId())
+            {
+                return null!;
+            }
+
+            var model = new AddressViewModel()
+            {
+                Id = address.AddressId,
+                Country = address.Country,  
+                City = address.City,
+                PostalCode = address.PostalCode.ToString(),    
+                Details = address.Details,
+            };
+
+            return model;
         }
     }
 }

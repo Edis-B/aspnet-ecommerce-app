@@ -22,7 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechStoreApp.Services.Data"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechStoreApp.Web.Infrastructure", "TechStoreApp.Web.Infrastructure\TechStoreApp.Web.Infrastructure.csproj", "{3A42A35B-44E9-4974-80BC-2683364B0A60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechStoreApp.WebAPI", "TechStoreApp.WebAPI\TechStoreApp.WebAPI.csproj", "{BB56CC88-277A-4666-8DC9-FA0AAB6C6C94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechStoreApp.WebAPI", "TechStoreApp.WebAPI\TechStoreApp.WebAPI.csproj", "{BB56CC88-277A-4666-8DC9-FA0AAB6C6C94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechStoreApp.Services.Tests", "TechStoreApp.Services.Tests\TechStoreApp.Services.Tests.csproj", "{FAC10D10-A057-4E44-8902-E24319C0E99B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +132,18 @@ Global
 		{BB56CC88-277A-4666-8DC9-FA0AAB6C6C94}.Release|x64.Build.0 = Release|Any CPU
 		{BB56CC88-277A-4666-8DC9-FA0AAB6C6C94}.Release|x86.ActiveCfg = Release|Any CPU
 		{BB56CC88-277A-4666-8DC9-FA0AAB6C6C94}.Release|x86.Build.0 = Release|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Debug|x64.Build.0 = Debug|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Debug|x86.Build.0 = Debug|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Release|x64.ActiveCfg = Release|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Release|x64.Build.0 = Release|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Release|x86.ActiveCfg = Release|Any CPU
+		{FAC10D10-A057-4E44-8902-E24319C0E99B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
