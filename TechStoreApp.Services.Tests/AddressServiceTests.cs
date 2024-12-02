@@ -125,5 +125,6 @@ namespace TechStoreApp.Services.Tests
             Assert.That(result.PostalCode, Is.EqualTo("12345"));
             Assert.That(result.Details, Is.EqualTo("Test details"));
         }
+
     }
 }

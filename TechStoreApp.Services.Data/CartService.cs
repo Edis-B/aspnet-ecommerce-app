@@ -117,7 +117,7 @@ namespace TechStoreApp.Services.Data
                 .Select(ci => new CartItemViewModel
                 {
                     Quantity = ci.Quantity,
-                    CartId = ci.ProductId,
+                    CartId = ci.CartId,
                     ProductId = ci.ProductId,
                     Product = productRepository.GetAllAttached()
                         .Where(p => p.ProductId == ci.ProductId)
