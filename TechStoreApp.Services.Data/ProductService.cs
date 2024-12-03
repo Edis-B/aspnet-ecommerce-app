@@ -174,12 +174,11 @@ namespace TechStoreApp.Services.Data
 
         public IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName = null, int? categoryId = null)
         {
-            productName = productName!.ToLower();
-
             var query = productRepository.GetAllAttached();
 
             if (productName != null)
             {
+                productName = productName!.ToLower();
                 query = query.Where(p => p.Name.Contains(productName!));             
             }
 
@@ -189,16 +188,16 @@ namespace TechStoreApp.Services.Data
             }
 
             var result = query.Select(p => new ProductApiViewModel()
-                {
-                    ProductId = p.ProductId,
-                    CategoryId = p.CategoryId,
-                    Name = p.Name,
-                    Description = p.Description,
-                    Price = p.Price,
-                    Stock = p.Stock,
-                    ImageUrl = p.ImageUrl,
-                    TotalLikes = p.Favorites.Count()
-                });
+            {
+                ProductId = p.ProductId,
+                CategoryId = p.CategoryId,
+                Name = p.Name,
+                Description = p.Description,
+                Price = p.Price,
+                Stock = p.Stock,
+                ImageUrl = p.ImageUrl,
+                TotalLikes = p.Favorites.Count()
+            });
 
             return result;
         }

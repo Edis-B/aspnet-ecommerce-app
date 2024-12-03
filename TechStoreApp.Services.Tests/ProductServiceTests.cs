@@ -5,6 +5,7 @@ using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.ViewModels.Products;
 
 namespace TechStoreApp.Services.Tests
 {
@@ -91,7 +92,7 @@ namespace TechStoreApp.Services.Tests
                 Assert.That(result, Is.Not.Null);
 
                 Assert.That(result.ProductId, Is.EqualTo(expected!.ProductId));
-                Assert.That(result.Name, Is.EqualTo(expected.Name));    
+                Assert.That(result.Name, Is.EqualTo(expected.Name));
                 Assert.That(result.Description, Is.EqualTo(expected.Description));
                 Assert.That(result.Price, Is.EqualTo(expected.Price));
                 Assert.That(result.Stock, Is.EqualTo(expected.Stock));
@@ -161,6 +162,193 @@ namespace TechStoreApp.Services.Tests
                     var expectedCategory = testCategories.FirstOrDefault(c => c.CategoryId == category.Id);
                     Assert.That(category.Description, Is.EqualTo(expectedCategory?.Description));
                 }
+            });
+        }
+
+        [Test]
+        public async Task EditProductAsync_ShouldEditTheCorrectProduct()
+        {
+            // Arrange
+            int testProductId = 1;
+            var productToEdit = testProducts.First();
+
+            var editedProduct = new EditProductViewModel()
+            {
+                ProductId = testProductId,
+                ProductName = "EditedName",
+                CategoryId = 2,  // Assuming you change the category ID
+                CategoryName = "EditedCategory",
+                Description = "Edited description",
+                Price = 15.99m,  // Modified price
+                Stock = 200,     // Modified stock
+                ImageUrl = "editedImageUrl.jpg"
+            };
+
+            mockProductRepository
+                .Setup(pr => pr.GetByIdAsync(testProductId))
+                .ReturnsAsync(productToEdit);
+
+            // Act
+            InitializeProductService();
+            await productService.EditProductAsync(editedProduct);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                mockProductRepository.Verify(pr => pr.UpdateAsync(It.Is<Product>(p =>
+                    p.ProductId == testProductId &&
+                    p.Name == editedProduct.ProductName &&
+                    p.CategoryId == editedProduct.CategoryId &&
+                    p.Description == editedProduct.Description &&
+                    p.Price == editedProduct.Price &&
+                    p.Stock == editedProduct.Stock &&
+                    p.ImageUrl == editedProduct.ImageUrl
+                )), Times.Once);
+
+                Assert.That(productToEdit.ProductId, Is.EqualTo(testProductId));
+                Assert.That(productToEdit.Name, Is.EqualTo(editedProduct.ProductName));
+                Assert.That(productToEdit.CategoryId, Is.EqualTo(editedProduct.CategoryId));
+                Assert.That(productToEdit.Description, Is.EqualTo(editedProduct.Description));
+                Assert.That(productToEdit.Price, Is.EqualTo(editedProduct.Price));
+                Assert.That(productToEdit.Stock, Is.EqualTo(editedProduct.Stock));
+                Assert.That(productToEdit.ImageUrl, Is.EqualTo(editedProduct.ImageUrl));
+            });
+        }
+
+        [Test]
+        public async Task AddProductAsync_ShouldAddTheCorrectProduct()
+        {
+            // Arrange
+            int testProductId = 1;
+            var productToEdit = testProducts.First();
+
+            var addedProduct = new AddProductViewModel()
+            {
+                ProductName = "NewTestProduct",
+                Description = "This is a new test product",
+                Price = 29.99m,
+                Stock = 150,
+                ImageUrl = "newtestimage.jpg",
+                CategoryId = 1
+            };
+
+            // Act
+            InitializeProductService();
+            var result = await productService.AddProductAsync(addedProduct);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                mockProductRepository.Verify(pr => pr.AddAsync(It.Is<Product>(p =>
+                    p.Name == addedProduct.ProductName &&
+                    p.Description == addedProduct.Description &&
+                    p.Price == addedProduct.Price &&
+                    p.Stock == addedProduct.Stock &&
+                    p.ImageUrl == addedProduct.ImageUrl &&
+                    p.CategoryId == addedProduct.CategoryId
+                )), Times.Once);
+            });
+        }
+
+
+        [Test]
+        public void GetAddProductViewModel_ShouldReturnANewAddProductViewModel()
+        {
+            // Arrange
+            mockCategoryRepository
+                .Setup(cr => cr.GetAllAttached())
+                .Returns(testCategories.AsQueryable().BuildMock());
+
+            // Act
+            InitializeProductService();
+            var result = productService.GetAddProductViewModel();
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.Categories, Is.Not.Null, "Categories should not be null");
+                Assert.That(result.Categories.Count(), Is.EqualTo(testCategories.Count), "Categories count does not match");
+
+                for (int i = 0; i < testCategories.Count; i++)
+                {
+                    Assert.That(result.Categories.ElementAt(i).Description, Is.EqualTo(testCategories[i].Description));
+                    Assert.That(result.Categories.ElementAt(i).Id, Is.EqualTo(testCategories[i].CategoryId));
+                }
+            });
+        }
+
+        [Test]
+        public void GetAllProduct_ShouldReturnAllProductsCorrectly()
+        {
+            // Arrange
+            mockProductRepository
+                .Setup(cr => cr.GetAllAttached())
+                .Returns(testProducts.AsQueryable().BuildMock());
+
+            // Act
+            InitializeProductService();
+            var result = productService.GetAllProducts();
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Count, Is.EqualTo(testProducts.Count));
+
+                for (int i = 0; i < testProducts.Count; i++)
+                {
+                    var resultProduct = result.ElementAt(i);
+                    var expectedProduct = testProducts[i];
+
+                    Assert.That(resultProduct.ProductId, Is.EqualTo(expectedProduct.ProductId));
+                    Assert.That(resultProduct.CategoryId, Is.EqualTo(expectedProduct.CategoryId));
+                    Assert.That(resultProduct.Name, Is.EqualTo(expectedProduct.Name));
+                    Assert.That(resultProduct.Description, Is.EqualTo(expectedProduct.Description));
+                    Assert.That(resultProduct.Price, Is.EqualTo(expectedProduct.Price));
+                    Assert.That(resultProduct.Stock, Is.EqualTo(expectedProduct.Stock));
+                    Assert.That(resultProduct.ImageUrl, Is.EqualTo(expectedProduct.ImageUrl));
+
+                    // Assert that TotalLikes is calculated correctly (assuming Favorites is correctly set in test data)
+                    Assert.That(resultProduct.TotalLikes, Is.EqualTo(expectedProduct.Favorites.Count));
+                }
+            });
+        }
+
+        [Test]
+        public void GetAllProductsByQuery_ShouldReturnProperly()
+        {
+            // Arrange
+            var productNameFilter = "TestProduct"; // Example product name filter
+            var categoryIdFilter = 1; // Example category ID filter
+
+            mockProductRepository
+                .Setup(pr => pr.GetAllAttached())
+                .Returns(testProducts.AsQueryable().BuildMock());
+
+            // Act
+            InitializeProductService();
+            var resultWithoutFilters = productService.GetAllProductsByQuery();
+
+            var resultWithNameFilter = productService.GetAllProductsByQuery(productName: productNameFilter);
+
+            var resultWithCategoryFilter = productService.GetAllProductsByQuery(categoryId: categoryIdFilter);
+
+            var resultWithBothFilters = productService.GetAllProductsByQuery(productName: productNameFilter, categoryId: categoryIdFilter);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(resultWithoutFilters, Is.Not.Null);
+                Assert.That(resultWithoutFilters.Count(), Is.EqualTo(testProducts.Count));
+
+                Assert.That(resultWithNameFilter, Is.Not.Null);
+                Assert.That(resultWithNameFilter.All(p => p.Name.Contains(productNameFilter)));
+
+                Assert.That(resultWithCategoryFilter, Is.Not.Null);
+                Assert.That(resultWithCategoryFilter.All(p => p.CategoryId == categoryIdFilter));
+
+                Assert.That(resultWithBothFilters, Is.Not.Null);
+                Assert.That(resultWithBothFilters.All(p => p.Name.Contains(productNameFilter) && p.CategoryId == categoryIdFilter));
             });
         }
     }
