@@ -41,7 +41,7 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveRole(string userId, string role)
         {
-            var result = await profileService.RemoveRoleRemoveRoleAsync(userId, role);
+            var result = await profileService.RemoveFromRoleAsync(userId, role);
 
             if (!result.Errors.Any()) {
                 return RedirectToAction("Manage"); 
@@ -53,7 +53,7 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> AssignRole(string userId, string role)
         {
-            var result = await profileService.AssignRoleAssignRoleAsync(userId, role);
+            var result = await profileService.AssignRoleAsync(userId, role);
 
             if (!result.Errors.Any()) {
                 return RedirectToAction("Manage"); 

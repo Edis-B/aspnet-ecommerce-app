@@ -27,7 +27,7 @@ namespace TechStoreApp.Services.Data
             userService = _userService;
         }
 
-        public async Task<IdentityResult> RemoveRoleRemoveRoleAsync(string userId, string role)
+        public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string role)
         {
             var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
@@ -43,7 +43,7 @@ namespace TechStoreApp.Services.Data
             return await userManager.RemoveFromRoleAsync(user, role);
         }
 
-        public async Task<IdentityResult> AssignRoleAssignRoleAsync(string userId, string role)
+        public async Task<IdentityResult> AssignRoleAsync(string userId, string role)
         {
             var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
@@ -87,27 +87,35 @@ namespace TechStoreApp.Services.Data
 
         public async Task<ManageUsersViewModel> GetAllUsersPageAsync(string? userName, string? email, int page, int itemsPerPage)
         {
-            var users = userRepository.GetAllAttached();
+            var users = await userRepository
+                .GetAllAttached()
+                .ToListAsync();
 
             if (!string.IsNullOrEmpty(email))
             {
                 users = users
-                    .Where(u => u.Email!.ToLower().Contains(email.ToLower()));
+                    .Where(u => u.Email!.ToLower().Contains(email.ToLower()))
+                    .ToList();
             }
 
             if (!string.IsNullOrEmpty(userName))
             {
                 users = users
-                    .Where(u => u.UserName!.ToLower().Contains(userName.ToLower()));
+                    .Where(u => u.UserName!.ToLower().Contains(userName.ToLower()))
+                    .ToList();
             }
 
-            var usersList = await users.ToListAsync();
             var usersModels = new List<UsersDetailsViewModel>();
-            var allRoles = roleManager.Roles.Select(r => r.ToString()).ToList();
-            foreach (var u in usersList)
+
+            var allRoles = roleManager
+                .Roles
+                .Select(r => r.ToString()).ToList();
+
+            foreach (var u in users)
             {
                 var roles = await userManager.GetRolesAsync(u);
                 var missingRoles = allRoles.Except(roles).ToList();
+
                 usersModels.Add(new UsersDetailsViewModel
                 {
                     UserId = u.Id.ToString(),
@@ -169,7 +177,8 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
-            var model = await userRepository.GetAllAttached()
+            var model = await userRepository
+                .GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Select(u => new PfpViewModel()
                 {
@@ -184,8 +193,7 @@ namespace TechStoreApp.Services.Data
         {
             var user = await userRepository
                 .GetAllAttached()
-                .Where(u => u.Id == id)
-                .FirstOrDefaultAsync();
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             return user!;
         }

@@ -65,7 +65,7 @@ namespace TechStoreApp.WebAPI.Controllers
                 return NotFound("userId and roleName must not be null");
             }
 
-            var users = await profileService.AssignRoleAssignRoleAsync(userId, roleName);
+            var users = await profileService.AssignRoleAsync(userId, roleName);
 
             if (users.Succeeded == false) 
             { 
@@ -89,7 +89,7 @@ namespace TechStoreApp.WebAPI.Controllers
                 return NotFound();
             }
 
-            var users = await profileService.RemoveRoleRemoveRoleAsync(userId, roleName);
+            var users = await profileService.RemoveFromRoleAsync(userId, roleName);
 
             if (users.Succeeded == false)
             {
