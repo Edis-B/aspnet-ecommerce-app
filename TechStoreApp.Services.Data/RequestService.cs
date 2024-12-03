@@ -1,14 +1,6 @@
-﻿using Azure.Core;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.ViewModels.Cart;
 
 namespace TechStoreApp.Services.Data
 {

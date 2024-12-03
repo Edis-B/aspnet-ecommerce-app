@@ -181,5 +181,66 @@ namespace TechStoreApp.Services.Tests
                     .ProfilePictureUrl!;
             });
         }
+
+        [Test]
+        public async Task GetUserFromIdAsync_ReturnsCorrectUser()
+        {
+            // Arrange
+            mockUserRepository
+                .Setup(ur => ur.GetAllAttached())
+                .Returns(testUsers.AsQueryable().BuildMock());
+
+            // Act
+            InitializeProfileService();
+            var result = await profileService.GetUserFromIdAsync(userId);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+                Assert.That(result.Id, Is.EqualTo(userId));
+
+                var expectedUser = testUsers.FirstOrDefault(u => u.Id == userId);
+
+                Assert.That(result.UserName, Is.EqualTo(expectedUser!.UserName));
+                Assert.That(result.Email, Is.EqualTo(expectedUser.Email));
+                Assert.That(result.ProfilePictureUrl, Is.EqualTo(expectedUser.ProfilePictureUrl));
+            });
+
+        }
+
+        [Test]
+        public async Task GetUserByTheirIdAsync_ReturnsCorrectUser()
+        {
+            // Arrange
+            mockUserRepository
+                .Setup(ur => ur.GetAllAttached())
+                .Returns(testUsers.AsQueryable().BuildMock());
+
+            mockUserManager
+                .Setup(um => um.GetRolesAsync(It.IsAny<ApplicationUser>()))
+                .ReturnsAsync(testRoles.Select(x => x.Name!.ToString()).ToList());
+
+            // Act
+            InitializeProfileService();
+            var result = await profileService.GetUserByTheirIdAsync(userId.ToString());
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result, Is.Not.Null);
+
+                var expectedUser = testUsers.FirstOrDefault(u => u.Id == userId);
+                Assert.That(result.UserId, Is.EqualTo(expectedUser!.Id.ToString()));
+                Assert.That(result.UserName, Is.EqualTo(expectedUser.UserName));
+                Assert.That(result.Email, Is.EqualTo(expectedUser.Email));
+                Assert.That(result.ProfilePictureUrl, Is.EqualTo(expectedUser.ProfilePictureUrl));
+
+                Assert.That(result.Roles, Is.Not.Null.And.Not.Empty);
+                Assert.That(result.Roles, Contains.Item("Admin"));
+
+            });
+
+        }
     }
 }

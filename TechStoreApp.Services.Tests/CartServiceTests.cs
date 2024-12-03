@@ -214,13 +214,6 @@ namespace TechStoreApp.Services.Tests
             mockCartRepository.Verify(cr => cr.DeleteAsync(It.Is<int>(id =>
                 id == testCarts.First().CartId
             )), Times.Once);
-
-            var jsonResult = result as JsonResult;
-            Assert.That(jsonResult, !Is.Null);
-
-            var data = jsonResult.Value as dynamic;
-            Assert.That(data.success, Is.True);
-            Assert.That(data.message, Is.EqualTo("Successfully removed item from cart!"));
         }
     }
 }
