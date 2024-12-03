@@ -1,19 +1,18 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using TechStoreApp.Common;
+﻿using Microsoft.AspNetCore.Mvc;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
-using static TechStoreApp.Common.GeneralConstraints;
+
 namespace TechStoreApp.Web.Controllers
 {
-
     public class ProductController : Controller
     {
         private readonly IProductService productService;
-        public ProductController(IProductService _productService)
+        private readonly IReviewService reviewService;
+        public ProductController(IProductService _productService,
+            IReviewService _reviewService)
         {
             productService = _productService;
+            reviewService = _reviewService;
         }
 
         [Route("Product/RedirectToDetails/{productId:int}")]
@@ -27,7 +26,7 @@ namespace TechStoreApp.Web.Controllers
         [HttpPost]
         public async Task<JsonResult> CreateReview([FromBody] ReviewFormModel model)
         {
-            await productService.CreateAndAddReviewToDBAsync(model);
+            await reviewService.CreateAndAddReviewToDBAsync(model);
 
             return Json(new { message = "Successfully added" });
         }

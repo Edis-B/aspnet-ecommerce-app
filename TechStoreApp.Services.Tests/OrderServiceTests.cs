@@ -1,22 +1,12 @@
 ﻿using Moq;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
-using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Orders;
-using TechStoreApp.Web.ViewModels.Products;
 using MockQueryable;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.AspNetCore.Components.Forms;
 
 namespace TechStoreApp.Services.Tests
 {
@@ -82,6 +72,7 @@ namespace TechStoreApp.Services.Tests
             testProducts = new List<Product>
             {
                 new Product { ProductId = 1, Name = "TestProduct1", Price = 10, Stock = 100, ImageUrl = "testimage1.jpg", Description = "Description1" },
+
                 new Product { ProductId = 2, Name = "TestProduct2", Price = 20, Stock = 50, ImageUrl = "testimage2.jpg", Description = "Description2" },
             };
 
@@ -98,7 +89,7 @@ namespace TechStoreApp.Services.Tests
 
             testUsers = new List<ApplicationUser>
             {
-                new ApplicationUser { Id = userId, Cart = testCarts.FirstOrDefault() }
+                new ApplicationUser { UserName = "TestUserName", Id = userId, Cart = testCarts.FirstOrDefault() }
             };
 
 
@@ -120,7 +111,7 @@ namespace TechStoreApp.Services.Tests
 
             testOrders = new List<Order>
             {
-                new Order { OrderId = 1, UserId = userId, TotalAmount = 50, ShippingAddress = "123TestSt", Status = testStatuses.First(), OrderDetails = testOrderDetails}
+                new Order { OrderId = 1, UserId = userId, User = testUsers.First(),  TotalAmount = 50, ShippingAddress = "123TestSt", Status = testStatuses.First(), OrderDetails = testOrderDetails}
             };
         }
 
@@ -137,33 +128,27 @@ namespace TechStoreApp.Services.Tests
             InitializeOrderService();
             var result = await orderService.GetOrderViewModelAsync(addressId);
             
-            var orderAddress =  result.Address;
-            var orderAllOrderAddresses = result.AllUserAddresses;
-            var orderTotalCost = result.TotalCost;
+            var resultAddress = result.Address;
+            var resultAllAddresses = result.AllUserAddresses;
             var orderCartItems = result.CartItems;
 
             // Assert
             Assert.Multiple(() =>
             {
-                // General result check
                 Assert.That(result, Is.Not.Null);
 
-                // Address properties
-                Assert.That(orderAddress, Is.Null.Or.InstanceOf<AddressFormModel>());
-
-                if (orderAddress != null)
+                if (resultAddress != null)
                 {
-                    Assert.That(orderAddress.Country, Is.EqualTo("TestCountry"));
-                    Assert.That(orderAddress.City, Is.EqualTo("TestCity"));
-                    Assert.That(orderAddress.Details, Is.EqualTo("TestDetails"));
+                    Assert.That(resultAddress.Country, Is.EqualTo("TestCountry"));
+                    Assert.That(resultAddress.City, Is.EqualTo("TestCity"));
+                    Assert.That(resultAddress.Details, Is.EqualTo("TestDetails"));
                 }
 
                 // AllUserAddresses
-                Assert.That(orderAllOrderAddresses, Is.Not.Null);
-                Assert.That(orderAllOrderAddresses.Count, Is.EqualTo(testUsers.First().Addresses.Count));
+                Assert.That(resultAllAddresses.Count, Is.EqualTo(testUsers.First().Addresses.Count));
 
                 // Total cost
-                Assert.That(orderTotalCost, Is.EqualTo(40));
+                Assert.That(result.TotalCost, Is.EqualTo(40));
 
                 // CartItems
                 Assert.That(orderCartItems, Is.Not.Null);
@@ -175,7 +160,6 @@ namespace TechStoreApp.Services.Tests
                 Assert.That(orderCartItems
                     .Any(ci => ci.ProductId == 2 && ci.Quantity == 1), Is.True);
 
-                // Detailed cart item properties
                 var firstCartItem = result.CartItems.First(ci => ci.ProductId == 1);
                 Assert.That(firstCartItem.Product.Name, Is.EqualTo("TestProduct1"));
                 Assert.That(firstCartItem.Product.Price, Is.EqualTo(10));
@@ -326,7 +310,7 @@ namespace TechStoreApp.Services.Tests
             // Assert
             Assert.Multiple(() =>
             {
-                // Check the overall result is not null and contains the expected number of orders
+                // Check the overall result
                 Assert.That(result, Is.Not.Null);
                 Assert.That(result.Orders.Count, Is.EqualTo(testOrders.Count(o => o.UserId == userId)));
 
@@ -415,6 +399,82 @@ namespace TechStoreApp.Services.Tests
                 Assert.That(result.CurrentStatus.Key, Is.EqualTo("Order Received"));
                 Assert.That(result.CurrentStatus.Value, Is.EqualTo(1));
                 
+            });
+
+        }
+
+        [Test]
+        public async Task GetAllOrders_ReturnsAllOrdersCorrectly()
+        {
+            // Arrange
+            mockOrderRepository
+                .Setup(or => or.GetAllAttached())
+                .Returns(testOrders.AsQueryable().BuildMock());
+
+            // Act
+            InitializeOrderService();
+            var results = await orderService.GetAllOrders();
+            var result = results.First();
+            var expected = testOrders.First();
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.OrderId, Is.EqualTo(expected.OrderId));
+                Assert.That(result.UserId, Is.EqualTo(expected.UserId.ToString()));
+                Assert.That(result.UserName, Is.EqualTo(expected.User.UserName));
+                Assert.That(result.TotalPrice, Is.EqualTo((double)expected.TotalAmount));
+                Assert.That(result.OrderStatus, Is.EqualTo(expected.Status.Description));
+                Assert.That(result.DeliveryAddress, Is.EqualTo(expected.ShippingAddress));
+
+                var productsResult = result.Products;
+                var productsExpected = expected.OrderDetails;
+
+                foreach (var expectedDetail in productsExpected)
+                {
+                    var actualDetail = productsResult.FirstOrDefault(p => p.ProductId == expectedDetail.ProductId);
+                    Assert.That(actualDetail, Is.Not.Null);
+                    Assert.That(actualDetail.ProductName, Is.EqualTo(expectedDetail.Product.Name));
+                    Assert.That(actualDetail.Quantity, Is.EqualTo(expectedDetail.Quantity));
+                    Assert.That(actualDetail.UnitPrice, Is.EqualTo((double)expectedDetail.UnitPrice));
+                }
+            });
+
+        }
+
+        [Test]
+        public async Task GetAllOrdersByUserId_ReturnsOrdersCorrectly()
+        {
+            // Arrange
+            mockOrderRepository
+                .Setup(or => or.GetAllAttached())
+                .Returns(testOrders.AsQueryable().BuildMock());
+
+            // Act
+            InitializeOrderService();
+            var results = await orderService.GetAllOrdersByUserId(userId.ToString());
+            var result = results.First();
+            var expected = testOrders.First();
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(result.OrderId, Is.EqualTo(expected.OrderId));
+                Assert.That(result.UserId, Is.EqualTo(expected.UserId.ToString()));
+                Assert.That(result.UserName, Is.EqualTo(expected.User.UserName));
+                Assert.That(result.TotalPrice, Is.EqualTo((double)expected.TotalAmount));
+                Assert.That(result.OrderStatus, Is.EqualTo(expected.Status.Description));
+                Assert.That(result.DeliveryAddress, Is.EqualTo(expected.ShippingAddress));
+
+                var productsResult = result.Products;
+                var productsExpected = expected.OrderDetails;
+
+                foreach (var expectedDetail in productsExpected)
+                {
+                    var actualDetail = productsResult.FirstOrDefault(p => p.ProductId == expectedDetail.ProductId);
+                    Assert.That(actualDetail, Is.Not.Null);
+                    Assert.That(actualDetail.ProductName, Is.EqualTo(expectedDetail.Product.Name));
+                    Assert.That(actualDetail.Quantity, Is.EqualTo(expectedDetail.Quantity));
+                    Assert.That(actualDetail.UnitPrice, Is.EqualTo((double)expectedDetail.UnitPrice));
+                }
             });
 
         }

@@ -8,9 +8,29 @@ namespace TechStoreApp.Services.Data
     public class ReviewService : IReviewService
     {
         private readonly IRepository<Review, int> reviewRepository;
-        public ReviewService(IRepository<Review, int> _reviewRepository)
+        private readonly IUserService userService;
+        public ReviewService(IRepository<Review, int> _reviewRepository, 
+            IUserService _userService)
         {
             reviewRepository = _reviewRepository;
+            userService = _userService;
+
+        }
+
+        public async Task CreateAndAddReviewToDBAsync(ReviewFormModel model)
+        {
+            var userId = userService.GetUserId();
+
+            var newReview = new Review
+            {
+                ReviewDate = DateTime.Now,
+                Rating = model.Rating,
+                ProductId = model.ProductId,
+                Comment = model.Comment,
+                UserId = userId
+            };
+
+            await reviewRepository.AddAsync(newReview);
         }
         public IEnumerable<ReviewViewModel> GetProductReviews(int productId)
         {

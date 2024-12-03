@@ -22,7 +22,6 @@ namespace TechStoreApp.Services.Data.Interfaces
         AddProductViewModel GetAddProductViewModel();
         Task<int> AddProductAsync(AddProductViewModel model);
 
-        Task CreateAndAddReviewToDBAsync(ReviewFormModel model);
         
         // Api
         IEnumerable<ProductApiViewModel> GetAllProducts();
