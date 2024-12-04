@@ -24,7 +24,7 @@ namespace TechStoreApp.Services.Data.Interfaces
 
         
         // Api
-        IEnumerable<ProductApiViewModel> GetAllProducts();
-        IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName, int? categoryId);
+        IEnumerable<ProductApiViewModel> ApiGetAllProducts();
+        IEnumerable<ProductApiViewModel> ApiGetAllProductsByQuery(string? productName, int? categoryId);
     }
 }

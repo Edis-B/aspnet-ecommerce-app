@@ -9,7 +9,8 @@ namespace TechStoreApp.Services.Data.Interfaces
 {
     public interface IReviewService
     {
-        IEnumerable<ReviewViewModel> GetProductReviews(int productId);
         Task CreateAndAddReviewToDBAsync(ReviewFormModel model);
+        // Api
+        IEnumerable<ReviewViewModel> ApiGetProductReviews(int productId);
     }
 }

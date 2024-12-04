@@ -32,7 +32,7 @@ namespace TechStoreApp.Services.Data
 
             await reviewRepository.AddAsync(newReview);
         }
-        public IEnumerable<ReviewViewModel> GetProductReviews(int productId)
+        public IEnumerable<ReviewViewModel> ApiGetProductReviews(int productId)
         {
             var result = reviewRepository.GetAllAttached()
                 .Where(r => r.ProductId == productId)

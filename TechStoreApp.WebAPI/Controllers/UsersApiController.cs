@@ -26,7 +26,7 @@ namespace TechStoreApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await profileService.GetAllUsersAsync();
+            var users = await profileService.ApiGetAllUsersAsync();
 
             return Ok(users);
         }
@@ -44,7 +44,7 @@ namespace TechStoreApp.WebAPI.Controllers
 
             if (!canParse) return BadRequest("Guid is not valid!");
 
-            var user = await profileService.GetUserByTheirIdAsync(userId);
+            var user = await profileService.ApiGetUserByTheirIdAsync(userId);
 
             if (user == null) return BadRequest("User not found!");
 

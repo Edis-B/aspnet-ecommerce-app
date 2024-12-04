@@ -147,7 +147,7 @@ namespace TechStoreApp.Services.Data
             return newModel;
         }
 
-        public async Task<IEnumerable<UserDetailsApiViewModel>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserDetailsApiViewModel>> ApiGetAllUsersAsync()
         {
             var users = userRepository.GetAllAttached();
 
@@ -198,7 +198,7 @@ namespace TechStoreApp.Services.Data
             return user!;
         }
 
-        public async Task<UserDetailsApiViewModel> GetUserByTheirIdAsync(string userId)
+        public async Task<UserDetailsApiViewModel> ApiGetUserByTheirIdAsync(string userId)
         {
             var user = await GetUserFromIdAsync(Guid.Parse(userId));
 

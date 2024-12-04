@@ -221,3 +221,29 @@ h3 {
     color: #f39c12;
     margin-top: 0.5rem;
 }
+
+.user-rating-div label {
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+    display: inline-block;
+    transition: color 0.3s ease;
+}
+
+.user-rating-div input[type="radio"]:checked ~ label {
+    color: gold;
+}
+
+.user-rating-div input[type="radio"]:hover ~ label,
+.user-rating-div label:hover {
+    color: #f39c12;
+}
+
+.user-rating-div input[type="radio"] {
+    display: none;
+}
+
+    .user-rating-div input[type="radio"]:checked + label {
+        color: gold;
+    }
+

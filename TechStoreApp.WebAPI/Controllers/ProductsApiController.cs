@@ -25,7 +25,7 @@ namespace TechStoreApp.WebAPI.Controllers
 
         public IActionResult GetAllProducts()
         {
-            var products = productService.GetAllProducts();
+            var products = productService.ApiGetAllProducts();
 
             if (!products.Any()) return NotFound("No product found!");
 
@@ -40,7 +40,7 @@ namespace TechStoreApp.WebAPI.Controllers
 
         public IActionResult GetAllProductsByQuery(string? productName, int? categoryId)
         {
-            var products = productService.GetAllProductsByQuery(productName, categoryId);
+            var products = productService.ApiGetAllProductsByQuery(productName, categoryId);
 
             if (!products.Any()) return NotFound("No product found!");
 

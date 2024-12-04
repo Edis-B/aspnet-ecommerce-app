@@ -1,16 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 
 namespace TechStoreApp.Services.Data
 {
-   
     public class StatusService : IStatusService
     {
         private readonly IRepository<Order, int> orderRepository;
@@ -31,7 +25,7 @@ namespace TechStoreApp.Services.Data
             }
 
             result.StatusId = statusId;
-            orderRepository.Update(result);
+            await orderRepository.UpdateAsync(result);
 
             return true;
         }

@@ -7,7 +7,7 @@ namespace TechStoreApp.Services.Data
     public class RequestService : IRequestService
     {
 
-        public async Task<TType> GetProductIdFromRequest<TType>(HttpRequest request)
+        public async Task<TType> ExtractModelFromRequestBody<TType>(HttpRequest request)
         {
             var body = await new StreamReader(request.Body).ReadToEndAsync();
             var model = JsonConvert.DeserializeObject<TType>(body);

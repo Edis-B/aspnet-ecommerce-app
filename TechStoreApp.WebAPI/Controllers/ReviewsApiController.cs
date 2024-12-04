@@ -22,7 +22,7 @@ namespace TechStoreApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetAllReviewsForProduct(int productId)
         {
-            var reviews = reviewService.GetProductReviews(productId);
+            var reviews = reviewService.ApiGetProductReviews(productId);
 
             if (!reviews.Any())
             {

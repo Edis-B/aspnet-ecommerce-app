@@ -129,7 +129,7 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeProfileService();
-            var result = await profileService.GetAllUsersAsync();
+            var result = await profileService.ApiGetAllUsersAsync();
 
             // Assert
             Assert.Multiple(() =>
@@ -223,7 +223,7 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeProfileService();
-            var result = await profileService.GetUserByTheirIdAsync(userId.ToString());
+            var result = await profileService.ApiGetUserByTheirIdAsync(userId.ToString());
 
             // Assert
             Assert.Multiple(() =>

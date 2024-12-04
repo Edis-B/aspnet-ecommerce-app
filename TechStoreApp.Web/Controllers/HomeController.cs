@@ -16,8 +16,10 @@ namespace TechStoreApp.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+
+
             return View();
         }
 

@@ -29,7 +29,7 @@ namespace TechStoreApp.WebAPI.Controllers
 
         public async Task<IActionResult> GetAllOrders()
         {
-            var orders = await orderService.GetAllOrders();
+            var orders = await orderService.ApiGetAllOrders();
 
             if (!orders.Any()) return NotFound("Orders not found!");
 
@@ -44,14 +44,14 @@ namespace TechStoreApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
 
-        public async Task<IActionResult> GetAllOrdersByUser(string userId)
+        public async Task<IActionResult> GetAllOrdersFromUserId(string userId)
         {
             if (!await userService.DoesUserExistId(userId))
             {
                 return NotFound("User with such id does not exist");
             }
 
-            var orders = await orderService.GetAllOrdersByUserId(userId);
+            var orders = await orderService.ApiGetAllOrdersFromUserId(userId);
 
             if (!orders.Any()) return NotFound("User does not have any orders!");      
 

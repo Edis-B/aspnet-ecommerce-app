@@ -26,7 +26,7 @@ namespace TechStoreApp.Web.Controllers
         {
             if (requestService.IsAjaxRequest(Request))
             {
-                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                model = await requestService.ExtractModelFromRequestBody<ProductIdFormModel>(Request);
                 var response = await cartService.AddToCartAsync(model);
 
                 return response;
@@ -52,7 +52,7 @@ namespace TechStoreApp.Web.Controllers
         {
             if (requestService.IsAjaxRequest(Request))
             {
-                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                model = await requestService.ExtractModelFromRequestBody<ProductIdFormModel>(Request);
                 var response = await cartItemService.IncreaseCountAsync(model);
 
                 return response;
@@ -70,7 +70,7 @@ namespace TechStoreApp.Web.Controllers
         {
             if (requestService.IsAjaxRequest(Request))
             {
-                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                model = await requestService.ExtractModelFromRequestBody<ProductIdFormModel>(Request);
                 var response = await cartItemService.DecreaseCountAsync(model);
 
                 return response;
@@ -87,7 +87,7 @@ namespace TechStoreApp.Web.Controllers
         {
             if (requestService.IsAjaxRequest(Request))
             {
-                model = await requestService.GetProductIdFromRequest<ProductIdFormModel>(Request);
+                model = await requestService.ExtractModelFromRequestBody<ProductIdFormModel>(Request);
                 var response = await cartItemService.RemoveFromCartAsync(model);
 
                 return response;

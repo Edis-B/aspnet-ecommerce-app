@@ -8,6 +8,8 @@ using TechStoreApp.Web.ViewModels.Products;
 using NUnit.Framework;
 using MockQueryable;
 using Moq;
+using Newtonsoft.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TechStoreApp.Services.Tests
 {
@@ -156,7 +158,11 @@ namespace TechStoreApp.Services.Tests
                 ci.Quantity == 1
                 )), Times.Once);
         }
-
+    
+        public class ResultDto
+        {
+            public int total { get; set; }
+        }
 
         [Test]
         public async Task GetCartItemsCountAsync_ShouldReturnProperly()
@@ -170,13 +176,15 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeCartItemService();
-            var result = await cartItemService.GetCartItemsCountAsync();
+            JsonResult? result = await cartItemService.GetCartItemsCountAsync();
 
-            int resultCount = result?.Value as int? ?? 0; // Access the Value or Data property as needed
+            // Extract the Value property from the JsonResult and cast it
+            var resultCount = result?.Value as dynamic;
+            var resultNum = resultCount.Total; 
 
             // Assert
             int expected = testCartItems.Sum(ci => ci.Quantity);
-            Assert.That(resultCount, Is.EqualTo(expected));
+            Assert.That(resultNum, Is.EqualTo(expected));
         }
 
         [Test]

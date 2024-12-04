@@ -13,8 +13,8 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<UserOrderSingleViewModel> GetDetailsOfOrder(int orderId);
 
         // Api
-        Task<IEnumerable<OrderApiViewModel>> GetAllOrders();
-        Task<IEnumerable<OrderApiViewModel>> GetAllOrdersByUserId(string userId);
+        Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrders();
+        Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrdersFromUserId(string userId);
 
     }
 }

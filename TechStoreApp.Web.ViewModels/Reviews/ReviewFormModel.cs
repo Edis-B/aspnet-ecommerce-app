@@ -7,8 +7,11 @@ namespace TechStoreApp.Web.ViewModels.Reviews
         [MinLength(10, ErrorMessage = "Comment must be at least 10 characters long.")]
         [Required(ErrorMessage = "Comment must be at least 10 characters long.")]
         public string Comment { get; set; }
-        public int ProductId { get; set; }
+
         [Required(ErrorMessage = "Rating is required")]
+        [Range(1.00, 5.00, ErrorMessage = "Rating is required")]
         public int Rating { get; set; }
+
+        public int ProductId { get; set; }
     }
 }

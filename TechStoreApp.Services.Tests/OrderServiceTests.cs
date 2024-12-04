@@ -413,7 +413,7 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeOrderService();
-            var results = await orderService.GetAllOrders();
+            var results = await orderService.ApiGetAllOrders();
             var result = results.First();
             var expected = testOrders.First();
             // Assert
@@ -451,7 +451,7 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeOrderService();
-            var results = await orderService.GetAllOrdersByUserId(userId.ToString());
+            var results = await orderService.ApiGetAllOrdersFromUserId(userId.ToString());
             var result = results.First();
             var expected = testOrders.First();
             // Assert

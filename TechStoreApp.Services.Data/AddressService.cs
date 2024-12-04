@@ -36,7 +36,7 @@ namespace TechStoreApp.Services.Data
         }
 
 
-        public async Task<IEnumerable<AddressApiViewModel>> GetAddressesByUserId(string userId)
+        public async Task<IEnumerable<AddressApiViewModel>> ApiGetAddressesByUserId(string userId)
         {
             var addresses = await addressRepository
                 .GetAllAttached()

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
+using TechStoreApp.Services.Data.DTOs.CartItems;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Products;
 
@@ -110,18 +111,18 @@ namespace TechStoreApp.Services.Data
 
             if (user == null)
             {
-                return new JsonResult(new { total = 0 });
+                return new JsonResult(new CartItemDto { Total = 0 });
             }
 
             if (user.Cart == null)
             {
-                return new JsonResult(new { total = 0 });
+                return new JsonResult(new CartItemDto { Total = 0 });
             }
 
             var totalItems = user.Cart.CartItems
                 .Sum(c => c.Quantity);
 
-            return new JsonResult(new { total = totalItems });
+            return new JsonResult(new CartItemDto { Total = totalItems });
         }
 
         public async Task<JsonResult> RemoveFromCartAsync(ProductIdFormModel model)

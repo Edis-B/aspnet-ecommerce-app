@@ -10,6 +10,6 @@ namespace TechStoreApp.Services.Data.Interfaces
     public interface IRequestService 
     {
         bool IsAjaxRequest(HttpRequest request);
-        Task<TType> GetProductIdFromRequest<TType>(HttpRequest request);
+        Task<TType> ExtractModelFromRequestBody<TType>(HttpRequest request);
     }
 }

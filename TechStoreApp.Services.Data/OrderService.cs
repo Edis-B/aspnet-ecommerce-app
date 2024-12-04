@@ -310,7 +310,7 @@ namespace TechStoreApp.Services.Data
             return orderViewModel!;
         }
 
-        public async Task<IEnumerable<OrderApiViewModel>> GetAllOrders()
+        public async Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrders()
         {
             var orders = await orderRepository.GetAllAttached()
                 .Include(o => o.User)
@@ -324,7 +324,7 @@ namespace TechStoreApp.Services.Data
             return result;
         }
 
-        public async Task<IEnumerable<OrderApiViewModel>> GetAllOrdersByUserId(string userId)
+        public async Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrdersFromUserId(string userId)
         {
             var orders = await orderRepository.GetAllAttached()
                 .Where(o => o.UserId == Guid.Parse(userId))

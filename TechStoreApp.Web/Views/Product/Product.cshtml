@@ -18,8 +18,8 @@
     <div class="product-info">
         <h3 class="product-name-p">@Model.Name</h3>
         <p class="product-description-p">@Model.Description</p>
-        <p class="product-price-p">@Model.Price</p>
-        <p class="product-stock-p">@Model.Stock</p>
+        <p class="product-price-p">Price: $@Model.Price</p>
+        <p class="product-stock-p">Stock: @Model.Stock</p>
 
         <form class="add-to-cart" asp-controller="Cart" asp-action="AddToCart" method="post">
             <input type="hidden" name="productId" value="@Model.ProductId" />
@@ -44,7 +44,7 @@
 </div>
 
 <div class="review-section">
-    <form id="post-review-form" method="post">
+    <form id="post-review-form" method="post" asp-controller="Review" asp-action="CreateReview">
         <input type="hidden" name="productId" value="@Model.ProductId" id="product-id-input">
 
         <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
@@ -54,19 +54,20 @@
         <span asp-validation-for="Review.Comment" id="validate-Comment" class="text-danger"></span>
 
         <label asp-for="Review.Rating">Rating</label>
-        <input type="hidden" name="rating" asp-for="Review.Rating" id="userRating">
+        <div class="user-rating-div">
+            @for (int i = 1; i <= 5; i++)
+            {
+                <label>
+                    <input type="radio" name="Rating" value="@i" class="rating-input" />
+                    &#9734; @* Empty Star *@
+                </label>
+            }
+        </div>
         <span asp-validation-for="Review.Rating" id="validate-Rating" class="text-danger"></span>
+
 
         <button id="post-review-button" type="submit">Post Review</button>
     </form>
-
-    <div class="user-rating-div">
-        <button class="single-star">&#9734;</button>
-        <button class="single-star">&#9734;</button>
-        <button class="single-star">&#9734;</button>
-        <button class="single-star">&#9734;</button>
-        <button class="single-star">&#9734;</button>
-    </div>
 </div>
 
 <h3>Reviews</h3>

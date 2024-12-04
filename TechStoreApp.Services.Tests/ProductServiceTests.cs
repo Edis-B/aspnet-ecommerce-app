@@ -287,7 +287,7 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeProductService();
-            var result = productService.GetAllProducts();
+            var result = productService.ApiGetAllProducts();
 
             // Assert
             Assert.Multiple(() =>
@@ -327,13 +327,13 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeProductService();
-            var resultWithoutFilters = productService.GetAllProductsByQuery();
+            var resultWithoutFilters = productService.ApiGetAllProductsByQuery();
 
-            var resultWithNameFilter = productService.GetAllProductsByQuery(productName: productNameFilter);
+            var resultWithNameFilter = productService.ApiGetAllProductsByQuery(productName: productNameFilter);
 
-            var resultWithCategoryFilter = productService.GetAllProductsByQuery(categoryId: categoryIdFilter);
+            var resultWithCategoryFilter = productService.ApiGetAllProductsByQuery(categoryId: categoryIdFilter);
 
-            var resultWithBothFilters = productService.GetAllProductsByQuery(productName: productNameFilter, categoryId: categoryIdFilter);
+            var resultWithBothFilters = productService.ApiGetAllProductsByQuery(productName: productNameFilter, categoryId: categoryIdFilter);
 
             // Assert
             Assert.Multiple(() =>

@@ -34,8 +34,8 @@ namespace TechStoreApp.Services.Data
             var product = await productRepository
                 .GetAllAttached()
                 .Include(p => p.Reviews)
-                .Where(p => p.ProductId == productId)
-                .FirstOrDefaultAsync();
+                    .ThenInclude(r => r.User)
+                .FirstOrDefaultAsync(p => p.ProductId == productId);
 
             if (product == null)
             {
@@ -154,7 +154,7 @@ namespace TechStoreApp.Services.Data
 
         }
 
-        public IEnumerable<ProductApiViewModel> GetAllProducts()
+        public IEnumerable<ProductApiViewModel> ApiGetAllProducts()
         {
             var result = productRepository.GetAllAttached()
                 .Select(p => new ProductApiViewModel()
@@ -172,7 +172,7 @@ namespace TechStoreApp.Services.Data
             return result;
         }
 
-        public IEnumerable<ProductApiViewModel> GetAllProductsByQuery(string? productName = null, int? categoryId = null)
+        public IEnumerable<ProductApiViewModel> ApiGetAllProductsByQuery(string? productName = null, int? categoryId = null)
         {
             var query = productRepository.GetAllAttached();
 

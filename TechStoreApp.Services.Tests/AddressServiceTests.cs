@@ -79,7 +79,7 @@ namespace TechStoreApp.Services.Tests
                 .Returns(mockQueryable);
 
             // Act
-            var result = await addressService.GetAddressesByUserId(userId.ToString());
+            var result = await addressService.ApiGetAddressesByUserId(userId.ToString());
 
             // Assert
             var addressResult = result.First();

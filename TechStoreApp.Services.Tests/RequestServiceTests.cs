@@ -2,9 +2,7 @@
 using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
-using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Web.ViewModels.Products;
 
@@ -33,7 +31,7 @@ namespace TechStoreApp.Services.Tests
                 .Setup(r => r.Body)
                 .Returns(memoryStream);
 
-            var result = await requestService.GetProductIdFromRequest<dynamic>(mockRequest.Object);
+            var result = await requestService.ExtractModelFromRequestBody<dynamic>(mockRequest.Object);
             var product = result.ToObject<ProductIdFormModel>();
 
             // Act

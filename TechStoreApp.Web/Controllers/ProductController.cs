@@ -7,12 +7,9 @@ namespace TechStoreApp.Web.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService productService;
-        private readonly IReviewService reviewService;
-        public ProductController(IProductService _productService,
-            IReviewService _reviewService)
+        public ProductController(IProductService _productService)
         {
             productService = _productService;
-            reviewService = _reviewService;
         }
 
         [Route("Product/RedirectToDetails/{productId:int}")]
@@ -21,14 +18,6 @@ namespace TechStoreApp.Web.Controllers
             var product = await productService.GetProductViewModelAsync(productId);
 
             return View("Product", product);
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> CreateReview([FromBody] ReviewFormModel model)
-        {
-            await reviewService.CreateAndAddReviewToDBAsync(model);
-
-            return Json(new { message = "Successfully added" });
         }
     }
 }

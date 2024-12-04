@@ -17,6 +17,6 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<AddressViewModel> GetAddressByIdAsync(int id);
 
         // Api
-        Task<IEnumerable<AddressApiViewModel>> GetAddressesByUserId(string userId);
+        Task<IEnumerable<AddressApiViewModel>> ApiGetAddressesByUserId(string userId);
     }
 }

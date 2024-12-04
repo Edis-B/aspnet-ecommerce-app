@@ -1,11 +1,106 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
+﻿<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Online Store</title>
+    <link rel="stylesheet" href="~/css/home-page.css">
 </head>
-<body>
-    <p>This is the Home page</p>
-</body>
+
+<section class="hero bg-primary text-white text-center py-5">
+    <h1 class="display-4">Welcome to Our Store</h1>
+    <p class="lead">Find the best deals on top-quality products.</p>
+    <a href="/shop" class="btn btn-light btn-lg">Start Shopping</a>
+</section>
+
+<section class="categories py-5">
+    <div class="container text-center">
+        <h2>Browse Our Categories</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="category-card">
+                    <img src="~/images/category1.jpg" class="img-fluid" alt="Category 1">
+                    <h3>Category 1</h3>
+                    <a href="/category/1" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card">
+                    <img src="~/images/category2.jpg" class="img-fluid" alt="Category 2">
+                    <h3>Category 2</h3>
+                    <a href="/category/2" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="category-card">
+                    <img src="~/images/category3.jpg" class="img-fluid" alt="Category 3">
+                    <h3>Category 3</h3>
+                    <a href="/category/3" class="btn btn-primary">Shop Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="featured-products py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center">Featured Products</h2>
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="~/images/product1.jpg" class="img-fluid" alt="Product 1">
+                    <h3>Product 1</h3>
+                    <p class="product-price">$99.99</p>
+                    <a href="/product/1" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="~/images/product2.jpg" class="img-fluid" alt="Product 2">
+                    <h3>Product 2</h3>
+                    <p class="product-price">$199.99</p>
+                    <a href="/product/2" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+           
+            <div class="col-md-4">
+                <div class="product-card">
+                    <img src="~/images/product3.jpg" class="img-fluid" alt="Product 3">
+                    <h3>Product 3</h3>
+                    <p class="product-price">$149.99</p>
+                    <a href="/product/3" class="btn btn-success">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="reviews py-5">
+    <div class="container">
+        <h2 class="text-center">Customer Reviews</h2>
+        <div class="row">
+            <!-- Review 1 -->
+            <div class="col-md-4">
+                <div class="review-card">
+                    <p>"This store is amazing! Great quality products at great prices."</p>
+                    <p>- Customer 1</p>
+                </div>
+            </div>
+            <!-- Review 2 -->
+            <div class="col-md-4">
+                <div class="review-card">
+                    <p>"Fast shipping and great customer service. Highly recommend!"</p>
+                    <p>- Customer 2</p>
+                </div>
+            </div>
+            <!-- Review 3 -->
+            <div class="col-md-4">
+                <div class="review-card">
+                    <p>"I love the variety of products. Will definitely be coming back."</p>
+                    <p>- Customer 3</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </html>
