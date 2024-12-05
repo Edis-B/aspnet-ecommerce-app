@@ -1,4 +1,5 @@
 ﻿@using TechStoreApp.Common
+@using TechStoreApp.Web.ViewModels.Products
 @using TechStoreApp.Web.ViewModels.Search
 @model SearchViewModel
 
@@ -8,12 +9,12 @@
         if (Model.CurrentPage == i)
         {
             <a class="page-selector" id="page-@i" style="background-color: gray" onclick="return false;" 
-                href="@Url.Action("Search", new { currentPage = i, query = Model.Query, category = Model.Category })">@i</a>
+                href="@Url.Action("Search", new SearchViewModel { CurrentPage = i, Query = Model.Query, Category = Model.Category })">@i</a>
         }
         else
         {
-            <a class="page-selector" id="page-@i" 
-                href="@Url.Action("Search", new { currentPage = i, query = Model.Query, category = Model.Category })">@i</a>
+            <a class="page-selector" id="page-@i"
+               href="@Url.Action("Search", new SearchViewModel { CurrentPage = i, Query = Model.Query, Category = Model.Category })">@i</a>
         }
     }
 </div>
@@ -36,7 +37,7 @@
             foreach (var item in @Model.Products)
             {
                 <div class="single-product-cell">
-                    <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
+                    <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new ProductIdFormModel { ProductId = item.ProductId })">
                         <img class="image-for-product" src="@item.ImageUrl" data-stock="@item.Stock" alt="Product image" />
                     </a>
 

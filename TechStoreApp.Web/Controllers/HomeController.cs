@@ -3,24 +3,25 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Data;
+using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 
 namespace TechStoreApp.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IHomeService homeService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(IHomeService _homeService)
         {
-            _logger = logger;
+            homeService = _homeService;
         }
 
         public async Task<IActionResult> Index()
         {
+            var model = await homeService.GetHomeViewModel();
 
-
-            return View();
+            return View(model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

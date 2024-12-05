@@ -34,6 +34,7 @@ public partial class Product
 
     [MaxLength(EntityValidationConstraints.Product.maxImageUrlStringLength)]
     public string? ImageUrl { get; set; }
+    public bool IsFeatured { get; set; }
 
     [ForeignKey(nameof(CategoryId))]
     public virtual Category Category { get; set; }

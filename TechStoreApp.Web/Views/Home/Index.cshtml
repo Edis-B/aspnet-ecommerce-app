@@ -1,8 +1,13 @@
-﻿<head>
+﻿@using TechStoreApp.Web.ViewModels.Home
+@using TechStoreApp.Web.ViewModels.Search
+@model HomeViewModel
+
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store</title>
     <link rel="stylesheet" href="~/css/home-page.css">
+    <script src="~/js/home-page.js"></script>
 </head>
 
 <section class="hero bg-primary text-white text-center py-5">
@@ -15,27 +20,15 @@
     <div class="container text-center">
         <h2>Browse Our Categories</h2>
         <div class="row">
-            <div class="col-md-4">
-                <div class="category-card">
-                    <img src="~/images/category1.jpg" class="img-fluid" alt="Category 1">
-                    <h3>Category 1</h3>
-                    <a href="/category/1" class="btn btn-primary">Shop Now</a>
+            @foreach (var category in Model.Categories)
+            {
+                <div class="col-md-4">
+                    <div class="category-card">
+                        <h3>@category.Description</h3>
+                        <a href="@Url.Action("Search", "Search", new SearchViewModel { CategoryId = category.Id })" class="btn btn-primary">Shop Now</a>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="category-card">
-                    <img src="~/images/category2.jpg" class="img-fluid" alt="Category 2">
-                    <h3>Category 2</h3>
-                    <a href="/category/2" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="category-card">
-                    <img src="~/images/category3.jpg" class="img-fluid" alt="Category 3">
-                    <h3>Category 3</h3>
-                    <a href="/category/3" class="btn btn-primary">Shop Now</a>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
@@ -44,33 +37,32 @@
     <div class="container">
         <h2 class="text-center">Featured Products</h2>
         <div class="row">
+            @foreach (var product in Model.FeaturedProducts)
+            {
+                <div class="col-md-4">
+                    <div class="product-card">
+                        <a href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })">
+                            <img src="@product.ImageUrl" class="img-fluid" alt="Product Image">
+                        </a>
+                        <h3>@product.Name</h3>
+                        <p class="product-price">$@product.Price</p>
 
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="~/images/product1.jpg" class="img-fluid" alt="Product 1">
-                    <h3>Product 1</h3>
-                    <p class="product-price">$99.99</p>
-                    <a href="/product/1" class="btn btn-success">View Details</a>
+                        <a href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })" class="btn btn-success">
+                            View Details
+                        </a>
+
+                        <div class="d-flex justify-content-around">
+                            @{
+                                await Html.RenderPartialAsync("_AddToCartPartial", new { productId = product.ProductId });
+
+                                await Html.RenderPartialAsync("_LikesProductPartial", new { productId = product.ProductId,
+                                    checkedString = product.CheckedString,
+                                    totalLikes = product.TotalLikes });
+                            }
+                        </div>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="~/images/product2.jpg" class="img-fluid" alt="Product 2">
-                    <h3>Product 2</h3>
-                    <p class="product-price">$199.99</p>
-                    <a href="/product/2" class="btn btn-success">View Details</a>
-                </div>
-            </div>
-           
-            <div class="col-md-4">
-                <div class="product-card">
-                    <img src="~/images/product3.jpg" class="img-fluid" alt="Product 3">
-                    <h3>Product 3</h3>
-                    <p class="product-price">$149.99</p>
-                    <a href="/product/3" class="btn btn-success">View Details</a>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </section>
@@ -79,28 +71,29 @@
     <div class="container">
         <h2 class="text-center">Customer Reviews</h2>
         <div class="row">
-            <!-- Review 1 -->
             <div class="col-md-4">
                 <div class="review-card">
+                    <img src="https://thumbs.dreamstime.com/b/happy-indian-man-t-shirt-showing-thumbs-up-gesture-people-concept-smiling-young-130955451.jpg" class="review-image" alt="Customer Image" />
                     <p>"This store is amazing! Great quality products at great prices."</p>
-                    <p>- Customer 1</p>
+                    <p>- John Doe</p>
                 </div>
             </div>
-            <!-- Review 2 -->
             <div class="col-md-4">
                 <div class="review-card">
+                    <img src="https://media.istockphoto.com/id/175174559/photo/happy-man-wishing-good-luck-isolated.jpg?s=1024x1024&w=is&k=20&c=Bdh-fY2YB0RUV7uWaBtE5-gWd256ILuNbfalGNttF0E=" class="review-image" alt="Customer Image" />
                     <p>"Fast shipping and great customer service. Highly recommend!"</p>
-                    <p>- Customer 2</p>
+                    <p>- John Doe</p>
                 </div>
             </div>
-            <!-- Review 3 -->
             <div class="col-md-4">
                 <div class="review-card">
+                    <img src="https://as2.ftcdn.net/v2/jpg/00/49/22/63/1000_F_49226343_zrW0Mlu6hqxzgN2gUBwW8EGaHmD5GZU6.jpg" class="review-image" alt="Customer Image" />
                     <p>"I love the variety of products. Will definitely be coming back."</p>
-                    <p>- Customer 3</p>
+                    <p>- John Doe</p>
                 </div>
             </div>
         </div>
     </div>
 </section>
-</html>
+
+

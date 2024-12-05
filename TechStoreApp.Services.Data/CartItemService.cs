@@ -71,10 +71,10 @@ namespace TechStoreApp.Services.Data
             var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
+                    .ThenInclude(c => c!.CartItems)
                 .FirstOrDefaultAsync();
 
-            if (user!.Cart == null || user.Cart.CartItems == null)
+            if (user == null || user!.Cart == null || user.Cart.CartItems == null)
             {
                 return new JsonResult(new { success = false, message = "Error - User cart not found" });
             }
@@ -106,7 +106,7 @@ namespace TechStoreApp.Services.Data
                 .GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
+                    .ThenInclude(c => c!.CartItems)
                 .FirstOrDefaultAsync();
 
             if (user == null)
@@ -132,7 +132,7 @@ namespace TechStoreApp.Services.Data
             var cartItem = await cartItemRepository
                 .GetAllAttached()
                 .Where(ci => ci.ProductId == model.ProductId)
-                .Where(ci => ci.Cart.UserId == userId)
+                .Where(ci => ci.Cart!.UserId == userId)
                 .FirstOrDefaultAsync();
 
             if (cartItem == null)

@@ -182,11 +182,11 @@ namespace TechStoreApp.Services.Data
                 .Where(u => u.Id == userId)
                 .Select(u => new PfpViewModel()
                 {
-                    ProfilePictureUrl = u.ProfilePictureUrl,
+                    ProfilePictureUrl = u.ProfilePictureUrl ?? "Profile picture error",
                 })
                 .FirstOrDefaultAsync();
 
-            return model;
+            return model ?? default!;
         }
 
         public async Task<ApplicationUser> GetUserFromIdAsync(Guid id)

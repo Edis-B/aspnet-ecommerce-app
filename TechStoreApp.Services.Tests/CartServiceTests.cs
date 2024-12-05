@@ -6,7 +6,6 @@ using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Web.ViewModels.Products;
-using Microsoft.AspNetCore.Mvc;
 
 namespace TechStoreApp.Services.Tests
 {
@@ -178,7 +177,7 @@ namespace TechStoreApp.Services.Tests
                 Assert.That(modelCartItems1.Quantity, Is.EqualTo(modelExpected1.Quantity));
                 Assert.That(modelCartItems1.CartId, Is.EqualTo(modelExpected1.CartId));
                 Assert.That(modelCartItems1.ProductId, Is.EqualTo(modelExpected1.ProductId));
-                Assert.That(modelCartItems1.Product.ProductId, Is.EqualTo(modelExpected1.Product.ProductId));
+                Assert.That(modelCartItems1.Product.ProductId, Is.EqualTo(modelExpected1.Product!.ProductId));
                 Assert.That(modelCartItems1.Product.ImageUrl, Is.EqualTo(modelExpected1.Product.ImageUrl));
                 Assert.That(modelCartItems1.Product.Name, Is.EqualTo(modelExpected1.Product.Name));
             });
@@ -190,7 +189,7 @@ namespace TechStoreApp.Services.Tests
                 Assert.That(modelCartItems2.Quantity, Is.EqualTo(modelExpected2.Quantity));
                 Assert.That(modelCartItems2.CartId, Is.EqualTo(modelExpected2.CartId));
                 Assert.That(modelCartItems2.ProductId, Is.EqualTo(modelExpected2.ProductId));
-                Assert.That(modelCartItems2.Product.ProductId, Is.EqualTo(modelExpected2.Product.ProductId));
+                Assert.That(modelCartItems2.Product.ProductId, Is.EqualTo(modelExpected2.Product!.ProductId));
                 Assert.That(modelCartItems2.Product.ImageUrl, Is.EqualTo(modelExpected2.Product.ImageUrl));
                 Assert.That(modelCartItems2.Product.Name, Is.EqualTo(modelExpected2.Product.Name));
             });

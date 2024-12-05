@@ -56,11 +56,14 @@
                     <label asp-for="@Model.CategoryId" class="form-label-add-edit">Category</label>
                     <select asp-for="@Model.CategoryId" class="form-control">
                         <option>Select Category...</option>
-                        @foreach (var category in Model.Categories)
+                        @if (Model.Categories != null)
                         {
-                            if (category.Id != Model.CategoryId)
+                            @foreach (var category in Model.Categories!)
                             {
-                                <option value="@category.Id">@category.Description</option>
+                                if (category.Id != Model.CategoryId)
+                                {
+                                    <option value="@category.Id">@category.Description</option>
+                                }
                             }
                         }
                     </select>

@@ -69,12 +69,12 @@ namespace TechStoreApp.Services.Tests
             mockStatusRepository = new Mock<IRepository<Status, int>>();
 
 
-            testProducts = new List<Product>
-            {
+            testProducts =
+            [
                 new Product { ProductId = 1, Name = "TestProduct1", Price = 10, Stock = 100, ImageUrl = "testimage1.jpg", Description = "Description1" },
 
                 new Product { ProductId = 2, Name = "TestProduct2", Price = 20, Stock = 50, ImageUrl = "testimage2.jpg", Description = "Description2" },
-            };
+            ];
 
             testCartItems = new List<CartItem>
             {
@@ -323,7 +323,7 @@ namespace TechStoreApp.Services.Tests
                     Assert.That(actualOrder, Is.Not.Null);
 
                     // Check the order's basic properties
-                    Assert.That(actualOrder.OrderId, Is.EqualTo(expectedOrder.OrderId));
+                    Assert.That(actualOrder!.OrderId, Is.EqualTo(expectedOrder.OrderId));
                     Assert.That(actualOrder.ShippingAddress, Is.EqualTo(expectedOrder.ShippingAddress));
                     Assert.That(actualOrder.OrderDate, Is.EqualTo(expectedOrder.OrderDate.ToString("dd/MM/yyyy")));
 
@@ -336,8 +336,8 @@ namespace TechStoreApp.Services.Tests
 
                         // Check that each order detail exists and matches
                         Assert.That(actualDetail, Is.Not.Null);
-                        Assert.That(actualDetail.ProductId, Is.EqualTo(expectedDetail.ProductId));
-                        Assert.That(actualDetail.ProductName, Is.EqualTo(expectedDetail.Product.Name));
+                        Assert.That(actualDetail!.ProductId, Is.EqualTo(expectedDetail.ProductId));
+                        Assert.That(actualDetail.ProductName, Is.EqualTo(expectedDetail.Product!.Name));
                         Assert.That(actualDetail.ProductImageUrl, Is.EqualTo(expectedDetail.Product.ImageUrl ?? string.Empty));
                         Assert.That(actualDetail.Quantity, Is.EqualTo(expectedDetail.Quantity));
                         Assert.That(actualDetail.UnitPrice, Is.EqualTo(expectedDetail.UnitPrice));
@@ -379,7 +379,7 @@ namespace TechStoreApp.Services.Tests
                 // Verify details for the first product
                 var detail1 = result.OrderDetails.FirstOrDefault(d => d.ProductId == 1);
                 Assert.That(detail1, Is.Not.Null);
-                Assert.That(detail1.ProductId, Is.EqualTo(1));
+                Assert.That(detail1!.ProductId, Is.EqualTo(1));
                 Assert.That(detail1.ProductName, Is.EqualTo("TestProduct1"));
                 Assert.That(detail1.ProductImageUrl, Is.EqualTo("testimage1.jpg"));
                 Assert.That(detail1.Quantity, Is.EqualTo(2));
@@ -389,7 +389,7 @@ namespace TechStoreApp.Services.Tests
                 var detail2 = result.OrderDetails.FirstOrDefault(d => d.ProductId == 2);
 
                 Assert.That(detail2, Is.Not.Null);
-                Assert.That(detail2.ProductId, Is.EqualTo(2));
+                Assert.That(detail2!.ProductId, Is.EqualTo(2));
                 Assert.That(detail2.ProductName, Is.EqualTo("TestProduct2"));
                 Assert.That(detail2.ProductImageUrl, Is.EqualTo("testimage2.jpg"));
                 Assert.That(detail2.Quantity, Is.EqualTo(1));
@@ -433,7 +433,7 @@ namespace TechStoreApp.Services.Tests
                 {
                     var actualDetail = productsResult.FirstOrDefault(p => p.ProductId == expectedDetail.ProductId);
                     Assert.That(actualDetail, Is.Not.Null);
-                    Assert.That(actualDetail.ProductName, Is.EqualTo(expectedDetail.Product.Name));
+                    Assert.That(actualDetail!.ProductName, Is.EqualTo(expectedDetail.Product!.Name));
                     Assert.That(actualDetail.Quantity, Is.EqualTo(expectedDetail.Quantity));
                     Assert.That(actualDetail.UnitPrice, Is.EqualTo((double)expectedDetail.UnitPrice));
                 }
@@ -471,7 +471,7 @@ namespace TechStoreApp.Services.Tests
                 {
                     var actualDetail = productsResult.FirstOrDefault(p => p.ProductId == expectedDetail.ProductId);
                     Assert.That(actualDetail, Is.Not.Null);
-                    Assert.That(actualDetail.ProductName, Is.EqualTo(expectedDetail.Product.Name));
+                    Assert.That(actualDetail!.ProductName, Is.EqualTo(expectedDetail.Product!.Name));
                     Assert.That(actualDetail.Quantity, Is.EqualTo(expectedDetail.Quantity));
                     Assert.That(actualDetail.UnitPrice, Is.EqualTo((double)expectedDetail.UnitPrice));
                 }

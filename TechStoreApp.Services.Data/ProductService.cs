@@ -145,7 +145,7 @@ namespace TechStoreApp.Services.Data
                     .GetAllAttached()
                     .Select(c => new CategoryViewModel()
                     {
-                        Description = c.Description,
+                        Description = c.Description!,
                         Id = c.CategoryId
                     })
             };

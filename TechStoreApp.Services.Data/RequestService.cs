@@ -12,7 +12,7 @@ namespace TechStoreApp.Services.Data
             var body = await new StreamReader(request.Body).ReadToEndAsync();
             var model = JsonConvert.DeserializeObject<TType>(body);
 
-            return model;
+            return model ?? default!;
         }
 
         public bool IsAjaxRequest(HttpRequest request)

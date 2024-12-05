@@ -39,6 +39,10 @@ public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser, App
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Product>()
+            .Property(p => p.IsFeatured)
+            .HasDefaultValue(false);
+
         modelBuilder.Entity<Favorited>(entity =>
         {
             entity.HasKey(e => new { e.UserId, e.ProductId });

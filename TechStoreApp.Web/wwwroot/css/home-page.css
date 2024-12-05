@@ -1,3 +1,55 @@
 ﻿body {
     margin-top: 120px;
 }
+
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+    
+    .product-card .btn {
+        margin-top: auto; 
+        align-self: center; 
+    }
+
+    
+    .product-card .btn {
+        background-color: #28a745;
+        color: white;
+        font-size: 1rem;
+        padding: 10px 20px;
+        border-radius: 5px;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .product-card .btn:hover {
+            background-color: #218838;
+        }
+
+.review-card {
+    text-align: center; /* Center the content in the card */
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Rounded corners for the card */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.review-image {
+    width: 100px; /* Set a fixed width for the image */
+    height: 100px; /* Set a fixed height to make it uniform */
+    object-fit: cover; /* Ensure the image fits within the dimensions */
+    border-radius: 50%; /* Make the image circular */
+    margin-bottom: 15px; /* Add spacing below the image */
+    border: 2px solid #ddd; /* Optional: Add a border around the image */
+}

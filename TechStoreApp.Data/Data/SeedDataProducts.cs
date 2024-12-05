@@ -18,6 +18,7 @@ namespace TechStoreApp.Data.Data
             {
                 new Product
                 {
+                    IsFeatured = true,
                     CategoryId = 1, // Assume category ID exists
                     Name = "Gaming PC Starter Pack",
                     Description = "A powerful gaming PC setup with high-performance specs.",
@@ -63,6 +64,7 @@ namespace TechStoreApp.Data.Data
                 },
                 new Product
                 {
+                    IsFeatured = true,
                     CategoryId = 2,
                     Name = "NVIDIA GeForce RTX 3080",
                     Description = "High-end graphics card for gamers and creators.",
@@ -108,12 +110,13 @@ namespace TechStoreApp.Data.Data
                 },
                 new Product
                 {
+                    IsFeatured = true,
                     CategoryId = 3,
                     Name = "Intel Core i9-11900K",
                     Description = "Top-of-the-line CPU for extreme gaming performance.",
                     Price = 599.99m,
                     Stock = 7,
-                    ImageUrl = "https://www.vario.bg/images/product/35495/BX8070811900Knew.jpg"
+                    ImageUrl = "https://www.sense.lk/images/uploads/product/2024/04/20240402131528i9.png"
                 },
                 new Product
                 {

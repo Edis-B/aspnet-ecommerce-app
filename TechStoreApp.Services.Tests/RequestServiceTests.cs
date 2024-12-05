@@ -44,7 +44,7 @@ namespace TechStoreApp.Services.Tests
         }
 
         [Test]
-        public async Task IsAjaxRequest_ReturnsHeadersCorrectly()
+        public void IsAjaxRequest_ReturnsHeadersCorrectly()
         {
             // Arrange 
             var mockRequest = new Mock<HttpRequest>();

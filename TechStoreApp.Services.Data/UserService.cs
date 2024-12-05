@@ -79,6 +79,11 @@ namespace TechStoreApp.Services.Data
 
             var user = await signInManager.UserManager.FindByNameAsync(model.UserName);
 
+            if (user == null)
+            {
+                return default!;
+            }
+
             // Sign the user in with the custom properties
             await signInManager.SignInAsync(user, authProperties);
 
@@ -159,7 +164,7 @@ namespace TechStoreApp.Services.Data
             await emailSender.SendConfirmationLinkAsync(
                 user,
                 "Reset Password",
-                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl!)}'>clicking here</a>.");
 
             return IdentityResult.Success;
 

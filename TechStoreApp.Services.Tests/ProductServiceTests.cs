@@ -219,7 +219,6 @@ namespace TechStoreApp.Services.Tests
         public async Task AddProductAsync_ShouldAddTheCorrectProduct()
         {
             // Arrange
-            int testProductId = 1;
             var productToEdit = testProducts.First();
 
             var addedProduct = new AddProductViewModel()
@@ -267,12 +266,12 @@ namespace TechStoreApp.Services.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(result.Categories, Is.Not.Null, "Categories should not be null");
-                Assert.That(result.Categories.Count(), Is.EqualTo(testCategories.Count), "Categories count does not match");
+                Assert.That(result.Categories!.Count(), Is.EqualTo(testCategories.Count), "Categories count does not match");
 
                 for (int i = 0; i < testCategories.Count; i++)
                 {
-                    Assert.That(result.Categories.ElementAt(i).Description, Is.EqualTo(testCategories[i].Description));
-                    Assert.That(result.Categories.ElementAt(i).Id, Is.EqualTo(testCategories[i].CategoryId));
+                    Assert.That(result.Categories!.ElementAt(i).Description, Is.EqualTo(testCategories[i].Description));
+                    Assert.That(result.Categories!.ElementAt(i).Id, Is.EqualTo(testCategories[i].CategoryId));
                 }
             });
         }

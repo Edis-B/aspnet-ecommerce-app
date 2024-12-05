@@ -9,5 +9,6 @@ namespace TechStoreApp.Services.Data.DTOs.Responses
     public class MessageDto
     {
         public string Message { get; set; }
+        public bool Success { get; set; }
     }
 }

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TechStoreApp.Data;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
+using TechStoreApp.Services.Data.DTOs.Responses;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
@@ -39,29 +40,33 @@ namespace TechStoreApp.Services.Data
         {
             int productId = model.ProductId;
             var userId = userService.GetUserId();
+            if (userId == default)
+            {
+                return new JsonResult(new MessageDto{ Success = false, Message = "Invalid user" });
+            }
 
             var product = await productRepository.GetByIdAsync(productId);
 
             if (product == null)
             {
-                return new JsonResult(new { success = false, message = "Error - product not found" });
+                return new JsonResult(new MessageDto { Success = false, Message = "Error - product not found" });
             }
 
             if (product.Stock <= 0)
             {
-                return new JsonResult(new { success = false, message = "Out of stock!" });
+                return new JsonResult(new MessageDto {Success = false, Message = "Out of stock!" });
             }
 
             var user = await userRepository
                 .GetAllAttached()
                 .Where(x => x.Id == userId)
                 .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
+                    .ThenInclude(c => c!.CartItems)
                 .FirstOrDefaultAsync();
 
 
             // Create a cart if the user doesn't have one
-            if (user.Cart == null)
+            if (user!.Cart == null)
             {
                 var newCart = new Cart {
                     UserId = userId,
@@ -71,7 +76,7 @@ namespace TechStoreApp.Services.Data
                 await cartRepository.AddAsync(newCart);
             }
 
-            var cartId = user.Cart.CartId;
+            var cartId = user.Cart!.CartId;
 
             // Create a cartItem with the correct product and cart id
             if (!user.Cart.CartItems.Any(x => x.ProductId == productId))
@@ -82,38 +87,50 @@ namespace TechStoreApp.Services.Data
                     ProductId = productId,
                     Quantity = 1
                 };
+
                 await cartItemRepository.AddAsync(newCartItem);
             }
+
             // Increase quantity if cartItem already exists
             else
             {
                 var cartItem = user.Cart.CartItems
                     .FirstOrDefault(ci => ci.ProductId == productId);
 
-                if (cartItem.Quantity >= product.Stock)
+                if (cartItem!.Quantity >= product.Stock)
                 {
-                    return new JsonResult(new { success = false, message = "Reached stock limit!" });
+                    return new JsonResult(new MessageDto { Success = false, Message = "Reached stock limit!" });
                 }
 
                 cartItem.Quantity++;
+
                 await cartItemRepository.UpdateAsync(cartItem);
             }
 
-            return new JsonResult(new { success = true, message = "Product added to cart!" });
+            return new JsonResult(new MessageDto { Success = true, Message = "Product added to cart!" });
         }
 
         public async Task<CartViewModel> GetCartItemsAsync()
         {
             var userId = userService.GetUserId();
 
-            var _user = await userRepository.GetAllAttached()
+            if (userId == default)
+            {
+                return default!;
+            }
+
+            var user = await userRepository.GetAllAttached()
                 .Where(x => x.Id == userId)
                 .Include(x => x.Cart)
-                    .ThenInclude(c => c.CartItems)
+                    .ThenInclude(c => c!.CartItems)
                 .FirstOrDefaultAsync();
                 
+            if (user == null || user.Cart == null || user.Cart.CartItems == null)
+            {
+                return default!;
+            }
 
-            var cartItems = _user?.Cart?.CartItems
+            var cartItems = user?.Cart?.CartItems
                 .Select(ci => new CartItemViewModel
                 {
                     Quantity = ci.Quantity,
@@ -133,7 +150,7 @@ namespace TechStoreApp.Services.Data
 
             CartViewModel newViewModel = new()
             {
-                CartItems = cartItems
+                CartItems = cartItems!
             };
 
             return newViewModel;
@@ -143,20 +160,24 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
+            if (userId == default)
+            {
+                return default!;
+            }
             var cart = await cartRepository
                 .GetAllAttached()
                 .Where(c => c.UserId == userId)
                     .Include(c => c.CartItems)
                 .FirstOrDefaultAsync();
 
-            if (cart == null || cart.CartItems.Count == 0)
+            if (cart == null || cart.CartItems == null || cart.CartItems.Count == 0)
             {
-                return new JsonResult(new { success = false, message = "Cart is already empty!" });
+                return new JsonResult(new MessageDto { Success = false, Message = "Cart is already empty!" });
             }
 
             await cartRepository.DeleteAsync(cart.CartId);
 
-            return new JsonResult(new { success = true, message = "Successfully removed item from cart!" });
+            return new JsonResult(new MessageDto { Success = true, Message = "Successfully removed item from cart!" });
         }
     }
 }

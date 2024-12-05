@@ -180,7 +180,7 @@ namespace TechStoreApp.Services.Tests
 
             // Extract the Value property from the JsonResult and cast it
             var resultCount = result?.Value as dynamic;
-            var resultNum = resultCount.Total; 
+            var resultNum = resultCount!.Total; 
 
             // Assert
             int expected = testCartItems.Sum(ci => ci.Quantity);

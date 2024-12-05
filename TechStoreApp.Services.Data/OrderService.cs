@@ -115,15 +115,25 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
+            if (userId == default)
+            {
+                return default!;
+            }
+
             var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Cart)
-                     .ThenInclude(c => c.CartItems)
+                     .ThenInclude(c => c!.CartItems)
                         .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync();
 
+            if (user == null || user.Cart == null || user.Cart.CartItems == null)
+            {
+                return default!;
+            }
+
             var totalCost = user.Cart.CartItems
-                .Sum(ci => ci.Product.Price * ci.Quantity);
+                .Sum(ci => ci.Product!.Price * ci.Quantity);
 
             var newModel = new OrderFinalizedPageViewModel
             {
@@ -137,7 +147,7 @@ namespace TechStoreApp.Services.Data
                             ProductId = ci.ProductId,
                             Product = new ProductViewModel()
                             {
-                                ProductId = ci.Product.ProductId,
+                                ProductId = ci.Product!.ProductId,
                                 CategoryId = ci.Product.CategoryId,
                                 Name = ci.Product.Name,
                                 Price = ci.Product.Price,
@@ -161,14 +171,19 @@ namespace TechStoreApp.Services.Data
             var user = await userRepository.GetAllAttached()
                 .Where(u => u.Id == userId)
                 .Include(u => u.Cart)
-                    .ThenInclude(c => c.CartItems)
+                    .ThenInclude(c => c!.CartItems)
                         .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync();
+
+            if (user == null || user.Cart == null || user.Cart.CartItems == null || user.Cart.CartItems.Count == 0)
+            {
+                return;
+            }
 
             var shippingAddressString = $"{model.Address.Country}, {model.Address.City} ({model.Address.PostalCode}), {model.Address.Details}";
 
             var totalCost = user.Cart.CartItems
-                .Sum(ci => ci.Product.Price * ci.Quantity);
+                .Sum(ci => ci.Product!.Price * ci.Quantity);
 
             var newOrder = new Order()
             {
@@ -192,7 +207,7 @@ namespace TechStoreApp.Services.Data
                     OrderId = newOrder.OrderId,
                     ProductId = item.ProductId,
                     Quantity = item.Quantity,
-                    UnitPrice = item.Product.Price
+                    UnitPrice = item.Product!.Price
                 };
 
                 var productsToDecrease = await productRepository
