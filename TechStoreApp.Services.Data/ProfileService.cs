@@ -67,7 +67,7 @@ namespace TechStoreApp.Services.Data
             {
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Code = "InvalidUserId",
+                    Code = "Invalid UserId",
                     Description = "The provided user ID is not valid."
                 });
             }
@@ -77,8 +77,8 @@ namespace TechStoreApp.Services.Data
             {
                 return IdentityResult.Failed(new IdentityError
                 {
-                    Code = "UserNotFound",
-                    Description = "The user does not exist."
+                    Code = "Delete Error",
+                    Description = "Cannot delete your own account."
                 });
             }
 

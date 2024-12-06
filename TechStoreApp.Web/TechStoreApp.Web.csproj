@@ -10,9 +10,17 @@
 
   <ItemGroup>
     <Compile Remove="ViewModels\**" />
+    <Compile Remove="Views\Shared\Components\Search\**" />
     <Content Remove="ViewModels\**" />
+    <Content Remove="Views\Shared\Components\Search\**" />
     <EmbeddedResource Remove="ViewModels\**" />
+    <EmbeddedResource Remove="Views\Shared\Components\Search\**" />
     <None Remove="ViewModels\**" />
+    <None Remove="Views\Shared\Components\Search\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Views\Shared\Components\Search.cs" />
   </ItemGroup>
 
   <ItemGroup>

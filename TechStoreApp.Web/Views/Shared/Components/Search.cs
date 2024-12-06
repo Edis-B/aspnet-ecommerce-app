@@ -15,8 +15,6 @@ namespace TechStoreApp.Web.Views.Shared.Components
 
         public async Task<IViewComponentResult> InvokeAsync(SearchViewModel model)
         {
-            var modelWithNewResults = await searchService.GetSearchViewModel(model);
-
             return View("FilterSearch", modelWithNewResults);
         }
     }

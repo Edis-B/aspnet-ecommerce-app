@@ -1,5 +1,4 @@
 ﻿body {
-    font-family: Arial, sans-serif;
     background-color: #f8f9fa;
     padding: 0;
     color: #333;
@@ -158,7 +157,6 @@ form#clear-cart-form button:hover {
 
 p {
     margin: 15px 0;
-    color: #555;
 }
 
 hr {

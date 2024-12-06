@@ -284,12 +284,14 @@ namespace TechStoreApp.Services.Data
 
             var userId = userService.GetUserId();
 
-            if (order == null || order.UserId != userId)
+            if (order == null)
             {
-                if (!await userService.IsUserAdmin(userId))
-                {
-                    return null!;
-                }
+                return null!;
+            }
+
+            if (order.UserId != userId && !await userService.IsUserAdmin(userId))
+            {
+                return null!;
             }
 
             var orderViewModel = new UserOrderSingleViewModel

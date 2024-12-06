@@ -1,4 +1,6 @@
-﻿@using TechStoreApp.Web.ViewModels.Search
+﻿@using static TechStoreApp.Common.GeneralConstraints
+@using TechStoreApp.Web.ViewModels.Products
+@using TechStoreApp.Web.ViewModels.Search
 @model SearchViewModel
 
 <link rel="stylesheet" href="~/css/search-page.css"/>
@@ -70,7 +72,64 @@
             </div>
         </div>
 
-         @await Component.InvokeAsync("Search", new { model = Model })
+        <div class="pages-container-selector">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                if (Model.CurrentPage == i)
+                {
+                    <a class="page-selector" id="page-@i" style="background-color: gray" onclick="return false;"
+                       href="@Url.Action("Search", new SearchViewModel { CurrentPage = i, Query = Model.Query, Category = Model.Category, Orderby = Model.Orderby })">@i</a>
+                }
+                else
+                {
+                    <a class="page-selector" id="page-@i"
+                       href="@Url.Action("Search", new SearchViewModel { CurrentPage = i, Query = Model.Query, Category = Model.Category, Orderby = Model.Orderby })">@i</a>
+                }
+            }
+        </div>
+
+        <div class="products-div">
+            @{
+                if (User.IsInRole(AdminRoleName))
+                {
+                    <div class="single-product-cell">
+                        <form class="" asp-controller="Product" asp-action="Add" asp-area="Admin" method="get">
+                            <button class="add-to-cart-button" type="submit">
+                                Add new item
+                            </button>
+                        </form>
+                    </div>
+                }
+
+                if (Model.Products.Any())
+                {
+                    foreach (var item in @Model.Products)
+                    {
+                        <div class="single-product-cell">
+                            <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new ProductIdFormModel { ProductId = item.ProductId })">
+                                <img class="image-for-product" src="@item.ImageUrl" data-stock="@item.Stock" alt="Product image" />
+                            </a>
+
+                            <div class="product-details">
+                                <p class="product-details-name">@item.Name</p>
+                                <p class="procuct-details-stock">Stock: @item.Stock</p>
+                                <p class="procuct-details-price">Price: $@item.Price</p>
+                            </div>
+
+                            @{
+                                await Html.RenderPartialAsync("_AddToCartPartial", new { productId = item.ProductId });
+
+                                await Html.RenderPartialAsync("_LikesProductPartial", new { productId = item.ProductId, checkedString = item.CheckedString, totalLikes = item.TotalLikes });
+                            }
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>No products found.</p>
+                }
+            }
+        </div>
     </div>
 </div>
 

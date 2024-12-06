@@ -1,24 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using TechStoreApp.Web.ViewModels;
-using System.Security.Claims;
 using TechStoreApp.Web.ViewModels.Search;
-using TechStoreApp.Data;
+using TechStoreApp.Services.Data.Interfaces;
 
 namespace TechStoreApp.Web.Controllers
 {
     public class SearchController : Controller
     {
-
-        public SearchController()
+        private readonly ISearchService searchService;
+        public SearchController(ISearchService _searchService)
         {
-
+            searchService = _searchService;
         }
 
         [HttpGet]
-        public IActionResult Search(string? query, string? category, string? orderBy, int currentPage)
+        public async Task<IActionResult> Search(string? query, string? category, string? orderBy, int currentPage)
         {
+            // Process and validate model
             var model = new SearchViewModel
             {
                 Category = category ?? "All",
@@ -27,7 +24,9 @@ namespace TechStoreApp.Web.Controllers
                 Query = query ?? null
             };
 
-            return View(model);
+            var modelWithNewResults = await searchService.GetSearchViewModel(model);
+
+            return View(modelWithNewResults);
         }
     }
 }

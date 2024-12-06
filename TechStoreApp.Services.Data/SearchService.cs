@@ -50,11 +50,28 @@ namespace TechStoreApp.Services.Data
 
             int totalItems = productsQuery.Count();
 
+            if (orderBy == "default")
+            {
+
+            } else if (orderBy == "priceAsc")
+            {
+                productsQuery = productsQuery
+                    .OrderBy(r => r.Price);
+            } else if (orderBy == "priceDesc")
+            {
+                productsQuery = productsQuery
+                    .OrderByDescending(r => r.Price);
+            } else if (orderBy == "likesDesc")
+            {
+                productsQuery = productsQuery
+                    .OrderByDescending(r => r.Favorites.Count);
+            }
+
             List<ProductViewModel> results = await productsQuery
                .Select(p => new ProductViewModel
                {
                     ProductId = p.ProductId,
-                    TotalLikes = p.Favorites.Sum(f => 1),
+                    TotalLikes = p.Favorites.Count,
                     CategoryId = p.CategoryId,
                     Name = p.Name,
                     Description = p.Description,
@@ -70,35 +87,12 @@ namespace TechStoreApp.Services.Data
 
             int totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
 
-            if (orderBy == "default")
-            {
-
-            } else if (orderBy == "priceAsc")
-            {
-                results = results
-                    .OrderBy(r => r.Price)
-                    .ToList();
-            } else if (orderBy == "priceDesc")
-            {
-                results = results
-                    .OrderByDescending(r => r.Price)
-                    .ToList();
-            } else if (orderBy == "likesDesc")
-            {
-                results = results
-                    .OrderByDescending(r => r.TotalLikes)
-                    .ToList();
-            }
-
-            var newModel = new SearchViewModel
-            {
-                Query = query,
-                Products = results,
-                CurrentPage = currentPage,
-                TotalPages = totalPages,
-            };
-
-            return newModel;
+            model.Query = query;
+            model.Products = results;
+            model.CurrentPage = currentPage;
+            model.TotalPages = totalPages;
+            
+            return model;
         }
     }
 }

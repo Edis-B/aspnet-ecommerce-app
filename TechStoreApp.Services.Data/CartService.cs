@@ -113,22 +113,11 @@ namespace TechStoreApp.Services.Data
         public async Task<CartViewModel> GetCartItemsAsync()
         {
             var userId = userService.GetUserId();
-
-            if (userId == default)
-            {
-                return default!;
-            }
-
             var user = await userRepository.GetAllAttached()
                 .Where(x => x.Id == userId)
                 .Include(x => x.Cart)
                     .ThenInclude(c => c!.CartItems)
                 .FirstOrDefaultAsync();
-                
-            if (user == null || user.Cart == null || user.Cart.CartItems == null)
-            {
-                return default!;
-            }
 
             var cartItems = user?.Cart?.CartItems
                 .Select(ci => new CartItemViewModel
@@ -164,6 +153,7 @@ namespace TechStoreApp.Services.Data
             {
                 return default!;
             }
+
             var cart = await cartRepository
                 .GetAllAttached()
                 .Where(c => c.UserId == userId)

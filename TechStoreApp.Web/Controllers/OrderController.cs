@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.Infrastructure;
+using TechStoreApp.Web.ViewModels;
 using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Orders;
+using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Web.Controllers
 {
@@ -13,12 +15,15 @@ namespace TechStoreApp.Web.Controllers
     {
         private readonly IOrderService orderService;
         private readonly ICartService cartService;
+        private readonly IUserService userService;
 
         public OrderController(IOrderService _orderService,
-            ICartService _cartService)
+            ICartService _cartService,
+            IUserService _userService)
         {
             orderService = _orderService;
             cartService = _cartService;
+            userService = _userService;
         }
 
         [HttpPost]
@@ -91,7 +96,11 @@ namespace TechStoreApp.Web.Controllers
 
             if (model == null)
             {
-                return RedirectToAction("Index", "Home");
+                if (User.IsInRole(AdminRoleName))
+                {
+                    return RedirectToAction("Error", "Home");
+                }
+                else return RedirectToAction("Index", "Home");
             }
 
             return View("CompletedOrder", model);

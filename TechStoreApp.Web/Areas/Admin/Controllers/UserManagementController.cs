@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.ViewModels;
 using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Web.Areas.Admin.Controllers
@@ -31,11 +32,16 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         {
             var result  = await profileService.DeleteUserAsync(userId);
 
-            if (!result.Errors.Any()) { 
-                return RedirectToAction("Manage"); 
+            if (result.Errors.Any()) { 
+                var model = new ErrorViewModel()
+                {
+                    Messages = result.Errors.Select(er => er.Description.ToString()).ToList()!,
+                };
+
+                return RedirectToAction("Error", "Home", new { area = "", model = model });
             }
             
-            return View("Error");
+            return RedirectToAction("Manage"); 
         }
 
         [HttpPost]
