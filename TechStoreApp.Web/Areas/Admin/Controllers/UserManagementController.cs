@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
 using static TechStoreApp.Common.GeneralConstraints;
+using static TechStoreApp.Web.Infrastructure.TempDataUtility;
 
 namespace TechStoreApp.Web.Areas.Admin.Controllers
 {
@@ -32,13 +34,9 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         {
             var result  = await profileService.DeleteUserAsync(userId);
 
-            if (result.Errors.Any()) { 
-                var model = new ErrorViewModel()
-                {
-                    Messages = result.Errors.Select(er => er.Description.ToString()).ToList()!,
-                };
-
-                return RedirectToAction("Error", "Home", new { area = "", model = model });
+            if (result.Errors.Any()) {
+                AppendErrorViewModelToTempData(TempData, nameof(ErrorViewModel), result.Errors.Select(e => e.Description.ToString()), 403);
+                return RedirectToAction("Error", "Home", new { area = "" });
             }
             
             return RedirectToAction("Manage"); 
@@ -49,8 +47,9 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         {
             var result = await profileService.RemoveFromRoleAsync(userId, role);
 
-            if (!result.Errors.Any()) {
-                return RedirectToAction("Manage"); 
+            if (result.Errors.Any()) {
+                AppendErrorViewModelToTempData(TempData, nameof(ErrorViewModel), result.Errors.Select(e => e.Description.ToString()), 403);
+                return RedirectToAction("Error", "Home", new { area = "" });
             }
 
             return View("Error");

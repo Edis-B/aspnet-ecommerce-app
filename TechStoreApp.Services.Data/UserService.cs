@@ -69,9 +69,12 @@ namespace TechStoreApp.Services.Data
                 rememberMe,
                 shouldLockout);
 
+            if (!signInResult.Succeeded) { return signInResult!; }
+
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = rememberMe,
+                // Set expiration date of cookie based on remember me option
                 ExpiresUtc = rememberMe
                     ? DateTime.UtcNow.AddDays(CookieDurationRememberMe) 
                     : (DateTime?)null,
@@ -94,15 +97,25 @@ namespace TechStoreApp.Services.Data
         {
             var user = CreateUser();
 
+            if (userManager.Users.Any(u => u.UserName == model.UserName))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Username is already taken."
+                });
+            }
+
+            if (userManager.Users.Any(u => u.Email == model.Email))
+            {
+                return IdentityResult.Failed(new IdentityError
+                {
+                    Description = "Email is already registered."
+                });
+            }
 
             user.UserName = model.UserName;
             user.Email = model.Email;
-            user.ProfilePictureUrl = model.ProfilePictureUrl;
-
-            if (model.ProfilePictureUrl == null)
-            {
-                user.ProfilePictureUrl = "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
-            }
+            user.ProfilePictureUrl = model.ProfilePictureUrl ?? "https://i.pinimg.com/originals/c0/27/be/c027bec07c2dc08b9df60921dfd539bd.webp";
 
             var result = await userManager.CreateAsync(user, model.Password);
 

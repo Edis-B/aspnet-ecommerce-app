@@ -6,6 +6,7 @@ using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.ApiViewModels.Users;
 using TechStoreApp.Web.ViewModels.User;
+using static TechStoreApp.Common.GeneralConstraints;
 
 namespace TechStoreApp.Services.Data
 {
@@ -29,6 +30,17 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string role)
         {
+            var result = new IdentityResult();
+
+            if (Guid.Parse(userId) == userService.GetUserId() && role == AdminRoleName)
+            {
+                return IdentityResult.Failed(new IdentityError()
+                {
+                    Code = "Invalid Role Removal",
+                    Description = "Cannot remove your own Admin role"
+                });
+            }
+
             var user = await GetUserFromIdAsync(Guid.Parse(userId));
             if (user == null)
             {

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TechStoreApp.Common;
+using static TechStoreApp.Common.EntityValidationConstraints.Status;
 
 namespace TechStoreApp.Data.Models
 {
@@ -16,8 +11,8 @@ namespace TechStoreApp.Data.Models
         public int StatusId { get; set; }
 
         [Required]
-        [MinLength(EntityValidationConstraints.Status.minDescriptionStringLength)]
-        [MaxLength(EntityValidationConstraints.Status.maxDescriptionStringLength)]
+        [MinLength(minDescriptionStringLength)]
+        [MaxLength(maxDescriptionStringLength)]
         public string Description { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();

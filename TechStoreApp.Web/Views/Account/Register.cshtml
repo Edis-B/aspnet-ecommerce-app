@@ -30,12 +30,19 @@
             <div class="form-floating mb-3">
                 <input asp-for="Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password" />
                 <label asp-for="Password">Password</label>
-                <span asp-validation-for="Password" classx="text-danger"></span>
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-floating mb-3">
                 <input asp-for="ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password" />
                 <label asp-for="ConfirmPassword">Confirm Password</label>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+            <div>
+                @if (TempData["ErrorMessages"] != null)
+                {
+                    var list = TempData["ErrorMessages"] as List<string>;
+                    <span class="text-danger m-2">@(string.Join('\n', list!))</span>
+                }   
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
         </form>

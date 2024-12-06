@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TechStoreApp.Common;
+using static TechStoreApp.Common.EntityValidationConstraints.Review;
 using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Data.Models;
@@ -20,12 +20,12 @@ public partial class Review
     public Guid UserId { get; set; }
 
     [Required]
-    [Range(EntityValidationConstraints.Review.minRating, EntityValidationConstraints.Review.maxRating)]
+    [Range(minRating, maxRating)]
     public int Rating { get; set; }
 
     [Required]
-    [MinLength(EntityValidationConstraints.Review.minCommentStringLength)]
-    [MaxLength(EntityValidationConstraints.Review.maxCommentStringLength)]
+    [MinLength(minCommentStringLength)]
+    [MaxLength(maxCommentStringLength)]
     public string Comment { get; set; }
 
     public DateTime ReviewDate { get; set; }

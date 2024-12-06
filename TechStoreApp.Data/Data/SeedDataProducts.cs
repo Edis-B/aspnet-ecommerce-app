@@ -33,7 +33,7 @@ namespace TechStoreApp.Data.Data
                     Description = "A reliable workstation for all your office needs.",
                     Price = 799.99m,
                     Stock = 15,
-                    ImageUrl = "https://www.vali.bg/UserFiles/Product/gallery_1/1-1-6fb3f5cc-5f6c-e4f4-cc4a-23362c531cc0.jpg?w=640&h=640&block&cache"
+                    ImageUrl = "https://www.meshcomputers.com/ImageCache/IMAGELIBRARYIMAGECONTENT2765416002D1002D1.png"
                 },
                 new Product
                 {

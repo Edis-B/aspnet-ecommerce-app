@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TechStoreApp.Common;
+using static TechStoreApp.Common.EntityValidationConstraints.OrderDetail;
 
 namespace TechStoreApp.Data.Models;
 
@@ -18,11 +16,11 @@ public partial class OrderDetail
     [Required]
     public int ProductId { get; set; }
 
-    [Range(EntityValidationConstraints.OrderDetail.minQuantityCount /*0*/, int.MaxValue)]
+    [Range(minQuantityCount, int.MaxValue)]
     public int Quantity { get; set; }
 
     [Column(TypeName = "decimal(18, 2)")]
-    [Range(EntityValidationConstraints.OrderDetail.minUnitPrice /*0*/, double.MaxValue)]
+    [Range(minUnitPrice, double.MaxValue)]
     public decimal UnitPrice { get; set; }
 
     [ForeignKey(nameof(OrderId))]

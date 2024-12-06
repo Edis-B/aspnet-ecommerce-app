@@ -10,20 +10,11 @@
         <div class="delivery-address-div">
             <p>Select delivery address:</p>
             <select id="adresses">
-                <option value="0">
-                    <form asp-action="Order" asp-controller="Order">
-                        <input type="hidden" name="addressId" value="@int.Parse("0")"/>
-                        <button type="submit">Empty</button>
-                    </form>
-                </option>
-                    
+                <option value="0"> Empty </option>
                 @foreach (var address in Model.AllUserAddresses) 
                 {
                     <option value="@address.Id">
-                        <form asp-action="Order" asp-controller="Order">
-                            <input type="hidden" name="addressId" value="@address.Id" />
-                            <button id="@address.Id" type="submit">@address.Details</button>
-                        </form>
+                        @address.Details
                     </option>
                 }
                 

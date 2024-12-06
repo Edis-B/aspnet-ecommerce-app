@@ -91,5 +91,12 @@ namespace TechStoreApp.Common
             public const int minDescriptionStringLength = 2;
             public const int maxDescriptionStringLength = 50;
         }
+        public static class PaymentDetail
+        {
+            public const int minPaymentTypeStringLength = 3;
+            public const int maxPaymentTypeStringLength = 50;
+            public const int minDescriptionTypeStringLength = 5;
+            public const int maxDescriptionTypeStringLength = 100;
+        }
     }
 }

@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Text;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.Infrastructure;
 using TechStoreApp.Web.ViewModels.User;
-using static TechStoreApp.Common.GeneralConstraints;
-
+using static TechStoreApp.Web.Infrastructure.TempDataUtility;
 namespace TechStoreApp.Web.Controllers
 {
     [AllowAnonymous]
@@ -49,12 +49,13 @@ namespace TechStoreApp.Web.Controllers
         {
             var signInStatus = await userService.SignInAsync(model);
 
-            await cookieService.AttachIsUserAdminToCookie(model.RememberMe);
-
             if (!signInStatus.Succeeded)
             {
+                TempData["ErrorMessage"] = "Invalid username or password.";
                 return View("Login", model);
             }
+
+            await cookieService.AttachIsUserAdminToCookie(model.RememberMe);
 
             if (model.ReturnUrl != null)
             {
@@ -80,6 +81,12 @@ namespace TechStoreApp.Web.Controllers
             }
 
             var result = await userService.RegisterAsync(model);
+
+            if (result.Errors.Any())
+            {
+                TempData["ErrorMessages"] = result.Errors.Select(e => e.Description.ToString()).ToList();
+                return View("Register", model);
+            }
 
             if (!result.Succeeded)
             {

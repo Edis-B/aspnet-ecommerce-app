@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TechStoreApp.Common;
+using static TechStoreApp.Common.EntityValidationConstraints.Product;
 using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Data.Models;
@@ -17,22 +17,22 @@ public partial class Product
     public int CategoryId { get; set; }
 
     [Required]
-    [MinLength(EntityValidationConstraints.Product.minNameStringLength)]
-    [MaxLength(EntityValidationConstraints.Product.maxNameStringLength)]
+    [MinLength(minNameStringLength)]
+    [MaxLength(maxNameStringLength)]
     public string Name { get; set; }
 
-    [MinLength(EntityValidationConstraints.Product.minDescriptionStringLength)]
-    [MaxLength(EntityValidationConstraints.Product.maxDescriptionStringLength)]
+    [MinLength(minDescriptionStringLength)]
+    [MaxLength(maxDescriptionStringLength)]
     public string? Description { get; set; }
 
     [Column(TypeName = "decimal(18, 2)")]
-    [Range(EntityValidationConstraints.Product.minPrice, double.MaxValue)]
+    [Range(minPrice, double.MaxValue)]
     public decimal Price { get; set; }
 
-    [Range(EntityValidationConstraints.Product.minStock, double.MaxValue)]
+    [Range(minStock, int.MaxValue)]
     public int Stock { get; set; }
 
-    [MaxLength(EntityValidationConstraints.Product.maxImageUrlStringLength)]
+    [MaxLength(maxImageUrlStringLength)]
     public string? ImageUrl { get; set; }
     public bool IsFeatured { get; set; }
 

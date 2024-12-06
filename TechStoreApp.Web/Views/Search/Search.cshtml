@@ -13,7 +13,7 @@
             <input type="text"  asp-for="@Model.Query" placeholder="Search in category..."/>
 
             <button type="submit">
-                <img src="~/images/magnifying-glass-icon-11.png" />
+                <img src="~/images/magnifying-glass-icon-12-black.png" />
             </button>
         </form>
 
@@ -39,7 +39,10 @@
 
     <div class="products-wrap-div">
         <div class="quick-filters">
-            <p style="display: block">Results for: "@Model.Query"</p>
+            @if (Model.Query != null)
+            {
+                <p style="display: block">Results for: "@Model.Query"</p>
+            }
 
             <div class="dropdown">
                 <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
@@ -92,7 +95,7 @@
             @{
                 if (User.IsInRole(AdminRoleName))
                 {
-                    <div class="single-product-cell">
+                    <div class="single-product-cell d-flex justify-content-center align-items-center">
                         <form class="" asp-controller="Product" asp-action="Add" asp-area="Admin" method="get">
                             <button class="add-to-cart-button" type="submit">
                                 Add new item

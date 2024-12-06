@@ -52,5 +52,7 @@ public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser, App
         {
             entity.HasKey(e => new { e.CartId, e.ProductId });
         });
+
+
     }
 }

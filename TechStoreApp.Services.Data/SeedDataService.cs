@@ -12,12 +12,14 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<Category, int> categoryRepository;
         private readonly IRepository<Product, int> productRepository;
         private readonly IRepository<Status, int> statusRepository;
+        private readonly IRepository<PaymentDetail, int> paymentDetailRepository;
         private readonly RoleManager<ApplicationRole> roleManager;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IUserService userService;
         public SeedDataService(IRepository<Category, int> _categoryRepository,
             IRepository<Product, int> _productRepository,
             IRepository<Status, int> _statusRepository,
+            IRepository<PaymentDetail, int> _paymentDetailRepository,
             RoleManager<ApplicationRole> _roleManager,
             UserManager<ApplicationUser> _userManager,
             IUserService _userService)
@@ -25,6 +27,7 @@ namespace TechStoreApp.Services.Data
             categoryRepository = _categoryRepository;
             productRepository = _productRepository;
             statusRepository = _statusRepository;
+            paymentDetailRepository = _paymentDetailRepository;
             roleManager = _roleManager;
             userManager = _userManager;
             userService = _userService;
@@ -36,6 +39,14 @@ namespace TechStoreApp.Services.Data
             await SeedCategories();
             await SeedProducts();
             await SeedStatuses();
+            await SeedPaymentDetails();
+        }
+        public async Task SeedPaymentDetails()
+        {
+            if (!paymentDetailRepository.GetAll().Any())
+            {
+                await paymentDetailRepository.AddRangeAsync(SeedDataPaymentTypes.GetPaymentTypes());
+            }
         }
         public async Task SeedRoles()
         {

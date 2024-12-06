@@ -3,8 +3,6 @@
 @model HomeViewModel
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store</title>
     <link rel="stylesheet" href="~/css/home-page.css">
     <script src="~/js/home-page.js"></script>
@@ -13,7 +11,7 @@
 <section class="hero bg-primary text-white text-center py-5">
     <h1 class="display-4">Welcome to Our Store</h1>
     <p class="lead">Find the best deals on top-quality products.</p>
-    <a href="/shop" class="btn btn-light btn-lg">Start Shopping</a>
+    <a href="@Url.Action("Search", "Search")" class="btn btn-light btn-lg">Start Shopping</a>
 </section>
 
 <section class="categories py-5">
@@ -24,14 +22,26 @@
             {
                 <div class="col-md-4">
                     <div class="category-card">
+                        @if (category.ImageUrls != null && category.ImageUrls.Any())
+                        {
+                            <div class="row">
+                                @foreach (var image in category.ImageUrls)
+                                {
+                                    <div class="col-6 mb-2">
+                                        <img class="img-fluid" src="@image" alt="Product Image" />
+                                    </div>
+                                }
+                            </div>
+                        }
                         <h3>@category.Description</h3>
-                        <a href="@Url.Action("Search", "Search", new SearchViewModel { CategoryId = category.Id })" class="btn btn-primary">Shop Now</a>
+                        <a href="@Url.Action("Search", "Search", new { CategoryId = category.Id })" class="btn btn-primary">Shop Now</a>
                     </div>
                 </div>
             }
         </div>
     </div>
 </section>
+
 
 <section class="featured-products py-5 bg-light">
     <div class="container">
@@ -47,7 +57,7 @@
                         <h3>@product.Name</h3>
                         <p class="product-price">$@product.Price</p>
 
-                        <a href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })" class="btn btn-success">
+                        <a href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })" class="btn btn-success m-2">
                             View Details
                         </a>
 

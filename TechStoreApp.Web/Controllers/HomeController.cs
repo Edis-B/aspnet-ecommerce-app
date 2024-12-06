@@ -1,9 +1,7 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using TechStoreApp.Data;
-using TechStoreApp.Data.Data;
 using TechStoreApp.Services.Data.Interfaces;
+using TechStoreApp.Web.Infrastructure;
 using TechStoreApp.Web.ViewModels;
 
 namespace TechStoreApp.Web.Controllers
@@ -23,12 +21,18 @@ namespace TechStoreApp.Web.Controllers
 
             return View(model);
         }
-        public IActionResult Error(ErrorViewModel model)
+        public IActionResult Error(ErrorViewModel model = default!)
         {
+            var data = TempDataUtility.GetTempData<ErrorViewModel>(TempData, "ErrorViewModel");
+
+            if (data != null)
+            {
+                model = data;
+            }
+
             model.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
 
             return View("Error", model);
         }
-
     }
 }

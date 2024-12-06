@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TechStoreApp.Common;
+using static TechStoreApp.Common.EntityValidationConstraints.Order;
 using TechStoreApp.Data.Models;
 
 namespace TechStoreApp.Data.Models;
@@ -20,19 +20,28 @@ public partial class Order
     public DateTime OrderDate { get; set; }
 
     [Required]
+    public bool HasBeenPaidFor {  get; set; }
+
+    [Required]
+    public int PaymentTypeId { get; set; } = 1;
+
+    [Required]
     [Column(TypeName = "decimal(18, 2)")]
-    [Range(EntityValidationConstraints.Order.minTotalAmount /*0*/, double.MaxValue)]
+    [Range(minTotalAmount, double.MaxValue)]
     public decimal TotalAmount { get; set; }
 
     [Required]
-    [MinLength(EntityValidationConstraints.Order.minShippingAddressStringLength)]
-    [MaxLength(EntityValidationConstraints.Order.maxShippingAddressStringLength)]
+    [MinLength(minShippingAddressStringLength)]
+    [MaxLength(maxShippingAddressStringLength)]
     public string? ShippingAddress { get; set; }
 
     public int StatusId { get; set; }
 
     [ForeignKey(nameof(StatusId))]
     public virtual Status Status { get; set; }
+
+    [ForeignKey(nameof(PaymentTypeId))]
+    public virtual PaymentDetail PaymentDetail { get; set; }
 
     [ForeignKey(nameof(UserId))]
     public virtual ApplicationUser User { get; set; }

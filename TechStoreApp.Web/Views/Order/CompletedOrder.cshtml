@@ -50,20 +50,31 @@
 
         @if (User.IsInRole(AdminRoleName))
         {
-            <div>
-                <form asp-action="EditStatusOfOrder" asp-controller="Status" method="post">
-                    <input name="orderId" type="hidden" value="@Model.OrderId"/>
-                    <select name="statusId">
-                        <option  value="@Model.CurrentStatus.Value">@Model.CurrentStatus.Key</option>
-                        @foreach (var status in Model.Statuses)
-                        {
-                            <option value="@status.Value">@status.Key</option>
-                        }
-                    </select>
+            <div class="admin-status-update mt-4">
+                <form asp-action="EditStatusOfOrder" asp-controller="Status" method="post" class="form-inline">
+                    <input name="orderId" type="hidden" value="@Model.OrderId" />
 
-                    <button type="submit">Update status</button>
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text" for="statusSelect">Update Status</label>
+                                <select id="statusSelect" name="statusId" class="form-select">
+                                    <option value="@Model.CurrentStatus.Value">@Model.CurrentStatus.Key</option>
+                                    @foreach (var status in Model.Statuses)
+                                    {
+                                        <option value="@status.Value">@status.Key</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4 text-md-end">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         }
+
     </div>
 </div>

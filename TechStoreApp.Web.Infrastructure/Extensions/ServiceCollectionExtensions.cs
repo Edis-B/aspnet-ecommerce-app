@@ -56,6 +56,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IRepository<Product, int>, Repository<Product, int>>();
             services.AddScoped<IRepository<Review, int>, Repository<Review, int>>();
             services.AddScoped<IRepository<Status, int>, Repository<Status, int>>();
+            services.AddScoped<IRepository<PaymentDetail, int>, Repository<PaymentDetail, int>>();
 
             return services;
         }

@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using TechStoreApp.Common;
+using static TechStoreApp.Common.EntityValidationConstraints.User;
 
 namespace TechStoreApp.Data.Models
 {
     public class ApplicationUser : IdentityUser<Guid>
     {
-        [MaxLength(EntityValidationConstraints.User.maxPfpImageUrlStringLength)]
+        [MaxLength(maxPfpImageUrlStringLength)]
         public string? ProfilePictureUrl { get; set; }
         public virtual Cart? Cart { get; set; }
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();

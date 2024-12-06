@@ -85,7 +85,7 @@ async function increaseCount() {
                 increaseCountBtn.style.cursor = 'default';
 
                 const itemContainer = document.getElementById(increaseCountBtn.value);
-                const quantityDiv = itemContainer.querySelector('.item-quantity');
+                const quantityP = itemContainer.querySelector('.item-quantity p');
 
                 const response = await fetch('/Cart/IncreaseCount', {
                     method: 'POST',
@@ -101,7 +101,7 @@ async function increaseCount() {
                 console.log(data);
 
                 // Set the new quantity
-                quantityDiv.textContent = data.newQuantity;
+                quantityP.textContent = data.newQuantity;
 
                 // Show popup and update cart count
                 showPopup(data.message);
@@ -130,10 +130,10 @@ async function decreaseCount() {
             decreaseCountBtn.style.cursor = 'default';
              
             const itemContainer = document.getElementById(decreaseCountBtn.value);
-            const quantityDiv = itemContainer.querySelector('.item-quantity');
+            const quantityP = itemContainer.querySelector('.item-quantity p');
 
             // If there is 1 product, ask if they want to delete it
-            if (quantityDiv.textContent == '1') {
+            if (quantityP.textContent == '1') {
 
                 const answer = await areYouSureWindow('Are you sure you want to remove this item from your cart?');
 
@@ -177,7 +177,7 @@ async function decreaseCount() {
                     console.log(data);
 
                     // Set the new quantity
-                    quantityDiv.textContent = data.newQuantity;
+                    quantityP.textContent = data.newQuantity;
 
                     // Show popup and update cart count
                     showPopup(data.message);

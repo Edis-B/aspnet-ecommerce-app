@@ -58,6 +58,7 @@ namespace TechStoreApp.Services.Data
                 .Where(c => categories.Contains(c.CategoryId))
                 .Select(c => new CategoryViewModel()
                 {
+                    ImageUrls = c.Products.Take(4).Select(p => p.ImageUrl).ToList()!,
                     Description = c.Description!,
                     Id = c.CategoryId
                 })

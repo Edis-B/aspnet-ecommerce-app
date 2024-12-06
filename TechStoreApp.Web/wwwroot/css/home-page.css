@@ -36,20 +36,29 @@
         }
 
 .review-card {
-    text-align: center; /* Center the content in the card */
+    text-align: center;
     padding: 20px;
     background-color: #f9f9f9;
     border: 1px solid #ddd;
-    border-radius: 10px; /* Rounded corners for the card */
+    border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
 }
 
 .review-image {
-    width: 100px; /* Set a fixed width for the image */
-    height: 100px; /* Set a fixed height to make it uniform */
-    object-fit: cover; /* Ensure the image fits within the dimensions */
-    border-radius: 50%; /* Make the image circular */
-    margin-bottom: 15px; /* Add spacing below the image */
-    border: 2px solid #ddd; /* Optional: Add a border around the image */
+    width: 100px; 
+    height: 100px;
+    object-fit: cover; 
+    border-radius: 50%;
+    margin-bottom: 15px;
+    border: 2px solid #ddd; 
 }
+
+.category-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
