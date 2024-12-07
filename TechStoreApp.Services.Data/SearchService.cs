@@ -11,13 +11,16 @@ namespace TechStoreApp.Services.Data
     {
         private readonly IRepository<Product, int> productRepository; 
         private readonly IRepository<Favorited, object> favoritedRepository;
+        private readonly IRepository<Category, int> categoryRepository;
         private readonly IUserService userService;
         public SearchService(IRepository<Product, int> _productRepository,
             IRepository<Favorited, object> _favoriteRepository,
+            IRepository<Category, int> _categoryRepository,
             IUserService _userService)
         {
             productRepository = _productRepository;
             favoritedRepository = _favoriteRepository;
+            categoryRepository = _categoryRepository;
             userService = _userService;
         }
         public async Task<SearchViewModel> GetSearchViewModel(SearchViewModel model)
@@ -34,6 +37,11 @@ namespace TechStoreApp.Services.Data
                 .Where(f => f.UserId == userId);
 
             var productsQuery = productRepository.GetAllAttached();
+
+            if (model.CategoryId != 0)
+            {
+                category = categoryRepository.GetById(model.CategoryId).Description!;
+            }
 
             if (!string.IsNullOrEmpty(category) && category != "All")
             {

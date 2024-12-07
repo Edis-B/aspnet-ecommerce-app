@@ -110,20 +110,22 @@
                     {
                         <div class="single-product-cell">
                             <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new ProductIdFormModel { ProductId = item.ProductId })">
-                                <img class="image-for-product" src="@item.ImageUrl" data-stock="@item.Stock" alt="Product image" />
+                                <img class="image-for-product" src="@item.ImageUrl" data-stock="@item.Stock" onerror="invalidPhoto(this)" />
                             </a>
 
                             <div class="product-details">
                                 <p class="product-details-name">@item.Name</p>
-                                <p class="procuct-details-stock">Stock: @item.Stock</p>
-                                <p class="procuct-details-price">Price: $@item.Price</p>
+                                <p class="procuct-details-stock text-muted">Stock: @item.Stock</p>
+                                <p class="procuct-details-price text-muted">Price: $@item.Price</p>
                             </div>
 
-                            @{
-                                await Html.RenderPartialAsync("_AddToCartPartial", new { productId = item.ProductId });
+                            <div class="mt-auto">
+                                @{
+                                    await Html.RenderPartialAsync("_AddToCartPartial", new { productId = item.ProductId });
 
-                                await Html.RenderPartialAsync("_LikesProductPartial", new { productId = item.ProductId, checkedString = item.CheckedString, totalLikes = item.TotalLikes });
-                            }
+                                    await Html.RenderPartialAsync("_LikesProductPartial", new { productId = item.ProductId, checkedString = item.CheckedString, totalLikes = item.TotalLikes });
+                                }
+                            </div>
                         </div>
                     }
                 }

@@ -9,7 +9,7 @@ namespace TechStoreApp.Web.ViewModels.Search
         public int TotalPages { get; set; }
         public int CurrentPage { get; set; } = 1;
         public int ProductsPerPage { get; set; } = 12;
-        public int CategoryId { get; set; }
+        public int CategoryId { get; set; } = 0;
 
         [AllowNull]
         public string Category { get; set; } = "All";

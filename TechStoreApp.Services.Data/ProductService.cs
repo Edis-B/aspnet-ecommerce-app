@@ -7,6 +7,7 @@ using TechStoreApp.Web.ViewModels.Products;
 using TechStoreApp.Web.ViewModels.Reviews;
 using TechStoreApp.Web.ViewModels.ApiViewModels.Products;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Services.Data
 {
@@ -61,7 +62,11 @@ namespace TechStoreApp.Services.Data
                     Comment = r.Comment,
                     ProductId = r.ProductId,
                     Rating = r.Rating,
-                    Author = r.User!.UserName ?? "Error with UserName"
+                    Author = new UserViewModel()
+                    {
+                        Name = r.User!.UserName!,
+                        PictureUrl = r.User.ProfilePictureUrl!
+                    }
                 })
                 .ToList();
 

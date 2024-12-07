@@ -1,9 +1,8 @@
 ﻿@using TechStoreApp.Web.ViewModels.Orders
 @model OrderPageViewModel
-<link rel="stylesheet" href="~/css/order-page.css"/>
+<link rel="stylesheet" href="~/css/order-page.css" />
 <script src="~/js/order-page.js"></script>
 <title>Cart</title>
-
 
 <div class="content-wrapper">
     <div class="user-information-content">
@@ -11,55 +10,94 @@
             <p>Select delivery address:</p>
             <select id="adresses">
                 <option value="0"> Empty </option>
-                @foreach (var address in Model.AllUserAddresses) 
+                @foreach (var address in Model.AllUserAddresses)
                 {
                     <option value="@address.Id">
                         @address.Details
                     </option>
                 }
-                
             </select>
 
             <form id="sharedForm" asp-action="SharedOrderForm" asp-controller="Order" method="post">
                 <div>
                     <label>Country</label>
-                    <input type="text" asp-for="Address.Country"
-                           placeholder="Country..."/>
+                    <input type="text" asp-for="Address.Country" placeholder="Country..." />
                     <span asp-validation-for="Address.Country" class="text-danger"></span>
                 </div>
 
                 <div>
                     <label>City</label>
-                    <input type="text" asp-for="Address.City"
-                           placeholder="City..."/>
+                    <input type="text" asp-for="Address.City" placeholder="City..." />
                     <span asp-validation-for="Address.City" class="text-danger"></span>
                 </div>
-                
+
                 <div>
                     <label>Postal Code</label>
-                    <input type="text" asp-for="Address.PostalCode"
-                        placeholder="Postal Code..."/>
+                    <input type="text" asp-for="Address.PostalCode" placeholder="Postal Code..." />
                     <span asp-validation-for="Address.PostalCode" class="text-danger"></span>
                 </div>
-                
+
                 <div>
                     <label>Address Details</label>
-                    <textarea type="text" asp-for="Address.Details" class="address-details"
-                        placeholder="Address Details..."></textarea>
+                    <textarea type="text" asp-for="Address.Details" class="address-details" placeholder="Address Details..."></textarea>
                     <span asp-validation-for="Address.Details" class="text-danger"></span>
                 </div>
-                
-                <input type="hidden" asp-for="Address.Id"/>
+
+                <input type="hidden" asp-for="Address.Id" />
 
                 <button type="submit" name="action" value="SaveAddress">Save Address</button>
+
+                <div class="payment-selection-div">
+                    <p>Select payment method:</p>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="paymentMethod1" value="@(1)" asp-for="PaymentId">
+                        <label class="form-check-label" for="paymentMethod1">
+                            <i class="bi bi-credit-card"></i> Credit Card
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="paymentMethod2" value="@(2)" asp-for="PaymentId">
+                        <label class="form-check-label" for="paymentMethod2">
+                            <i class="bi bi-paypal"></i> PayPal
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="paymentMethod3" value="@(3)" asp-for="PaymentId">
+                        <label class="form-check-label" for="paymentMethod3">
+                            <i class="bi bi-bank"></i> Bank Transfer
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="paymentMethod4" value="@(4)" asp-for="PaymentId">
+                        <label class="form-check-label" for="paymentMethod4">
+                            <i class="bi bi-cash"></i> Cash on Delivery
+                        </label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" id="paymentMethod5" value="@(5)" asp-for="PaymentId">
+                        <label class="form-check-label" for="paymentMethod5">
+                            <i class="bi bi-google"></i> Google Pay
+                        </label>
+                    </div>
+                </div>
+                <span asp-validation-for="PaymentId" class="text-danger"></span>
+
+                <div class="order-price-summary">
+                    <p>Total: @Model.TotalCost</p>
+
+                    <button class="go-back-button" onclick="window.history.back();">Back</button>
+
+                    <button type="submit" name="action" form="sharedForm" value="FinalizeOrder" id="continue-order-button">Continue</button>
+                </div>
             </form>
         </div>
-            
-        <div class="payment-selection-div">
-            <p>Select payment method:</p>
-
-        </div>
     </div>
+
     <div class="order-details-content">
         @if (Model.CartItems.Count != 0)
         {
@@ -68,7 +106,7 @@
                 <div class="single-product-cell">
                     <div class="div-image-container">
                         <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.Product.ProductId })">
-                            <img class="product-image" src="@item.Product.ImageUrl" alt="Product image" />
+                            <img class="product-image" src="@item.Product.ImageUrl" onerror="invalidPhoto(this)" />
                         </a>
                     </div>
                     <div class="products-details">
@@ -80,7 +118,6 @@
                         </div>
                     </div>
                 </div>
-
                 <hr>
             }
         }
@@ -88,13 +125,5 @@
         {
             <p>Your cart is empty.</p>
         }
-
-        <div class="order-price-summary">
-            <p class="">Total: @Model.TotalCost</p>
-
-            <button class="go-back-button" onclick="window.history.back();">Back</button>
-            
-            <button type="submit" name="action" form="sharedForm" value="FinalizeOrder" id="continue-order-button">Continue</button>
-        </div>
     </div>
 </div>

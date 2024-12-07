@@ -111,7 +111,7 @@ namespace TechStoreApp.Services.Data
             return newModel;
         }
 
-        public async Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(AddressFormModel model)
+        public async Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(OrderPageViewModel model)
         {
             var userId = userService.GetUserId();
 
@@ -137,7 +137,9 @@ namespace TechStoreApp.Services.Data
 
             var newModel = new OrderFinalizedPageViewModel
             {
-                Address = model,
+                Address = model.Address,
+                PaymentMethod = model.PaymentId,
+                TotalSum = totalCost,
                 Cart = new CartViewModel()
                     {
                         CartItems = user.Cart.CartItems.Select(ci => new CartItemViewModel()
@@ -158,7 +160,6 @@ namespace TechStoreApp.Services.Data
                         })
                         .ToList()
                     } ?? new CartViewModel(),
-                TotalSum = totalCost,
             };
 
             return newModel;

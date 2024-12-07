@@ -4,11 +4,11 @@ using TechStoreApp.Services.Data.Interfaces;
 namespace TechStoreApp.Web.Views.Shared.Components
 {
     [ViewComponent]
-    public class UserProfile : ViewComponent
+    public class UserProfilePicture : ViewComponent
     {
         private readonly IProfileService profileService;
 
-        public UserProfile(IProfileService _profileService)
+        public UserProfilePicture(IProfileService _profileService)
         {
             profileService = _profileService;
         }
@@ -17,7 +17,7 @@ namespace TechStoreApp.Web.Views.Shared.Components
         {
             var model  = await profileService.GetUserProfilePictureUrlAsync();
 
-            return View("UserProfile", model);
+            return View("UserProfilePicture", model);
         }
     }
 }

@@ -24,7 +24,7 @@
                     <div class="product-div" id="@item.ProductId">
                         
                         <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
-                            <img class="image-for-product" src="@item.Product.ImageUrl" alt="Product image" />
+                            <img class="image-for-product" src="@item.Product.ImageUrl" onerror="invalidPhoto(this)" />
                         </a>
 
                         <div class="stock-control">
@@ -49,8 +49,7 @@
                             <input type="hidden" name="productId" value="@item.ProductId" />
 
 						    <button class="trash-can-button" type="submit">
-                                <img class="trash-can" 
-                                    src="https://icons.veryicon.com/png/o/miscellaneous/flat-wireframe-library/trash-bin-3.png" />
+                                <img class="trash-can" src="~/images/trash-bin-black.png" />
                             </button>
                         </form>
 

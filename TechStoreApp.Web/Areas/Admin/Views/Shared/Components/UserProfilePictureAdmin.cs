@@ -4,12 +4,12 @@ using TechStoreApp.Services.Data.Interfaces;
 namespace TechStoreApp.Web.Areas.Admin.Views.Shared.Components
 {
     [ViewComponent]
-    public class UserProfileAdmin : ViewComponent
+    public class UserProfilePictureAdmin : ViewComponent
     {
         private readonly IUserService userService;
         private readonly IProfileService profileService;
 
-        public UserProfileAdmin(IUserService _userService,
+        public UserProfilePictureAdmin(IUserService _userService,
             IProfileService _profileService)
         {
             userService = _userService;
@@ -20,7 +20,7 @@ namespace TechStoreApp.Web.Areas.Admin.Views.Shared.Components
         {
             var model = await profileService.GetUserProfilePictureUrlAsync();
 
-            return View("UserProfileAdmin", model);
+            return View("UserProfilePictureAdmin", model);
         }
 
     }

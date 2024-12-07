@@ -113,6 +113,8 @@
     padding: 10px;
     text-align: center;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
     .single-product-cell:hover {

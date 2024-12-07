@@ -340,3 +340,8 @@ async function setCartItemsCount() {
         span.textContent = itemCount;
     }
 }
+
+function invalidPhoto(element) {
+    element.onerror = null;
+    element.src = '/images/no-image-available-02.jpg'
+}

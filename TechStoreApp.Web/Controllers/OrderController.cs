@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.Infrastructure;
-using TechStoreApp.Web.ViewModels;
-using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.Orders;
 using static TechStoreApp.Common.GeneralConstraints;
 
@@ -27,23 +25,19 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SharedOrderForm(OrderPageViewModel model, string action)
+        public async Task<IActionResult> SharedOrderForm(OrderPageViewModel model, string action, int PaymentMethod = 1)
         {
+            model.PaymentId = model.PaymentId == 0 ? PaymentMethod : model.PaymentId;
+
             if (!ModelState.IsValid)
             {
-                var address = model.Address;
-
-                // Repopulate other data
-                model = await orderService.GetOrderViewModelAsync(null);
-                model.Address = address;
-
                 return View("Order", model);
             }
 
             if (action == "FinalizeOrder")
             {
-                TempData["Model"] = JsonConvert.SerializeObject(model.Address);
-                return RedirectToActionPreserveMethod("FinalizeOrder", "Order");
+                TempData["Model"] = JsonConvert.SerializeObject(model);
+                return RedirectToAction("FinalizeOrder", "Order");
 
             }
             else if (action == "SaveAddress")
@@ -64,19 +58,19 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult FinalizeOrder()
-        {
-            return RedirectToAction(nameof(Order));
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> FinalizeOrder(AddressFormModel model)
+        public async Task<IActionResult> FinalizeOrder(OrderFinalizedPageViewModel model, int PaymentMethod)
         {
             // TempData from SharedForm Redirection
-            model = TempDataUtility
-                .GetTempData<AddressFormModel>(TempData, "Model") ?? model;
+            var unfinishedOrder = TempDataUtility
+                .GetTempData<OrderPageViewModel>(TempData, "Model");
 
-            var newModel = await orderService.GetOrderFinalizedModelAsync(model);
+            if (model == null)
+            {
+                return RedirectToAction(nameof(Order));
+            }
+
+            
+            OrderFinalizedPageViewModel? newModel = await orderService.GetOrderFinalizedModelAsync(unfinishedOrder);
 
             return View("OrderFinalized", newModel);
         }

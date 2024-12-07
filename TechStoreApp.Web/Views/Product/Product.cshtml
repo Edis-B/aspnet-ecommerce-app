@@ -12,7 +12,7 @@
 
 <div class="product-details-container">
     <div class="div-image-container">
-        <img class="image-for-product" src="@Model.ImageUrl" data-stock="@Model.Stock" />
+        <img class="image-for-product" src="@Model.ImageUrl" onerror="invalidPhoto(this)" data-stock="@Model.Stock" />
     </div>
 
     <div class="product-info">
@@ -73,17 +73,20 @@
 <h3>Reviews</h3>
 <div class="reviews-div-container">
     @{
-        foreach (var item in Model.Reviews)
+        foreach (var review in Model.Reviews)
         {
             <hr />
+
             <div class="review-container">
-                <p class="author-review">@item.Author</p>
-                <p class="review-comment">@item.Comment</p>
+                <img src="@review.Author.PictureUrl"/>
+                <p class="author-review">@review.Author.Name</p>
+
+                <p class="review-comment">@review.Comment</p>
                 <p class="single-star-p">
                     @{
                         // Get string for rating
-                        var filledStars = new string('★', item.Rating);    // Filled stars
-                        var emptyStars = new string('☆', 5 - item.Rating); // Empty stars
+                        var filledStars = new string('★', review.Rating);    // Filled stars
+                        var emptyStars = new string('☆', 5 - review.Rating); // Empty stars
                     }
                     @Html.Raw(filledStars)@Html.Raw(emptyStars)
                 </p>

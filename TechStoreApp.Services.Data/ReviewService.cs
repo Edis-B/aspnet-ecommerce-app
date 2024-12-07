@@ -2,6 +2,7 @@
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Reviews;
+using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Services.Data
 {
@@ -40,8 +41,12 @@ namespace TechStoreApp.Services.Data
                 {
                     Comment = r.Comment,
                     ProductId = productId,
-                    Author = r.User!.UserName!,
                     Rating = r.Rating,
+                    Author = new UserViewModel()
+                    {
+                        Name = r.User!.UserName!,
+                        PictureUrl = r.User.ProfilePictureUrl!
+                    }
                 });
 
             return result;
