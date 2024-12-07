@@ -78,8 +78,13 @@ namespace TechStoreApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> SendOrder(OrderFinalizedPageViewModel model)
         {
-            await orderService.SendOrderAsync(model);
 
+            var result = await orderService.SendOrderAsync(model);
+
+            if (!result) 
+            { 
+                return View("OrderFinalized", model);
+            }
             return RedirectToAction("Index", "Account");
         }
 
@@ -98,6 +103,21 @@ namespace TechStoreApp.Web.Controllers
             }
 
             return View("CompletedOrder", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PayForOrder(int orderId)
+        {
+            var userId = userService.GetUserId();
+
+            var result = await orderService.PayForOrder(orderId);
+
+            if (!result)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("CompletedOrder", new { orderId = orderId });
         }
     }
 }

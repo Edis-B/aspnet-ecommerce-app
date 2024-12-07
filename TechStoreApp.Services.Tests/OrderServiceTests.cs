@@ -69,11 +69,10 @@ namespace TechStoreApp.Services.Tests
             mockCartRepository = new Mock<IRepository<Cart, int>>();
             mockCartItemRepository = new Mock<IRepository<CartItem, object>>();
             mockStatusRepository = new Mock<IRepository<Status, int>>();
-            mockPaymentDetailRepository = new Mock<IRepository<PaymentDetail, int>>();
 
             testPaymentDetail =
             [
-                new PaymentDetail { PaymentId = 1, Description = "TestPayment1"}
+                new PaymentDetail { PaymentId = 1, Description = "TestPayment1" }
             ];
 
             testProducts =
@@ -120,6 +119,11 @@ namespace TechStoreApp.Services.Tests
             {
                 new Order { OrderId = 1, UserId = userId, User = testUsers.First(),  TotalAmount = 50, ShippingAddress = "123TestSt", Status = testStatuses.First(), OrderDetails = testOrderDetails}
             };
+
+            mockPaymentDetailRepository = new Mock<IRepository<PaymentDetail, int>>();
+            mockPaymentDetailRepository
+                .Setup(pdr => pdr.GetAllAttached())
+                .Returns(testPaymentDetail.AsQueryable().BuildMock());
         }
 
         [Test]
@@ -134,7 +138,7 @@ namespace TechStoreApp.Services.Tests
             // Act
             InitializeOrderService();
             var result = await orderService.GetOrderViewModelAsync(addressId);
-            
+
             var resultAddress = result.Address;
             var resultAllAddresses = result.AllUserAddresses;
             var orderCartItems = result.CartItems;
@@ -191,7 +195,7 @@ namespace TechStoreApp.Services.Tests
                 .Setup(ur => ur.GetAllAttached())
                 .Returns(testUsers.AsQueryable().BuildMock());
 
-            mockPaymentDetailRepository 
+            mockPaymentDetailRepository
                 .Setup(ur => ur.GetById(1))
                 .Returns(testPaymentDetail.FirstOrDefault()!);
 
@@ -418,7 +422,7 @@ namespace TechStoreApp.Services.Tests
                 // Status check (if part of the result)
                 Assert.That(result.CurrentStatus.Key, Is.EqualTo("Order Received"));
                 Assert.That(result.CurrentStatus.Value, Is.EqualTo(1));
-                
+
             });
 
         }
@@ -474,6 +478,7 @@ namespace TechStoreApp.Services.Tests
             var results = await orderService.ApiGetAllOrdersFromUserId(userId.ToString());
             var result = results.First();
             var expected = testOrders.First();
+
             // Assert
             Assert.Multiple(() =>
             {
@@ -497,6 +502,27 @@ namespace TechStoreApp.Services.Tests
                 }
             });
 
+        }
+
+        [Test]
+        public async Task PayForOrder_WorksAsExpected() 
+        {
+            // Arrange
+            int testOrderId = 1;
+
+            var builtMock = testOrders.Where(o => o.OrderId == testOrderId).AsQueryable().BuildMock();
+
+            mockOrderRepository
+                .Setup(or => or.GetByIdAsync(testOrderId))!
+                .ReturnsAsync(testOrders.FirstOrDefault(o => o.OrderId == testOrderId));
+
+            // Act
+            InitializeOrderService();
+            var results = await orderService.PayForOrder(testOrderId);
+
+            // Assert
+            Assert.That(results);
+            mockOrderRepository.Verify(o => o.UpdateAsync(It.Is<Order>(or => or.HasBeenPaidFor == true)));
         }
     }
 }

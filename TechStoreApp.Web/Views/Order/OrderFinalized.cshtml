@@ -7,9 +7,9 @@
 </head>
 
 
-<div class="order-details">
-    @{
-        foreach (var item in Model.Cart.CartItems)
+@if (Model.Cart != null && Model.Cart.CartItems != null && Model.Cart.CartItems.Count != 0) {
+    <div class="order-details">
+        @foreach (var item in Model.Cart.CartItems)
         {
             <div class="item-info-container">
                 <img src="@item.Product.ImageUrl" onerror="invalidPhoto(this)">
@@ -18,29 +18,65 @@
             </div>
         }
         <p class="total-price"></p>
-    }
 
-    <div id="send-order-div">
-        <form class="d-flex flex-column" id="send-order-form" asp-controller="Order" asp-action="SendOrder" method="post">
-            @* Address *@
-            <input type="text" asp-for="Address.Country" value="@Model.Address.Country" disabled>
-            <input type="text" asp-for="Address.City" value="@Model.Address.City" disabled>
-            <input type="text" asp-for="Address.PostalCode" value="@Model.Address.PostalCode" disabled>
-            <input type="text" asp-for="Address.Details" value="@Model.Address.Details" disabled>
+        <div id="send-order-div">
+            <form class="d-flex flex-column" id="send-order-form" asp-controller="Order" asp-action="SendOrder" method="post">
 
-            @* Cost *@
-            <input type="text" asp-for="TotalSum" value="@Model.TotalSum" disabled>
+                <!-- Address Section -->
+                <div class="mb-3">
+                    <label for="Address.Country" class="form-label">Country</label>
+                    <input type="text" class="form-control" asp-for="Address.Country" value="@Model.Address.Country" readonly>
+                </div>
 
-            @* Payment *@
-            <input type="hidden" asp-for="PaymentId" value="@Model.PaymentId" disabled>
-            <input type="hidden" asp-for="PaymentMethod" value="@Model.PaymentMethod" disabled>
+                <div class="mb-3">
+                    <label for="Address.City" class="form-label">City</label>
+                    <input type="text" class="form-control" asp-for="Address.City" value="@Model.Address.City" readonly>
+                </div>
 
-            <button type="submit">Send Order</button>
-        </form>
+                <div class="mb-3">
+                    <label for="Address.PostalCode" class="form-label">Postal Code</label>
+                    <input type="text" class="form-control" asp-for="Address.PostalCode" value="@Model.Address.PostalCode" readonly>
+                </div>
+
+                <div class="mb-3">
+                    <label for="Address.Details" class="form-label">Address Details</label>
+                    <input type="text" class="form-control" asp-for="Address.Details" value="@Model.Address.Details" readonly>
+                </div>
+
+                <!-- Cost Section -->
+                <div class="mb-3">
+                    <label for="TotalSum" class="form-label">Total Cost</label>
+                    <input type="text" class="form-control" asp-for="TotalSum" value="@Model.TotalSum" readonly>
+                </div>
+
+                <!-- Payment Section -->
+                <div class="mb-3">
+                    <label for="PaymentMethod" class="form-label">Payment Method</label>
+                    <input type="text" class="form-control" asp-for="PaymentMethod" value="@Model.PaymentMethod" readonly>
+                </div>
+
+                <!-- Hidden Payment ID -->
+                <input type="hidden" asp-for="PaymentId" value="@Model.PaymentId">
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary mt-4">Send Order</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<div class="d-flex justify-content-center">
-    <button class="btn btn-secondary" onclick="window.history.back()">Go back</button>
-</div>
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-secondary" onclick="window.history.back()">Go back</button>
+    </div>
+} 
+else
+{
+    <p>Order is empty</p>
+
+    <div class="d-flex justify-content-center">
+        <a class="text-primary" src="@Url.Action("Search", "Search")">Go to products</a>
+    </div>
+}
+
+
+
 

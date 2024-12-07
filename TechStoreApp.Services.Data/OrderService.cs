@@ -135,6 +135,10 @@ namespace TechStoreApp.Services.Data
                 return default!;
             }
 
+            var paymentDetail = paymentDetailRepository
+                .GetAllAttached()
+                .ToDictionary(x => x.PaymentId, x => x.PaymentType);
+
             var totalCost = user.Cart.CartItems
                 .Sum(ci => ci.Product!.Price * ci.Quantity);
 
@@ -142,7 +146,7 @@ namespace TechStoreApp.Services.Data
             {
                 Address = model.Address,
                 PaymentId = model.PaymentId,
-                PaymentMethod = paymentDetailRepository.GetById(model.PaymentId).PaymentType,
+                PaymentMethod = paymentDetail[model.PaymentId],
                 TotalSum = totalCost,
                 Cart = new CartViewModel()
                     {
@@ -169,7 +173,7 @@ namespace TechStoreApp.Services.Data
             return newModel;
         }
 
-        public async Task SendOrderAsync(OrderFinalizedPageViewModel model)
+        public async Task<bool> SendOrderAsync(OrderFinalizedPageViewModel model)
         {
             var userId = userService.GetUserId();
 
@@ -182,7 +186,12 @@ namespace TechStoreApp.Services.Data
 
             if (user == null || user.Cart == null || user.Cart.CartItems == null || user.Cart.CartItems.Count == 0)
             {
-                return;
+                return false ;
+            }
+
+            if (model.Address == null )
+            {
+                return false ;
             }
 
             var shippingAddressString = $"{model.Address.Country}, {model.Address.City} ({model.Address.PostalCode}), {model.Address.Details}";
@@ -240,24 +249,36 @@ namespace TechStoreApp.Services.Data
             // Remove cart entries for user
             await cartItemRepository.RemoveRangeAsync(cartItems);
             await cartRepository.DeleteAsync(user.Cart.CartId);
+
+            return true;
         }
 
         public async Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync(string? userId = null)
         {
-            var orders = orderRepository.GetAllAttached();
+            var orders = orderRepository.GetAllAttached()
+                .Include(o => o.OrderDetails)
+                    .ThenInclude(od => od.Product)
+                .AsQueryable();
 
-            userId = userId 
-                ?? userService.GetUserId().ToString();
+            userId = userId ?? userService.GetUserId().ToString();
 
-            orders = orders
-                .Where(o => o.UserId.ToString() == userId);
+            orders = orders.Where(o => o.UserId.ToString() == userId);
 
-            var results = await orders
-                .Select(o => new UserOrderSingleViewModel()
+            List<UserOrderSingleViewModel> results = new List<UserOrderSingleViewModel>();
+
+            var paymentDetails = paymentDetailRepository
+                .GetAllAttached()
+                .ToDictionary(x => x.PaymentId, x => x.PaymentType);
+
+            foreach (var o in orders)
+            {
+                var result = new UserOrderSingleViewModel()
                 {
                     OrderId = o.OrderId,
                     ShippingAddress = o.ShippingAddress!,
                     OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
+                    PaymentMethod = paymentDetails[o.PaymentTypeId],
+                    HasBeenPaidFor = o.HasBeenPaidFor,
                     OrderDetails = o.OrderDetails
                         .Select(od => new OrderDetailViewModel()
                         {
@@ -268,8 +289,10 @@ namespace TechStoreApp.Services.Data
                             UnitPrice = od.UnitPrice
                         })
                         .ToList()
-                })
-                .ToListAsync();
+                };
+
+                results.Add(result);
+            }
 
             var orderModel = new UserOrdersListViewModel()
             {
@@ -306,6 +329,7 @@ namespace TechStoreApp.Services.Data
                 ShippingAddress = order.ShippingAddress!,
                 OrderDate = order.OrderDate.ToString("dd/MM/yyyy"),
                 TotalPrice = (double)order.TotalAmount,
+                HasBeenPaidFor = order.HasBeenPaidFor,
                 OrderDetails = order.OrderDetails
                     .Select(od => new OrderDetailViewModel
                     {
@@ -360,6 +384,23 @@ namespace TechStoreApp.Services.Data
             var result = orders.Select(o => new OrderApiViewModel(o));
 
             return result;
+        }
+
+        public async Task<bool> PayForOrder(int orderId)
+        {
+            var userId = userService.GetUserId();
+
+            var order = await orderRepository.GetByIdAsync(orderId);
+
+            if (userId != order.UserId)
+            {
+                return false;
+            }
+
+            order.HasBeenPaidFor = true;
+            await orderRepository.UpdateAsync(order);
+
+            return true;
         }
     }
 }

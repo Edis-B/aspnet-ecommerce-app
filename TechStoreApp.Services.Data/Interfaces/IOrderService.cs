@@ -8,9 +8,10 @@ namespace TechStoreApp.Services.Data.Interfaces
     {
         Task<OrderPageViewModel> GetOrderViewModelAsync(int? addressId);
         Task<OrderFinalizedPageViewModel> GetOrderFinalizedModelAsync(OrderPageViewModel model);
-        Task SendOrderAsync(OrderFinalizedPageViewModel model);
+        Task<bool> SendOrderAsync(OrderFinalizedPageViewModel model);
         Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync(string? userId = null);
         Task<UserOrderSingleViewModel> GetDetailsOfOrder(int orderId);
+        Task<bool> PayForOrder(int orderId);
 
         // Api
         Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrders();

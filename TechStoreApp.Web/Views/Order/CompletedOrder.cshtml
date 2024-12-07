@@ -2,11 +2,13 @@
 @using TechStoreApp.Web.ViewModels.Orders
 @model UserOrderSingleViewModel
 
-<link rel="stylesheet" href="~/css/completed-order-page.css"/>
+<head>
+    <link rel="stylesheet" href="~/css/completed-order-page.css"/>
+</head>
 
 @if (User.IsInRole(AdminRoleName))
 {
-    <p>Admin View</p>
+    <p class="d-block text-center text-danger">Admin View</p>
 }
 
 <div class="container">
