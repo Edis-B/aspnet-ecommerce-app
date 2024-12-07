@@ -229,5 +229,22 @@ namespace TechStoreApp.Services.Data
                     .ToList()
             };
         }
+
+        public async Task<UserViewModel> GetUserViewModel(Guid userId)
+        {
+            var user = await GetUserFromIdAsync(userId); 
+            
+            if (user == null) 
+            {
+                return default!;
+            }
+
+            return new UserViewModel()
+            {
+                UserId = user.Id.ToString(),
+                Name = user.UserName!,
+                PictureUrl = user.ProfilePictureUrl!,
+            };
+        }
     }
 }

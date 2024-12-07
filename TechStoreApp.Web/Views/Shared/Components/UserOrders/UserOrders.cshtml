@@ -3,68 +3,75 @@
 @model UserOrdersListViewModel
 
 <div class="container my-4">
-    @foreach (var order in Model.Orders)
+    @if (Model.Orders == null || Model.Orders.Count == 0)
     {
-        <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Order ID: @order.OrderId</h5>
-                <span>@order.OrderDate</span>
-            </div>
+        <p>No orders.</p>
+    }
+    else
+    {
+        foreach (var order in Model.Orders)
+        {
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Order ID: @order.OrderId</h5>
+                    <span>@order.OrderDate</span>
+                </div>
 
-            <div class="card-body">
-                @foreach (var orderDetail in order.OrderDetails)
-                {
-                    <div class="row mb-3">
-                        <div class="col-md-2 col-sm-4 col-4">
-                            <a href="@Url.Action("RedirectToDetails", "Product", new ProductIdFormModel{ ProductId = orderDetail.ProductId })" style="display: contents">
-                                <img class="img-fluid rounded" src="@orderDetail.ProductImageUrl" onerror="invalidPhoto(this)" />
-                            </a>
+                <div class="card-body">
+                    @foreach (var orderDetail in order.OrderDetails)
+                    {
+                        <div class="row mb-3">
+                            <div class="col-md-2 col-sm-4 col-4">
+                                <a href="@Url.Action("RedirectToDetails", "Product", new ProductIdFormModel{ ProductId = orderDetail.ProductId })" style="display: contents">
+                                    <img class="img-fluid rounded" src="@orderDetail.ProductImageUrl" onerror="invalidPhoto(this)" />
+                                </a>
+                            </div>
+                            <div class="col-md-6 col-sm-8 col-8">
+                                <h6 class="mb-1">@orderDetail.ProductName</h6>
+                                <p class="mb-0">Quantity: @orderDetail.Quantity</p>
+                                <p class="text-muted small">Unit Price: $@orderDetail.UnitPrice</p>
+                            </div>
+                            <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
+                                <p class="fw-bold mb-0">
+                                    $@(orderDetail.Quantity * orderDetail.UnitPrice)
+                                </p>
+                            </div>
+
                         </div>
-                        <div class="col-md-6 col-sm-8 col-8">
-                            <h6 class="mb-1">@orderDetail.ProductName</h6>
-                            <p class="mb-0">Quantity: @orderDetail.Quantity</p>
-                            <p class="text-muted small">Unit Price: $@orderDetail.UnitPrice</p>
-                        </div>
-                        <div class="col-md-4 text-end d-flex align-items-center justify-content-end">
-                            <p class="fw-bold mb-0">
-                                $@(orderDetail.Quantity * orderDetail.UnitPrice)
-                            </p>
-                        </div>
+                    }
 
-                    </div>
-                }
-
-            </div>
+                </div>
 
 
-            <div class="card-footer bg-light">
-                <p class="mb-1"><strong>Delivery Address:</strong> @order.ShippingAddress</p>
-                <p class="mb-1"><strong>Payment method:</strong> @order.PaymentMethod</p>
+                <div class="card-footer bg-light">
+                    <p class="mb-1"><strong>Delivery Address:</strong> @order.ShippingAddress</p>
+                    <p class="mb-1"><strong>Payment method:</strong> @order.PaymentMethod</p>
 
-                <form asp-action="CompletedOrder" asp-controller="Order" asp-route-orderId="@order.OrderId" method="get" class="mt-3">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="bi bi-eye"></i> View Order
-                    </button>
-                </form>
+                    <form asp-action="CompletedOrder" asp-controller="Order" asp-route-orderId="@order.OrderId" method="get" class="mt-3">
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="bi bi-eye"></i> View Order
+                        </button>
+                    </form>
 
                 
-                <div class="d-block">
-                    @if (order.HasBeenPaidFor)
-                    {
-                        <button type="submit" class="btn btn-success btn-sm" disabled>
-                            <i class="bi bi-eye"></i> Order has been paid for
-                        </button>
-                    }
-                    else
-                    {
-                        <form asp-action="PayForOrder" asp-controller="Order" asp-route-orderId="@order.OrderId" method="post" class="mt-3">
-                            <button type="submit" class="btn btn-danger btn-sm">
-                                <i class="bi bi-eye"></i> Pay for order
+                    <div class="d-block">
+                        @if (order.HasBeenPaidFor)
+                        {
+                            <button type="submit" class="btn btn-success btn-sm" disabled>
+                                <i class="bi bi-eye"></i> Order has been paid for
                             </button>
-                        </form>
-                    }
+                        }
+                        else
+                        {
+                            <form asp-action="PayForOrder" asp-controller="Order" asp-route-orderId="@order.OrderId" method="post" class="mt-3">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="bi bi-eye"></i> Pay for order
+                                </button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
-        </div>
+        }
     }
 </div>

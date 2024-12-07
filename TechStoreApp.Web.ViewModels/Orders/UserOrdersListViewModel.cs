@@ -1,4 +1,5 @@
 ﻿using TechStoreApp.Data.Models;
+using TechStoreApp.Web.ViewModels.User;
 
 namespace TechStoreApp.Web.ViewModels.Orders
 {

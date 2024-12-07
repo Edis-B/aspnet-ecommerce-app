@@ -253,16 +253,22 @@ namespace TechStoreApp.Services.Data
             return true;
         }
 
-        public async Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync(string? userId = null)
+        public async Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync(string? userIdExternal = null)
         {
             var orders = orderRepository.GetAllAttached()
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
                 .AsQueryable();
 
-            userId = userId ?? userService.GetUserId().ToString();
-
-            orders = orders.Where(o => o.UserId.ToString() == userId);
+            var userId = userService.GetUserId();
+            if (!await userService.IsUserAdmin(userId) && userIdExternal != null)
+            {
+                return default!;
+            }
+            
+            userId = userIdExternal == null ? userId : Guid.Parse(userIdExternal);
+            
+            orders = orders.Where(o => o.UserId == userId);
 
             List<UserOrderSingleViewModel> results = new List<UserOrderSingleViewModel>();
 

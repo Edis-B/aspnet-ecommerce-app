@@ -12,18 +12,32 @@ namespace TechStoreApp.Web.Controllers
     public class AccountController : Controller
     {
         private readonly IUserService userService;
+        private readonly IProfileService profileService;
         private readonly ICookieService cookieService;
         public AccountController(IUserService _userService,
+            IProfileService _profileService,
             ICookieService _cookieService)
         {
             userService = _userService;
+            profileService = _profileService;
             cookieService = _cookieService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
-            return View("Index");
+            var userId = userService.GetUserId();
+
+            if (await userService.IsUserAdmin(userId))
+            {
+                // Redirect to the Admin area
+                return RedirectToAction("Index", "Account", new { area = "Admin", userId = userId });
+            }
+
+            var model = await profileService.GetUserViewModel(userId);
+
+            return View("Index", model);
         }
 
         [ValidateAntiForgeryToken]

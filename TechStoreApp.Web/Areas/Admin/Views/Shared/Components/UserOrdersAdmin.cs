@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TechStoreApp.Services.Data.Interfaces;
-
+using static TechStoreApp.Common.GeneralConstraints;
 namespace TechStoreApp.Web.Views.Shared.Components
 {
+    [Authorize(Roles = AdminRoleName)]
     [ViewComponent]
     public class UserOrdersAdmin : ViewComponent
     {

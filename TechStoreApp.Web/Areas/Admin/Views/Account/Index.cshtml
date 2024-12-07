@@ -1,17 +1,30 @@
 ﻿@using static TechStoreApp.Common.GeneralConstraints
+@using System.Security.Claims
 @using TechStoreApp.Web.ViewModels.User
 @model UserViewModel
+
+@{
+    var isMyProfile = User.FindFirst(ClaimTypes.NameIdentifier)!.Value == Model.UserId;
+}
 
 <head>
     <link rel="stylesheet" href="~/css/profile-page.css" />
 </head>
 
 <div class="container">
+    @if (isMyProfile)
+    {
+        <p>This is your profile.</p>
+    }
+
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <!-- Logout Button -->
-        <form asp-controller="Account" asp-action="Logout" method="post">
-            <button class="btn btn-warning btn-dark-text py-2 fw-bold rounded" type="submit"> Logout </button>
-        </form>
+        @if (isMyProfile)
+        {
+            <!-- Logout Button -->
+            <form asp-controller="Account" asp-action="Logout" method="post">
+                <button class="btn btn-warning btn-dark-text py-2 fw-bold rounded" type="submit"> Logout </button>
+            </form>
+        }
 
         <!-- Admin Management Button (Visible Only for Admins) -->
         @if (User.IsInRole(AdminRoleName))
@@ -38,12 +51,15 @@
             <dd class="col-sm-9">
                 <img src="@Model.PictureUrl" alt="Profile Picture" class="img-thumbnail" style="max-height: 150px; max-width: 150px;" onerror="this.src='/images/default-profile.png';" />
             </dd>
+
+            <dt class="col-sm-3">User Id:</dt>
+            <dd class="col-sm-9">@Model.UserId</dd>
         </dl>
     </div>
 
     <!-- User Orders Section -->
     <div class="orders-container">
-        <h2 class="mb-3">Your Orders:</h2>
+        <h2 class="mb-3">Orders:</h2>
         @await Component.InvokeAsync("UserOrders")
     </div>
 </div>

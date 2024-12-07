@@ -1,41 +1,56 @@
 ﻿@using TechStoreApp.Web.ViewModels.Favorites
 @model FavoriteViewModel
+<head>
+    <link rel="stylesheet" href="~/css/favorites-page.css" />
+    <script src="~/js/favorite-page.js"></script>
+    <title>Favorites</title>
+</head>
 
-<link rel="stylesheet" href="~/css/favorites-page.css" />
-<script src="~/js/favorite-page.js"></script>
-<title>Favorites</title>
-
-<div class="main-body-container">
+<div class="main-body-container container my-4">
+    <h1 class="text-center mb-4">Your Favorites</h1>
     @if (Model.Products.Count != 0)
     {
-        <div class="products-container">
+        <div class="products-container row gy-4">
             @foreach (var item in Model.Products)
             {
-                <div class="row-container" id="product-id_@item.ProductId">
-                    <form asp-action="RemoveFromFavorites" asp-controller="Favorites" class="remove-from-favorites">
-                        <button type="submit">
-                            <img src="~/images/black-x-symbol.png" />
-                        </button>
-                    </form>
+                <div class="row-container col-lg-3 col-md-4 col-sm-6" id="product-id_@item.ProductId">
+                    <div class="card shadow-sm h-100">
+                        <!-- Remove Button -->
+                        <form asp-action="RemoveFromFavorites" asp-controller="Favorites" class="remove-from-favorites position-absolute end-0 me-2 mt-2">
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                <img src="~/images/black-x-symbol.png" alt="Remove" class="img-fluid" style="height: 20px; width: 20px;" />
+                            </button>
+                        </form>
 
-                    <div class="item-container">
-                        <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
-                            <img class="image-for-product" src="@item.ImageUrl" onerror="invalidPhoto(this)"  />
-                        </a>
+                        <!-- Product Image -->
+                        <div class="item-container">
+                            <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
+                                <img class="image-for-product card-img-top img-fluid" src="@item.ImageUrl" onerror="invalidPhoto(this)" alt="@item.Name" />
+                            </a>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="card-body d-flex flex-column">
+                            <p class="card-title text-center mb-2">@item.Name</p>
+                            <p class="card-text text-muted text-center">Liked on: @item.DateLiked</p>
+
+                            <!-- Add to Cart Partial -->
+                            <div class="mt-auto">
+                                @{
+                                    await Html.RenderPartialAsync("_AddToCartPartial", new { productId = item.ProductId });
+                                }
+                            </div>
+                        </div>
                     </div>
-
-                    <p>@item.Name</p>
-                    <p>Liked on: @item.DateLiked</p>
-
-                    @{
-                        await Html.RenderPartialAsync("_AddToCartPartial", new { productId = item.ProductId });
-                    }
                 </div>
             }
         </div>
     }
     else
     {
-        <p>No favorited items.</p>
+        <div class="alert alert-info text-center">
+            <p>No favorited items.</p>
+        </div>
     }
 </div>
+
