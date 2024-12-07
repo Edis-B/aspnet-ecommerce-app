@@ -22,10 +22,18 @@
 
     <div id="send-order-div">
         <form class="d-flex flex-column" id="send-order-form" asp-controller="Order" asp-action="SendOrder" method="post">
-            <input type="text" value="@Model.Address.Country" disabled>
-            <input type="text" value="@Model.Address.City" disabled>
-            <input type="text" value="@Model.Address.PostalCode" disabled>
-            <input type="text" value="@Model.Address.Details" disabled>
+            @* Address *@
+            <input type="text" asp-for="Address.Country" value="@Model.Address.Country" disabled>
+            <input type="text" asp-for="Address.City" value="@Model.Address.City" disabled>
+            <input type="text" asp-for="Address.PostalCode" value="@Model.Address.PostalCode" disabled>
+            <input type="text" asp-for="Address.Details" value="@Model.Address.Details" disabled>
+
+            @* Cost *@
+            <input type="text" asp-for="TotalSum" value="@Model.TotalSum" disabled>
+
+            @* Payment *@
+            <input type="hidden" asp-for="PaymentId" value="@Model.PaymentId" disabled>
+            <input type="hidden" asp-for="PaymentMethod" value="@Model.PaymentMethod" disabled>
 
             <button type="submit">Send Order</button>
         </form>

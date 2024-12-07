@@ -19,6 +19,7 @@ namespace TechStoreApp.Services.Tests
         private Mock<IRepository<OrderDetail, int>> mockOrderDetailRepository;
         private Mock<IRepository<Cart, int>> mockCartRepository;
         private Mock<IRepository<CartItem, object>> mockCartItemRepository;
+        private Mock<IRepository<PaymentDetail, int>> mockPaymentDetailRepository;
         private Mock<IRepository<Status, int>> mockStatusRepository;
         private Mock<IUserService> mockUserService;
         private OrderService orderService;
@@ -32,7 +33,7 @@ namespace TechStoreApp.Services.Tests
         private List<OrderDetail> testOrderDetails;
         private List<Address> testAddresses;
         private List<Status> testStatuses;
-
+        private List<PaymentDetail> testPaymentDetail;
         void InitializeOrderService()
         {
             // Initialize service
@@ -43,6 +44,7 @@ namespace TechStoreApp.Services.Tests
                 mockOrderDetailRepository.Object,
                 mockCartRepository.Object,
                 mockCartItemRepository.Object,
+                mockPaymentDetailRepository.Object,
                 mockUserService.Object,
                 mockStatusRepository.Object
             );
@@ -67,7 +69,12 @@ namespace TechStoreApp.Services.Tests
             mockCartRepository = new Mock<IRepository<Cart, int>>();
             mockCartItemRepository = new Mock<IRepository<CartItem, object>>();
             mockStatusRepository = new Mock<IRepository<Status, int>>();
+            mockPaymentDetailRepository = new Mock<IRepository<PaymentDetail, int>>();
 
+            testPaymentDetail =
+            [
+                new PaymentDetail { PaymentId = 1, Description = "TestPayment1"}
+            ];
 
             testProducts =
             [
@@ -174,13 +181,23 @@ namespace TechStoreApp.Services.Tests
             // Arrange
             var addressModel = new AddressFormModel { Country = "Test Country", City = "Test City", Details = "Test Details", PostalCode = "2222" };
 
+            var model = new OrderPageViewModel()
+            {
+                Address = addressModel,
+                PaymentId = 1,
+            };
+
             mockUserRepository
                 .Setup(ur => ur.GetAllAttached())
                 .Returns(testUsers.AsQueryable().BuildMock());
 
+            mockPaymentDetailRepository 
+                .Setup(ur => ur.GetById(1))
+                .Returns(testPaymentDetail.FirstOrDefault()!);
+
             // Act
             InitializeOrderService();
-            var result = await orderService.GetOrderFinalizedModelAsync(addressModel);
+            var result = await orderService.GetOrderFinalizedModelAsync(model);
 
             // Assert
             Assert.Multiple(() =>
@@ -197,6 +214,9 @@ namespace TechStoreApp.Services.Tests
 
                 // TotalSum check
                 Assert.That(result.TotalSum, Is.EqualTo(40));
+
+                // PaymentId check
+                Assert.That(result.PaymentId, Is.EqualTo(model.PaymentId));
 
                 // Cart checks
                 Assert.That(result.Cart, Is.Not.Null);
@@ -226,7 +246,7 @@ namespace TechStoreApp.Services.Tests
         public async Task SendOrderAsync_ShouldCreateOrderAndRemoveCartItems()
         {
             // Arrange
-            var sendOrderModel = new SendOrderViewModel
+            var sendOrderModel = new OrderFinalizedPageViewModel
             {
                 Address = new AddressFormModel { Country = "Test Country", City = "Test City", Details = "Test Details", PostalCode = "1234" }
             };

@@ -113,7 +113,7 @@ namespace TechStoreApp.Services.Tests
                     Assert.That(resultReviews[i].Comment, Is.EqualTo(expectedReviews[i].Comment), $"Review {i + 1} Comment does not match");
                     Assert.That(resultReviews[i].Rating, Is.EqualTo(expectedReviews[i].Rating), $"Review {i + 1} Rating does not match");
                     Assert.That(resultReviews[i].ProductId, Is.EqualTo(expectedReviews[i].ProductId), $"Review {i + 1} ProductId does not match");
-                    Assert.That(resultReviews[i].Author, Is.EqualTo(expectedReviews[i].User?.UserName ?? "Error with UserName"), $"Review {i + 1} Author does not match");
+                    Assert.That(resultReviews[i].Author.Name, Is.EqualTo(expectedReviews[i].User?.UserName ?? "Error with UserName"), $"Review {i + 1} Author does not match");
                 }
 
             });

@@ -204,6 +204,11 @@ h3 {
         margin: 0.5rem 0;
     }
 
+    .review-container img {
+        height: 100px;
+        width: auto;
+    }
+
 .author-review {
     font-weight: bold;
     font-size: 1.1rem;

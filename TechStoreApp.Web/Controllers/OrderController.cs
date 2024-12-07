@@ -76,7 +76,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SendOrder(SendOrderViewModel model)
+        public async Task<IActionResult> SendOrder(OrderFinalizedPageViewModel model)
         {
             await orderService.SendOrderAsync(model);
 

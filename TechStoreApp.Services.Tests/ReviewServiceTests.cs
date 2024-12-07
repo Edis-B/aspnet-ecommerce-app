@@ -102,12 +102,12 @@ namespace TechStoreApp.Services.Tests
             {
                 Assert.That(result, Has.Count.EqualTo(2));
                 Assert.That(result[0].ProductId, Is.EqualTo(productId));
-                Assert.That(result[0].Author, Is.EqualTo("User1"));
+                Assert.That(result[0].Author.Name, Is.EqualTo("User1"));
                 Assert.That(result[0].Rating, Is.EqualTo(5));
                 Assert.That(result[0].Comment, Is.EqualTo("Great product!"));
 
                 Assert.That(result[1].ProductId, Is.EqualTo(productId));
-                Assert.That(result[1].Author, Is.EqualTo("User2"));
+                Assert.That(result[1].Author.Name, Is.EqualTo("User2"));
                 Assert.That(result[1].Rating, Is.EqualTo(4));
                 Assert.That(result[1].Comment, Is.EqualTo("Good quality."));
             });

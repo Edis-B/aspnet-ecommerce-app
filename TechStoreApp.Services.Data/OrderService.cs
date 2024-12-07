@@ -20,6 +20,7 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<OrderDetail, int> orderDetailRepository;
         private readonly IRepository<Cart, int> cartRepository;
         private readonly IRepository<CartItem, object> cartItemRepository;
+        private readonly IRepository<PaymentDetail, int> paymentDetailRepository;
         private readonly IUserService userService;
         private readonly IRepository<Status, int> statusRepository;
         public OrderService(IRepository<Order, int> _orderRepository,
@@ -28,6 +29,7 @@ namespace TechStoreApp.Services.Data
             IRepository<OrderDetail, int> _orderDetailRepository,
             IRepository<Cart, int> _cartRepository,
             IRepository<CartItem, object> _cartItemRepository,
+            IRepository<PaymentDetail,int> _paymentDetailRepository,
             IUserService _userService,
             IRepository<Status, int> _statusRepository)
         {
@@ -37,6 +39,7 @@ namespace TechStoreApp.Services.Data
             orderDetailRepository = _orderDetailRepository;
             cartRepository = _cartRepository;
             cartItemRepository = _cartItemRepository;
+            paymentDetailRepository = _paymentDetailRepository;
             userService = _userService;
             statusRepository = _statusRepository;
         }
@@ -138,7 +141,8 @@ namespace TechStoreApp.Services.Data
             var newModel = new OrderFinalizedPageViewModel
             {
                 Address = model.Address,
-                PaymentMethod = model.PaymentId,
+                PaymentId = model.PaymentId,
+                PaymentMethod = paymentDetailRepository.GetById(model.PaymentId).PaymentType,
                 TotalSum = totalCost,
                 Cart = new CartViewModel()
                     {
@@ -165,7 +169,7 @@ namespace TechStoreApp.Services.Data
             return newModel;
         }
 
-        public async Task SendOrderAsync(SendOrderViewModel model)
+        public async Task SendOrderAsync(OrderFinalizedPageViewModel model)
         {
             var userId = userService.GetUserId();
 
@@ -192,6 +196,7 @@ namespace TechStoreApp.Services.Data
                 OrderDate = DateTime.Now,
                 TotalAmount = totalCost,
                 ShippingAddress = shippingAddressString,
+                PaymentTypeId = model.PaymentId,
                 StatusId = 1
             };
 

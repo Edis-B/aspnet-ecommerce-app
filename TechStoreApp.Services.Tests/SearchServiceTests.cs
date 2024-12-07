@@ -14,6 +14,7 @@ namespace TechStoreApp.Services.Tests
         private SearchService searchService;
         private Mock<IRepository<Product, int>> mockProductRepository;
         private Mock<IRepository<Favorited, object>> mockFavoritedRepository;
+        private Mock<IRepository<Category, int>> mockCategoryRepository;
         private Mock<IUserService> mockUserService;
 
         private List<Product> testProducts;
@@ -26,6 +27,7 @@ namespace TechStoreApp.Services.Tests
             // Initialize mocks and test data
             mockProductRepository = new Mock<IRepository<Product, int>>();
             mockFavoritedRepository = new Mock<IRepository<Favorited, object>>();
+            mockCategoryRepository = new Mock<IRepository<Category, int>>();
             mockUserService = new Mock<IUserService>();
 
             userId = Guid.NewGuid();
@@ -86,6 +88,7 @@ namespace TechStoreApp.Services.Tests
             searchService = new SearchService(
                 mockProductRepository.Object,
                 mockFavoritedRepository.Object,
+                mockCategoryRepository.Object,
                 mockUserService.Object
             );
         }

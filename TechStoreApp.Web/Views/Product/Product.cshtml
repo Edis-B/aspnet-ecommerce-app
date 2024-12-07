@@ -77,8 +77,8 @@
         {
             <hr />
 
-            <div class="review-container">
-                <img src="@review.Author.PictureUrl"/>
+            <div class="review-container d-flex flex-column align-items-start mb-4">
+                <img class="ratio ratio-1x1 rounded-circle img-fluid" src="@review.Author.PictureUrl" />
                 <p class="author-review">@review.Author.Name</p>
 
                 <p class="review-comment">@review.Comment</p>
