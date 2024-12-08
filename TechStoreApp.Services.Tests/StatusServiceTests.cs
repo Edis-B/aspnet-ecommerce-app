@@ -13,16 +13,12 @@ using MockQueryable;
 
 namespace TechStoreApp.Services.Tests
 {
-    public class StatusServiceTests
+    public class StatusServiceTests : TestBase
     {
-        private StatusService statusService;
-        private Mock<IRepository<Order, int>> mockOrderRepository;
-
         [SetUp]
         public void SetUp()
         {
-            // Initialize the mock repository
-            mockOrderRepository = new Mock<IRepository<Order, int>>();
+            ResetTestData();
         }
 
         void InitializeStatusService()

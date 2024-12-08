@@ -27,6 +27,7 @@ namespace TechStoreApp.Services.Tests
             string jsonContent = JsonConvert.SerializeObject(testProduct);
 
             var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(jsonContent));
+
             mockRequest
                 .Setup(r => r.Body)
                 .Returns(memoryStream);

@@ -243,6 +243,7 @@ namespace TechStoreApp.Services.Data
             {
                 UserId = user.Id.ToString(),
                 Name = user.UserName!,
+                Email = user.Email!,
                 PictureUrl = user.ProfilePictureUrl!,
             };
         }

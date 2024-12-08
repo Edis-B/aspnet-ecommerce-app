@@ -11,22 +11,8 @@ namespace TechStoreApp.Services.Tests
 {
 
     [TestFixture]
-    public class CartServiceTests
+    public class CartServiceTests : TestBase
     {
-        private Guid userId;
-        private Mock<IRepository<Cart, int>> mockCartRepository;
-        private Mock<IRepository<CartItem, object>> mockCartItemRepository;
-        private Mock<IRepository<Product, int>> mockProductRepository;
-        private Mock<IRepository<ApplicationUser, Guid>> mockUserRepository;
-        private Mock<IUserService> mockUserService;
-        private CartService cartService;
-
-        private Product testProductSeperate;
-        private List<Product> testProducts;
-        private List<CartItem> testCartItems;
-        private List<Cart> testCarts;
-        private List<ApplicationUser> testUsers;
-
         void InitializeCartService()
         {
             cartService = new CartService(mockCartRepository.Object,
@@ -39,19 +25,14 @@ namespace TechStoreApp.Services.Tests
         [SetUp]
         public void Setup()
         {
-            userId = Guid.NewGuid();
-            mockUserService = new Mock<IUserService>();
-            mockUserService
-                .Setup(x => x.GetUserId())
-                .Returns(userId);
+            ResetTestData();
+        }
 
-            mockCartItemRepository = new Mock<IRepository<CartItem, object>>();
-            mockProductRepository = new Mock<IRepository<Product, int>>();
-            mockUserRepository = new Mock<IRepository<ApplicationUser, Guid>>();
-            mockCartRepository = new Mock<IRepository<Cart, int>>();
-
-            // Data
-            testProductSeperate = new Product()
+        [Test]
+        public async Task AddToCartAsync_ShouldAddNewProductIfItsNotAlreadyAdded()
+        {
+            // Arrange
+            var testProductSeperate = new Product()
             {
                 ProductId = 3,
                 CategoryId = 3,
@@ -62,76 +43,9 @@ namespace TechStoreApp.Services.Tests
                 ImageUrl = "TestImage3"
             };
 
-            testProducts = new List<Product>() {
-                new Product()
-                {
-                    ProductId = 1,
-                    CategoryId = 1,
-                    Name = "TestName1",
-                    Description = "TestDescription1",
-                    Price = 1,
-                    Stock = 10,
-                    ImageUrl = "TestImage1"
-                },
-                new Product()
-                {
-                    ProductId = 2,
-                    CategoryId = 2,
-                    Name = "TestName2",
-                    Description = "TestDescription2",
-                    Price = 2,
-                    Stock = 20,
-                    ImageUrl = "TestImage2"
-                }
-            };
-
-            testCartItems = new List<CartItem>() {
-                new CartItem()
-                {
-                    CartId = 1,
-                    ProductId = 1,
-                    Quantity = 2,
-                    Product = testProducts[0],
-                },
-                new CartItem()
-                {
-                    CartId = 1,
-                    ProductId = 2,
-                    Quantity = 2,
-                    Product = testProducts[1],
-                }
-            };
-
-            testCarts = new List<Cart> {
-                new Cart()
-                {
-                    CartId = 1,
-                    UserId = userId,
-                    CartItems = testCartItems
-                }
-            };
-
-            testUsers = new List<ApplicationUser>() {
-                new ApplicationUser()
-                {
-                    Id = userId,
-                    Cart = testCarts[0]
-                }
-            };
-
-            testCartItems[0].Cart = testCarts[0];
-            testCartItems[1].Cart = testCarts[0];
-        }
-
-        [Test]
-        public async Task AddToCartAsync_ShouldAddNewProductIfItsNotAlreadyAdded()
-        {
-            // Arrange
-            var mockQueryableUsers = testUsers.AsQueryable().BuildMock();
-
             mockUserRepository
                 .Setup(ur => ur.GetAllAttached())
-                .Returns(mockQueryableUsers);
+                .Returns(testUsers.AsQueryable().BuildMock());
 
             mockProductRepository
                 .Setup(ur => ur.GetByIdAsync(testProductSeperate.ProductId))
@@ -153,17 +67,13 @@ namespace TechStoreApp.Services.Tests
         public async Task GetCartItemsAsync_ShouldAddReturnProductsWhenAvailable()
         {
             // Arrange
-            var mockQueryableUsers = testUsers.AsQueryable().BuildMock();
-
             mockUserRepository
                 .Setup(ur => ur.GetAllAttached())
-                .Returns(mockQueryableUsers);
-
-            var mockQueryableProducts = testProducts.AsQueryable().BuildMock();
+                .Returns(testUsers.AsQueryable().BuildMock());
 
             mockProductRepository
                 .Setup(pr => pr.GetAllAttached())
-                .Returns(mockQueryableProducts);
+                .Returns(testProducts.AsQueryable().BuildMock());
 
             // Act
             InitializeCartService();
@@ -199,11 +109,9 @@ namespace TechStoreApp.Services.Tests
         public async Task ClearCartAsync_ShouldClearCartSuccessfully()
         {
             // Arrange
-            var mockQueryableCarts = testCarts.AsQueryable().BuildMock();
-
             mockCartRepository
                 .Setup(cr => cr.GetAllAttached())
-                .Returns(mockQueryableCarts);
+                .Returns(testCarts.AsQueryable().BuildMock());
 
             // Act
             InitializeCartService();

@@ -341,7 +341,13 @@ async function setCartItemsCount() {
     }
 }
 
-function invalidPhoto(element) {
+function invalidProductPhoto(element) {
     element.onerror = null;
     element.src = '/images/no-image-available-02.jpg'
 }
+
+function invalidProfilePicture(element) {
+    element.onerror = null;
+    element.src = '/images/Error_Loading_Image.png'
+}
+

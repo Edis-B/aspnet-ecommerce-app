@@ -4,31 +4,16 @@ using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Products;
-
 using NUnit.Framework;
 using MockQueryable;
 using Moq;
 using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace TechStoreApp.Services.Tests
 {
     [TestFixture]
-    public class CartItemServiceTests
+    public class CartItemServiceTests : TestBase
     {
-        private Guid userId;
-        private Mock<IRepository<CartItem, object>> mockCartItemRepository;
-        private Mock<IRepository<Product, int>> mockProductRepository;
-        private Mock<IRepository<ApplicationUser, Guid>> mockUserRepository;
-        private Mock<IUserService> mockUserService;
-        private CartItemService cartItemService;
-
-        private Product testProduct;
-        private Product testProduct2;
-        private List<CartItem> testCartItems;
-        private List<Cart> testCarts;
-        private List<ApplicationUser> testUsers;
-
         void InitializeCartItemService()
         {
             cartItemService = new CartItemService(mockCartItemRepository.Object,
@@ -38,101 +23,33 @@ namespace TechStoreApp.Services.Tests
         }
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-            userId = Guid.NewGuid();
-            mockUserService = new Mock<IUserService>();
-            mockUserService
-                .Setup(x => x.GetUserId())
-                .Returns(userId);
-
-            mockCartItemRepository = new Mock<IRepository<CartItem, object>>();
-            mockProductRepository = new Mock<IRepository<Product, int>>();
-            mockUserRepository = new Mock<IRepository<ApplicationUser, Guid>>();
-
-
-            // Data
-            testProduct = new Product()
-            {
-                ProductId = 1,
-                CategoryId = 1,
-                Name = "TestName",
-                Description = "TestDescription",
-                Price = 1,
-                Stock = 10,
-                ImageUrl = "TestImage"
-            };
-
-            testProduct2 = new Product()
-            {
-                ProductId = 2,
-                CategoryId = 2,
-                Name = "TestName2",
-                Description = "TestDescription2",
-                Price = 2,
-                Stock = 20,
-                ImageUrl = "TestImage2"
-            };
-
-            testCartItems = new List<CartItem>() {
-                new CartItem()
-                {
-                    CartId = 1,
-                    ProductId = 1,
-                    Quantity = 2,
-                    Product = testProduct,
-                },
-                new CartItem()
-                {
-                    CartId = 1,
-                    ProductId = 2,
-                    Quantity = 2,
-                    Product = testProduct2,
-                }
-            };
-
-            testCarts = new List<Cart> {
-                new Cart()
-                {
-                    CartId = 1,
-                    UserId = userId,
-                    CartItems = testCartItems
-                }
-            };
-
-            testUsers = new List<ApplicationUser>() {
-                new ApplicationUser()
-                {
-                    Id = userId,
-                    Cart = testCarts[0]
-                }
-            };
-
-            testCartItems[0].Cart = testCarts[0];
+            ResetTestData();
         }
 
         [Test]
         public async Task IncreaseCountAsync_ShouldIncreaseCountProperly()
         {
             // Arrange
-            mockProductRepository
-                .Setup(pr => pr.GetByIdAsync(1))
-                .ReturnsAsync(testProduct);
+            int testProductId = 1;
 
-            var mockQueryableUsers = testUsers.AsQueryable().BuildMock();
+            mockProductRepository
+                .Setup(pr => pr.GetByIdAsync(testProductId))
+                .ReturnsAsync(testProducts.First(p => p.ProductId == testProductId));
 
             mockUserRepository
                 .Setup(ur => ur.GetAllAttached())
-                .Returns(mockQueryableUsers);
+                .Returns(testUsers.AsQueryable().BuildMock());
 
             // Act
             InitializeCartItemService();
-            await cartItemService.IncreaseCountAsync(new ProductIdFormModel() { ProductId = 1 });
+            await cartItemService.IncreaseCountAsync(new ProductIdFormModel() { ProductId = testProductId });
 
             // Assert
             mockCartItemRepository.Verify(cr => cr.UpdateAsync(It.Is<CartItem>(ci =>
                 ci.CartId == 1 &&
-                ci.ProductId == 1 &&
+                ci.ProductId == testProductId &&
                 ci.Quantity == 3
                 )), Times.Once);
         }
@@ -141,38 +58,35 @@ namespace TechStoreApp.Services.Tests
         public async Task DecreaseCountAsync_ShouldDecreaseProperly()
         {
             // Arrange
-            var mockQueryableUsers = testUsers.AsQueryable().BuildMock();
+            int testProductId = 1;
+
+            mockProductRepository
+                .Setup(pr => pr.GetByIdAsync(testProductId))
+                .ReturnsAsync(testProducts.First(p => p.ProductId == testProductId));
 
             mockUserRepository
                 .Setup(ur => ur.GetAllAttached())
-                .Returns(mockQueryableUsers);
+                .Returns(testUsers.AsQueryable().BuildMock());
 
             // Act
             InitializeCartItemService();
-            await cartItemService.DecreaseCountAsync(new ProductIdFormModel() { ProductId = 1 });
+            await cartItemService.DecreaseCountAsync(new ProductIdFormModel() { ProductId = testProductId });
 
             // Assert
             mockCartItemRepository.Verify(cr => cr.UpdateAsync(It.Is<CartItem>(ci =>
                 ci.CartId == 1 &&
-                ci.ProductId == 1 &&
+                ci.ProductId == testProductId &&
                 ci.Quantity == 1
                 )), Times.Once);
-        }
-    
-        public class ResultDto
-        {
-            public int total { get; set; }
         }
 
         [Test]
         public async Task GetCartItemsCountAsync_ShouldReturnProperly()
         {
             // Arrange
-            var mockQueryableUsers = testUsers.AsQueryable().BuildMock();
-
             mockUserRepository
                 .Setup(ur => ur.GetAllAttached())
-                .Returns(mockQueryableUsers);
+                .Returns(testUsers.AsQueryable().BuildMock());
 
             // Act
             InitializeCartItemService();
@@ -180,7 +94,7 @@ namespace TechStoreApp.Services.Tests
 
             // Extract the Value property from the JsonResult and cast it
             var resultCount = result?.Value as dynamic;
-            var resultNum = resultCount!.Total; 
+            var resultNum = resultCount!.Total;
 
             // Assert
             int expected = testCartItems.Sum(ci => ci.Quantity);
@@ -191,18 +105,17 @@ namespace TechStoreApp.Services.Tests
         public async Task RemoveFromCartAsync_ShouldRemoveProperly()
         {
             // Arrange
-            var mockQueryableCartItems = testCartItems.AsQueryable().BuildMock();
-
+            int testProductId = 1;
             mockCartItemRepository
                 .Setup(cir => cir.GetAllAttached())
-                .Returns(mockQueryableCartItems);
+                .Returns(testCartItems.AsQueryable().BuildMock());
 
             // Act
             InitializeCartItemService();
-            await cartItemService.RemoveFromCartAsync(new ProductIdFormModel() { ProductId = 1 });
+            await cartItemService.RemoveFromCartAsync(new ProductIdFormModel() { ProductId = testProductId });
 
             // Assert
-            mockCartItemRepository.Verify(cr => cr.DeleteAsync(testCarts.First().CartId, 1), Times.Once);
+            mockCartItemRepository.Verify(cr => cr.DeleteAsync(1, testProductId), Times.Once);
         }
     }
 }

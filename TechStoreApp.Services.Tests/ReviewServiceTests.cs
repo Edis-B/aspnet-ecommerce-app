@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using MockQueryable;
+using Moq;
 using NUnit.Framework;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
@@ -8,62 +9,24 @@ using TechStoreApp.Web.ViewModels.Reviews;
 
 namespace TechStoreApp.Services.Tests
 {
-    public class ReviewServiceTests
+    public class ReviewServiceTests : TestBase
     {
-        private ReviewService reviewService;
-        private Mock<IRepository<Review, int>> mockReviewRepository;
-        private Mock<IUserService> mockUserService;
-
-        private List<Review> testReviews;
-        private Guid userId;
-
         [SetUp]
         public void SetUp()
         {
-            userId = Guid.NewGuid();
-            mockReviewRepository = new Mock<IRepository<Review, int>>();
-            mockUserService = new Mock<IUserService>();
-
-
-            testReviews = new List<Review>
-            {
-                new Review
-                {
-                    ReviewDate = DateTime.Now,
-                    Rating = 5,
-                    ProductId = 1,
-                    Comment = "Great product!",
-                    UserId = userId,
-                    User = new ApplicationUser { Id = userId, UserName = "User1" }
-                },
-                new Review
-                {
-                    ReviewDate = DateTime.Now,
-                    Rating = 4,
-                    ProductId = 1,
-                    Comment = "Good quality.",
-                    UserId = userId,
-                    User = new ApplicationUser { Id = userId, UserName = "User2" }
-                }
-            };
-
-            mockUserService
-                .Setup(us => us.GetUserId())
-                .Returns(userId);
+            ResetTestData();
 
             mockReviewRepository
                 .Setup(r => r.GetAllAttached())
-                .Returns(testReviews.AsQueryable());
-
+                .Returns(testReviews.AsQueryable().BuildMock());
         }
-
 
         void InitializeReviewService()
         {
-            reviewService = new ReviewService(mockReviewRepository.Object, mockUserService.Object);
+            reviewService = new ReviewService(mockReviewRepository.Object,
+                mockUserService.Object);
         }
         
-
         [Test]
         public async Task CreateAndAddReviewToDBAsync_ShouldCreateAndAddReview()
         {

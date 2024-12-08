@@ -4,7 +4,7 @@
 <link rel="stylesheet" href="~/css/pfp-for-view-component.css" />
 
 <a class="user-profile" asp-controller="Account" asp-action="Index" asp-area="" method="get">
-    <img style="color: white" src="@Model.ProfilePictureUrl" alt="Profile Picture" />
+    <img style="color: white" src="@Model.ProfilePictureUrl" onerror="invalidProfilePicture(this)" />
 </a>
 
 

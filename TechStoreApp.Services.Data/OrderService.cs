@@ -404,6 +404,7 @@ namespace TechStoreApp.Services.Data
             }
 
             order.HasBeenPaidFor = true;
+            order.StatusId = 3;
             await orderRepository.UpdateAsync(order);
 
             return true;

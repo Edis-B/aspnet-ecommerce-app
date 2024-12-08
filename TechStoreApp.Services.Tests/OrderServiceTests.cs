@@ -11,29 +11,8 @@ using MockQueryable;
 namespace TechStoreApp.Services.Tests
 {
     [TestFixture]
-    public class OrderServiceTests
+    public class OrderServiceTests : TestBase
     {
-        private Mock<IRepository<Order, int>> mockOrderRepository;
-        private Mock<IRepository<ApplicationUser, Guid>> mockUserRepository;
-        private Mock<IRepository<Product, int>> mockProductRepository;
-        private Mock<IRepository<OrderDetail, int>> mockOrderDetailRepository;
-        private Mock<IRepository<Cart, int>> mockCartRepository;
-        private Mock<IRepository<CartItem, object>> mockCartItemRepository;
-        private Mock<IRepository<PaymentDetail, int>> mockPaymentDetailRepository;
-        private Mock<IRepository<Status, int>> mockStatusRepository;
-        private Mock<IUserService> mockUserService;
-        private OrderService orderService;
-
-        private Guid userId;
-        private List<ApplicationUser> testUsers;
-        private List<Order> testOrders;
-        private List<Cart> testCarts;
-        private List<CartItem> testCartItems;
-        private List<Product> testProducts;
-        private List<OrderDetail> testOrderDetails;
-        private List<Address> testAddresses;
-        private List<Status> testStatuses;
-        private List<PaymentDetail> testPaymentDetail;
         void InitializeOrderService()
         {
             // Initialize service
@@ -53,74 +32,8 @@ namespace TechStoreApp.Services.Tests
         [SetUp]
         public void Setup()
         {
-            // Setup test data
-            userId = Guid.NewGuid();
+            ResetTestData();
 
-            // Initialize mocks
-            mockUserRepository = new Mock<IRepository<ApplicationUser, Guid>>();
-            mockUserService = new Mock<IUserService>();
-            mockUserService
-                .Setup(x => x.GetUserId())
-                .Returns(userId);
-
-            mockOrderRepository = new Mock<IRepository<Order, int>>();
-            mockProductRepository = new Mock<IRepository<Product, int>>();
-            mockOrderDetailRepository = new Mock<IRepository<OrderDetail, int>>();
-            mockCartRepository = new Mock<IRepository<Cart, int>>();
-            mockCartItemRepository = new Mock<IRepository<CartItem, object>>();
-            mockStatusRepository = new Mock<IRepository<Status, int>>();
-
-            testPaymentDetail =
-            [
-                new PaymentDetail { PaymentId = 1, Description = "TestPayment1" }
-            ];
-
-            testProducts =
-            [
-                new Product { ProductId = 1, Name = "TestProduct1", Price = 10, Stock = 100, ImageUrl = "testimage1.jpg", Description = "Description1" },
-
-                new Product { ProductId = 2, Name = "TestProduct2", Price = 20, Stock = 50, ImageUrl = "testimage2.jpg", Description = "Description2" },
-            ];
-
-            testCartItems = new List<CartItem>
-            {
-                new CartItem { CartId = 1, ProductId = 1, Quantity = 2, Product = testProducts[0] },
-                new CartItem { CartId = 1, ProductId = 2, Quantity = 1, Product = testProducts[1] }
-            };
-
-            testCarts = new List<Cart>
-            {
-                new Cart { CartId = 1, UserId = userId, CartItems = testCartItems }
-            };
-
-            testUsers = new List<ApplicationUser>
-            {
-                new ApplicationUser { UserName = "TestUserName", Id = userId, Cart = testCarts.FirstOrDefault() }
-            };
-
-
-            testOrderDetails = new List<OrderDetail>
-            {
-                new OrderDetail { OrderId = 1, ProductId = 1, Quantity = 2, UnitPrice = 10, Product = testProducts[0] },
-                new OrderDetail { OrderId = 1, ProductId = 2, Quantity = 1, UnitPrice = 20, Product = testProducts[1] }
-            };
-
-            testAddresses = new List<Address>
-            {
-                new Address { AddressId = 1, City = "TestCity", Country = "TestCountry", Details = "TestDetails", PostalCode = 1111, UserId = userId, User = testUsers[0] }
-            };
-
-            testStatuses = new List<Status>
-            {
-                new Status { StatusId = 1, Description = "Order Received" }
-            };
-
-            testOrders = new List<Order>
-            {
-                new Order { OrderId = 1, UserId = userId, User = testUsers.First(),  TotalAmount = 50, ShippingAddress = "123TestSt", Status = testStatuses.First(), OrderDetails = testOrderDetails}
-            };
-
-            mockPaymentDetailRepository = new Mock<IRepository<PaymentDetail, int>>();
             mockPaymentDetailRepository
                 .Setup(pdr => pdr.GetAllAttached())
                 .Returns(testPaymentDetail.AsQueryable().BuildMock());

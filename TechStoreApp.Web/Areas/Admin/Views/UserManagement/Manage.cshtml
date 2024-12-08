@@ -35,11 +35,10 @@
         {
             <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
                 <div class="user-card">
-                    <img src="@profile.ProfilePictureUrl" alt="Profile Picture">
+                    <img src="@profile.ProfilePictureUrl" onerror="invalidProfilePicture(this)">
                     <h1>@profile.UserName</h1>
                     <p><strong>Email:</strong> @profile.Email</p>
                     <p><strong>User ID:</strong> @profile.UserId</p>
-                    <a href="/admin/edit-user/@profile.UserId" class="btn btn-primary btn-edit d-flex justify-content-center">Edit User</a>
 
                     <div class="d-inline">
                         @foreach (var role in profile.UserRoles)
@@ -77,7 +76,11 @@
 
                     <form method="get" asp-action="Index" asp-controller="Account" asp-area="Admin" class="d-inline m-3">
                         <input type="hidden" name="userId" value="@profile.UserId" />
-                        <button type="submit" class="btn btn-danger btn-sm">Manage orders</button>
+                        
+                        <button type="submit" class="btn btn-info btn-sm">
+                            <i class="bi bi-eye"></i>
+                            View Account
+                        </button>
                     </form>
                 </div>
             </div>

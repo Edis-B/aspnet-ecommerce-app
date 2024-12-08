@@ -10,25 +10,20 @@ using Moq;
 namespace TechStoreApp.Services.Tests
 {
     [TestFixture]
-    public class AddressServiceTests
+    public class AddressServiceTests : TestBase
     {
-        private Guid userId;
-        private Mock<IRepository<Address, int>> mockAddressRepository;
-        private Mock<IUserService> mockUserService;
-        private AddressService addressService;
+        void InitializeAddressService()
+        {
+            addressService = new AddressService(mockUserService.Object,
+                mockAddressRepository.Object);
+        }
 
         [SetUp]
-        public void Setup()
+        public void SetUp()
         {
-            userId = Guid.NewGuid();
-            mockUserService = new Mock<IUserService>();
-            mockUserService
-                .Setup(x => x.GetUserId())
-                .Returns(userId);
-
-            mockAddressRepository = new Mock<IRepository<Address, int>>();
-            addressService = new AddressService(mockUserService.Object, mockAddressRepository.Object);
+            ResetTestData();
         }
+
 
         [Test]
         public async Task SaveAddressAsync_ShouldSaveNewAddress()
@@ -43,6 +38,7 @@ namespace TechStoreApp.Services.Tests
             };
 
             // Act
+            InitializeAddressService();
             await addressService.SaveAddressAsync(model);
 
             // Assert
@@ -79,6 +75,7 @@ namespace TechStoreApp.Services.Tests
                 .Returns(mockQueryable);
 
             // Act
+            InitializeAddressService();
             var result = await addressService.ApiGetAddressesByUserId(userId.ToString());
 
             // Assert
@@ -116,6 +113,7 @@ namespace TechStoreApp.Services.Tests
                 .Returns(mockQueryable);
 
             // Act
+            InitializeAddressService();
             var result = await addressService.GetAddressByIdAsync(1);
 
             // Assert

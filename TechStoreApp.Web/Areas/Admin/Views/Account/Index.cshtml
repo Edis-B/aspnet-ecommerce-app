@@ -14,7 +14,7 @@
 <div class="container">
     @if (isMyProfile)
     {
-        <p>This is your profile.</p>
+        <p class="text-center">This is your profile.</p>
     }
 
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -49,7 +49,7 @@
 
             <dt class="col-sm-3">Profile Picture:</dt>
             <dd class="col-sm-9">
-                <img src="@Model.PictureUrl" alt="Profile Picture" class="img-thumbnail" style="max-height: 150px; max-width: 150px;" onerror="this.src='/images/default-profile.png';" />
+                <img src="@Model.PictureUrl" class="img-thumbnail" style="max-height: 150px; max-width: 150px;" onerror="invalidPhoto" />
             </dd>
 
             <dt class="col-sm-3">User Id:</dt>

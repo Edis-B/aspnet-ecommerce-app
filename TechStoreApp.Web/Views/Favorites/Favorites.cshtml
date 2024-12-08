@@ -45,6 +45,55 @@
                 </div>
             }
         </div>
+
+        <div class="recommended-products my-5">
+            <h3 class="text-center">You Might Also Be Interested In</h3>
+            <div class="d-flex justify-content-center align-items-center">
+                <!-- Left Arrow -->
+                <button class="scroll-arrow btn btn-outline-secondary me-2" onclick="scrollContainerLeft('scrollable-recommended')">
+                    &#8592;
+                </button>
+
+                <!-- Scrollable Products -->
+                <div id="scrollable-recommended" class="scrollable-container d-flex overflow-hidden">
+                    @if (Model.RecommendedProducts != null && Model.RecommendedProducts.Count != 0)
+                    {
+                        @foreach (var product in Model.RecommendedProducts)
+                        {
+                            <div class="product-card">
+                                <div class="card shadow-sm">
+                                    <!-- Product Image -->
+                                    <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })">
+                                        <img class="card-img-top img-fluid" src="@product.ImageUrl" onerror="invalidPhoto(this)" alt="@product.Name" />
+                                    </a>
+
+                                    <!-- Card Body -->
+                                    <div class="card-body text-center">
+                                        <p class="card-title text-truncate mb-1">@product.Name</p>
+                                        <p class="card-text text-muted">@string.Format("{0:C}", product.Price)</p>
+                                    </div>
+
+                                    <div>
+                                        @{
+                                            await Html.RenderPartialAsync("_AddToCartPartial", new { productId = product.ProductId });
+
+                                            await Html.RenderPartialAsync("_LikesProductPartial", new { productId = product.ProductId, checkedString = "unchecked", totalLikes = product.TotalLikes });
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+
+                <!-- Right Arrow -->
+                <button class="scroll-arrow btn btn-outline-secondary ms-2" onclick="scrollContainerRight('scrollable-recommended')">
+                    &#8594;
+                </button>
+            </div>
+        </div>
+
+
     }
     else
     {
@@ -53,4 +102,7 @@
         </div>
     }
 </div>
+
+
+
 

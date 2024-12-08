@@ -5,5 +5,6 @@ namespace TechStoreApp.Web.ViewModels.Favorites
     public class FavoriteViewModel
     {
         public List<ProductViewModel> Products { get; set; }
+        public List<ProductViewModel> RecommendedProducts { get; set; }
     }
 }

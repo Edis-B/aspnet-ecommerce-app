@@ -10,56 +10,12 @@ using TechStoreApp.Web.ViewModels.Products;
 namespace TechStoreApp.Services.Tests
 {
     [TestFixture]
-    public class ProductServiceTests
+    public class ProductServiceTests : TestBase
     {
-        private Mock<IRepository<Product, int>> mockProductRepository;
-        private Mock<IRepository<Review, int>> mockReviewRepository;
-        private Mock<IRepository<Category, int>> mockCategoryRepository;
-        private Mock<IUserService> mockUserService;
-        private ProductService productService;
-
-        private Guid userId;
-        private List<ApplicationUser> testUsers;
-        private List<Product> testProducts;
-        private List<Review> testReviews;
-        private List<Category> testCategories;
         [SetUp]
         public void SetUp()
         {
-            userId = Guid.NewGuid();
-            mockUserService = new Mock<IUserService>();
-            mockUserService
-                .Setup(ur => ur.GetUserId())
-                .Returns(userId);
-
-            mockProductRepository = new Mock<IRepository<Product, int>>();
-            mockReviewRepository = new Mock<IRepository<Review, int>>();
-            mockCategoryRepository = new Mock<IRepository<Category, int>>();
-
-            testCategories = new List<Category>()
-            {
-                new Category() { CategoryId = 1, Description = "TestCategoryDescription1"}
-            };
-
-            testUsers = new List<ApplicationUser>()
-            {
-                new ApplicationUser() { Id = userId, UserName = "TestUserName" },
-            };
-
-            testReviews = new List<Review>()
-            {
-                new Review { ReviewId = 1, ProductId = 1,  UserId = userId, Rating = 4, Comment = "TestComment1", User = testUsers.First() },
-
-                new Review { ReviewId = 2, ProductId = 2,  UserId = userId, Rating = 3, Comment = "TestComment2", User = testUsers.First() }
-
-            };
-
-            testProducts = new List<Product>
-            {
-                new Product { ProductId = 1, Name = "TestProduct1", Price = 10, Stock = 100, ImageUrl = "testimage1.jpg", Description = "Description1", Reviews = testReviews.Where(x => x.ProductId == 1).ToList(), Category = testCategories.First() },
-
-                new Product { ProductId = 2, Name = "TestProduct2", Price = 20, Stock = 50, ImageUrl = "testimage2.jpg", Description = "Description2", Reviews = testReviews.Where(x => x.ProductId == 2).ToList() },
-            };
+            ResetTestData();
         }
 
         void InitializeProductService()
@@ -72,6 +28,7 @@ namespace TechStoreApp.Services.Tests
                 mockProductRepository.Object
             );
         }
+
         [Test]
         public async Task GetProductViewModelAsync_ShouldReturnCorrectProduct()
         {
@@ -125,6 +82,7 @@ namespace TechStoreApp.Services.Tests
         {
             // Arrange
             int testProductId = 1;
+
             mockProductRepository
                 .Setup(pr => pr.GetAllAttached())
                 .Returns(testProducts.AsQueryable().BuildMock());

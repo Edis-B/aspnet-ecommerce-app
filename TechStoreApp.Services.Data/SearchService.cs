@@ -33,10 +33,10 @@ namespace TechStoreApp.Services.Data
 
             var userId = userService.GetUserId();
 
-            var _favoritedForUser = favoritedRepository.GetAllAttached()
-                .Where(f => f.UserId == userId);
-
-            var productsQuery = productRepository.GetAllAttached();
+            var productsQuery = productRepository.GetAllAttached()
+                .Include(p => p.Favorites)
+                .Include(p => p.Category)
+                .AsQueryable();
 
             if (model.CategoryId != 0)
             {
@@ -86,8 +86,8 @@ namespace TechStoreApp.Services.Data
                     Price = p.Price,
                     Stock = p.Stock,
                     ImageUrl = p.ImageUrl,
-                    CheckedString = favoritedRepository.GetAllAttached()
-                        .FirstOrDefault(f => f.ProductId == p.ProductId && f.UserId == userId) != null ? "checked" : "unchecked"
+                    CheckedString = p.Favorites
+                        .Any(p => p.UserId == userId) ? "checked" : "unchecked"
                })
                .Skip((currentPage - 1) * pageSize)
                .Take(pageSize)

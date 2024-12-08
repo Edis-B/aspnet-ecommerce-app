@@ -12,49 +12,18 @@ using TechStoreApp.Services.Data.Interfaces;
 
 namespace TechStoreApp.Services.Tests
 {
-    public class ProfileServiceTests
+    public class ProfileServiceTests : TestBase
     {
-        private ProfileService profileService;
-
-        private Mock<IRepository<ApplicationUser, Guid>> mockUserRepository;
-        private Mock<RoleManager<ApplicationRole>> mockRoleManager;
-        private Mock<UserManager<ApplicationUser>> mockUserManager;
-        private Mock<IUserService> mockUserService;
-
-        private Guid userId;
-        private Guid roleId;
-        private List<ApplicationUser> testUsers;
-        private List<ApplicationRole> testRoles;
-
         [SetUp]
         public void SetUp()
         {
-            testRoles = new List<ApplicationRole>()
-            {
-                new ApplicationRole { Id = roleId, Name = "Admin" }
-            };
-
-            userId = Guid.NewGuid();
+            ResetTestData();
 
             testUsers = new List<ApplicationUser>
             {
                 new ApplicationUser { Id = userId, UserName = "TestUserName", Email = "testemail@example.com", ProfilePictureUrl = "TestImage.jpeg" },
                 new ApplicationUser { Id = Guid.NewGuid(), UserName = "TestUserName2", Email = "testemail@example.com", ProfilePictureUrl = "TestImage.jpeg" }
             };
-
-            var mocker = new AutoMocker();
-
-            roleId = Guid.NewGuid();
-            mockUserService = new Mock<IUserService>();
-            mockUserService
-                .Setup(ur => ur.GetUserId())
-            .Returns(userId);
-
-            mockUserManager = mocker.GetMock<UserManager<ApplicationUser>>();
-            mockRoleManager = mocker.GetMock<RoleManager<ApplicationRole>>();
-
-            mockUserRepository = new Mock<IRepository<ApplicationUser, Guid>>();
-
         }
 
         void InitializeProfileService()

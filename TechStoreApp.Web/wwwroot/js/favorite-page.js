@@ -2,6 +2,7 @@
     appendPopupContainer();
 
     addToCart();
+    addFavoriting();
     
     removeFromFavorites();
 });
@@ -37,4 +38,14 @@ async function removeFromFavorites() {
             }
         });
     });
+}
+
+function scrollContainerLeft(containerId) {
+    const container = document.getElementById(containerId);
+    container.scrollLeft -= container.offsetWidth / 2;
+}
+
+function scrollContainerRight(containerId) {
+    const container = document.getElementById(containerId);
+    container.scrollLeft += container.offsetWidth / 2;
 }

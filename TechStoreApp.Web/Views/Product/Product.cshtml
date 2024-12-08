@@ -78,7 +78,7 @@
             <hr />
 
             <div class="review-container d-flex flex-column align-items-start mb-4">
-                <img class="ratio ratio-1x1 rounded-circle img-fluid" src="@review.Author.PictureUrl" />
+                <img class="ratio ratio-1x1 rounded-circle img-fluid" src="@review.Author.PictureUrl" onerror="invalidProfilePicture(this)" />
                 <p class="author-review">@review.Author.Name</p>
 
                 <p class="review-comment">@review.Comment</p>
