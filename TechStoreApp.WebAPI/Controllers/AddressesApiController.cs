@@ -1,4 +1,5 @@
 ﻿using CinemaApp.Web.Infrastructure.Attributes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using TechStoreApp.Services.Data.Interfaces;
@@ -24,7 +25,7 @@ namespace TechStoreApp.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetUserAddressesByTheirId(string userId) 
+        public async Task<IActionResult> GetUserAddressesByTheirUserId(string userId) 
         {
             if (!await userService.DoesUserExistId(userId))
             {

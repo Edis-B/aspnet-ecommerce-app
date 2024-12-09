@@ -106,7 +106,7 @@
                 <div class="single-product-cell">
                     <div class="div-image-container">
                         <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.Product.ProductId })">
-                            <img class="product-image" src="@item.Product.ImageUrl" onerror="invalidPhoto(this)" />
+                            <img class="product-image" src="@item.Product.ImageUrl" onerror="invalidProductPhoto(this)" />
                         </a>
                     </div>
                     <div class="products-details">

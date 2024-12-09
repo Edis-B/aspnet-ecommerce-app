@@ -31,8 +31,9 @@ namespace TechStoreApp.Services.Data
         public async Task<IdentityResult> RemoveFromRoleAsync(string userId, string role)
         {
             var result = new IdentityResult();
+            var currUserId = userService.GetUserId();
 
-            if (Guid.Parse(userId) == userService.GetUserId() && role == AdminRoleName)
+            if (Guid.Parse(userId) == currUserId && role == AdminRoleName)
             {
                 return IdentityResult.Failed(new IdentityError()
                 {
@@ -161,7 +162,8 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IEnumerable<UserDetailsApiViewModel>> ApiGetAllUsersAsync()
         {
-            var users = userRepository.GetAllAttached();
+            var users = userRepository.GetAll()
+                .ToList();
 
             List<UserDetailsApiViewModel> results = new List<UserDetailsApiViewModel>();
 
@@ -177,6 +179,7 @@ namespace TechStoreApp.Services.Data
                 };
 
                 var res = await userManager.GetRolesAsync(user);
+
                 newUser.Roles = res.ToList();
 
                 results.Add(newUser);
@@ -189,16 +192,14 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
-            var model = await userRepository
+            var model = userRepository
                 .GetAllAttached()
-                .Where(u => u.Id == userId)
-                .Select(u => new PfpViewModel()
-                {
-                    ProfilePictureUrl = u.ProfilePictureUrl ?? "Profile picture error",
-                })
-                .FirstOrDefaultAsync();
+                .First(u => u.Id == userId);
 
-            return model ?? default!;
+            return new PfpViewModel()
+            {
+                ProfilePictureUrl = model.ProfilePictureUrl ?? "Profile picture error",
+            } ?? default!;
         }
 
         public async Task<ApplicationUser> GetUserFromIdAsync(Guid id)
@@ -245,6 +246,7 @@ namespace TechStoreApp.Services.Data
                 Name = user.UserName!,
                 Email = user.Email!,
                 PictureUrl = user.ProfilePictureUrl!,
+                Roles = (await userManager.GetRolesAsync(user)).ToList()
             };
         }
     }

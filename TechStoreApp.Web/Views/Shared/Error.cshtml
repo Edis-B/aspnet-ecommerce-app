@@ -11,7 +11,11 @@
 </head>
 
 <div class="error-container">
-    <div class="error-code">@(Model.StatusCode != default ? Model.StatusCode : "")</div>
+    @if (Model.StatusCode != 0 && Model.StatusCode != 200)
+    {
+        <div class="error-code">Model.StatusCode</div>
+    }
+    
     <h1>Oops! Something went wrong.</h1>
     <p class="error-message">
         An unexpected error occurred while processing your request. We apologize for the inconvenience.

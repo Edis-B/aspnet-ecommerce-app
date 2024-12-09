@@ -24,7 +24,7 @@
                 {
                     <div class="product-item">
                         <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })">
-                            <img src="@product.ProductImageUrl" onerror="invalidPhoto(this)" class="product-image" />
+                            <img src="@product.ProductImageUrl" onerror="invalidProductPhoto(this)" class="product-image" />
                         </a>
 
                         <div class="product-details">

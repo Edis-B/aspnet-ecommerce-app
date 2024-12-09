@@ -258,9 +258,12 @@ namespace TechStoreApp.Services.Data
             var orders = orderRepository.GetAllAttached()
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
+                .Include(o => o.Status)
                 .AsQueryable();
 
             var userId = userService.GetUserId();
+
+            // If user is not an admin and an Id has been tampered with return
             if (!await userService.IsUserAdmin(userId) && userIdExternal != null)
             {
                 return default!;
@@ -285,6 +288,7 @@ namespace TechStoreApp.Services.Data
                     OrderDate = o.OrderDate.ToString("dd/MM/yyyy"),
                     PaymentMethod = paymentDetails[o.PaymentTypeId],
                     HasBeenPaidFor = o.HasBeenPaidFor,
+                    CurrentStatus = new KeyValuePair<string, int>(o.Status.Description, o.Status.StatusId),
                     OrderDetails = o.OrderDetails
                         .Select(od => new OrderDetailViewModel()
                         {
@@ -377,17 +381,28 @@ namespace TechStoreApp.Services.Data
             return result;
         }
 
-        public async Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrdersFromUserId(string userId)
+        public async Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrdersFromQuery(string? userId = null, string? userName = null)
         {
-            var orders = await orderRepository.GetAllAttached()
-                .Where(o => o.UserId == Guid.Parse(userId))
+            var orders = orderRepository.GetAllAttached()
                 .Include(o => o.User)
                 .Include(o => o.Status)
                 .Include(o => o.OrderDetails)
                     .ThenInclude(od => od.Product)
-                .ToListAsync();
+                .AsQueryable();
 
-            var result = orders.Select(o => new OrderApiViewModel(o));
+            if (!string.IsNullOrEmpty(userId))
+            {
+                orders = orders.Where(o => o.UserId == Guid.Parse(userId));
+            }
+
+            if (!string.IsNullOrEmpty(userName))
+            {
+                orders = orders.Where(o => o.User.UserName!.Contains(userName.ToLower()));
+            }
+
+            var result = await orders
+                .Select(o => new OrderApiViewModel(o))
+                .ToListAsync();
 
             return result;
         }

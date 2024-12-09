@@ -35,7 +35,11 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
             var result  = await profileService.DeleteUserAsync(userId);
 
             if (result.Errors.Any()) {
-                AppendErrorViewModelToTempData(TempData, nameof(ErrorViewModel), result.Errors.Select(e => e.Description.ToString()), 403);
+                AppendErrorViewModelToTempData(TempData,
+                    nameof(ErrorViewModel),
+                    result.Errors.Select(e => e.Description.ToString()),
+                    403);
+
                 return RedirectToAction("Error", "Home", new { area = "" });
             }
             
@@ -48,11 +52,15 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
             var result = await profileService.RemoveFromRoleAsync(userId, role);
 
             if (result.Errors.Any()) {
-                AppendErrorViewModelToTempData(TempData, nameof(ErrorViewModel), result.Errors.Select(e => e.Description.ToString()), 403);
+                AppendErrorViewModelToTempData(TempData,
+                    nameof(ErrorViewModel),
+                    result.Errors.Select(e => e.Description.ToString()),
+                    403);
+
                 return RedirectToAction("Error", "Home", new { area = "" });
             }
 
-            return View("Error");
+            return RedirectToAction("Manage");
         }
 
         [HttpPost]
@@ -60,11 +68,16 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         {
             var result = await profileService.AssignRoleAsync(userId, role);
 
-            if (!result.Errors.Any()) {
-                return RedirectToAction("Manage"); 
+            if (result.Errors.Any()) {
+                AppendErrorViewModelToTempData(TempData,
+                    nameof(ErrorViewModel),
+                    result.Errors.Select(e => e.Description.ToString()),
+                    403);
+
+                return RedirectToAction("Error", "Home", new { area = "" });
             }
 
-            return View("Error");
+            return RedirectToAction("Manage");
         }
     }
 }

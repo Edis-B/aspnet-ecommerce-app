@@ -28,7 +28,7 @@
                                 @foreach (var image in category.ImageUrls)
                                 {
                                     <div class="col-6 mb-2">
-                                        <img class="img-fluid" src="@image" onerror="invalidPhoto(this)" />
+                                        <img class="img-fluid" src="@image" onerror="invalidProductPhoto(this)" />
                                     </div>
                                 }
                             </div>
@@ -52,7 +52,7 @@
                 <div class="col-md-4">
                     <div class="product-card">
                         <a href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })">
-                            <img src="@product.ImageUrl" class="img-fluid" onerror="invalidPhoto(this)" />
+                            <img src="@product.ImageUrl" class="img-fluid" onerror="invalidProductPhoto(this)" />
                         </a>
                         <h3>@product.Name</h3>
                         <p class="product-price">$@product.Price</p>

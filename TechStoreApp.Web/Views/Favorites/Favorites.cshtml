@@ -25,7 +25,7 @@
                         <!-- Product Image -->
                         <div class="item-container">
                             <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
-                                <img class="image-for-product card-img-top img-fluid" src="@item.ImageUrl" onerror="invalidPhoto(this)" alt="@item.Name" />
+                                <img class="image-for-product card-img-top img-fluid" src="@item.ImageUrl" onerror="invalidProductPhoto(this)" alt="@item.Name" />
                             </a>
                         </div>
 
@@ -64,7 +64,7 @@
                                 <div class="card shadow-sm">
                                     <!-- Product Image -->
                                     <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = product.ProductId })">
-                                        <img class="card-img-top img-fluid" src="@product.ImageUrl" onerror="invalidPhoto(this)" alt="@product.Name" />
+                                        <img class="card-img-top img-fluid" src="@product.ImageUrl" onerror="invalidProductPhoto(this)" alt="@product.Name" />
                                     </a>
 
                                     <!-- Card Body -->

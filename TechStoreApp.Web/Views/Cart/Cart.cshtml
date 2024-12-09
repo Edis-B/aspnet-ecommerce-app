@@ -24,7 +24,7 @@
                     <div class="product-div" id="@item.ProductId">
                         
                         <a class="image-link" href="@Url.Action("RedirectToDetails", "Product", new { productId = item.ProductId })">
-                            <img class="image-for-product" src="@item.Product.ImageUrl" onerror="invalidPhoto(this)" />
+                            <img class="image-for-product" src="@item.Product.ImageUrl" onerror="invalidProductPhoto(this)" />
                         </a>
 
                         <div class="stock-control">

@@ -388,7 +388,7 @@ namespace TechStoreApp.Services.Tests
 
             // Act
             InitializeOrderService();
-            var results = await orderService.ApiGetAllOrdersFromUserId(userId.ToString());
+            var results = await orderService.ApiGetAllOrdersFromQuery(userId.ToString());
             var result = results.First();
             var expected = testOrders.First();
 

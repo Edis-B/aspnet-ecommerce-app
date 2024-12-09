@@ -21,16 +21,12 @@ namespace TechStoreApp.Web.Controllers
 
             return View(model);
         }
-        public IActionResult Error(ErrorViewModel model = default!)
+        public IActionResult Error(ErrorViewModel? model)
         {
-            var data = TempDataUtility.GetTempData<ErrorViewModel>(TempData, "ErrorViewModel");
-
-            if (data != null)
-            {
-                model = data;
-            }
+            model = TempDataUtility.GetTempData<ErrorViewModel>(TempData, "ErrorViewModel") ?? new ErrorViewModel();
 
             model.RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
+            model.StatusCode = HttpContext.Response.StatusCode == default ? model.StatusCode : HttpContext.Response.StatusCode;
 
             return View("Error", model);
         }

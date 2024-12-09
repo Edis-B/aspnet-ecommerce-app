@@ -51,9 +51,33 @@ namespace TechStoreApp.WebAPI.Controllers
                 return NotFound("User with such id does not exist");
             }
 
-            var orders = await orderService.ApiGetAllOrdersFromUserId(userId);
+            var orders = await orderService.ApiGetAllOrdersFromQuery(userId, null!);
 
             if (!orders.Any()) return NotFound("User does not have any orders!");      
+
+            return Ok(orders);
+        }
+
+        [HttpGet(action)]
+        [AdminCookieOnly]
+        [ProducesResponseType((typeof(IEnumerable<OrderApiViewModel>)), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+
+        public async Task<IActionResult> GetAllOrdersFromUserName(string userName)
+        {
+            var orders = await orderService.ApiGetAllOrdersFromQuery(null!, userName);
+
+            if (orders == null)
+            {
+                return NotFound("No such User!");
+            }
+            else if (!orders.Any())
+            {
+                return NotFound("User does not have any orders!");
+            }
 
             return Ok(orders);
         }

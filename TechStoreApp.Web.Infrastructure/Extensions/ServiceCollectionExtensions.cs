@@ -66,8 +66,9 @@ namespace Microsoft.Extensions.DependencyInjection
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.HttpOnly = true;
-                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
                 options.Cookie.SameSite = SameSiteMode.Lax;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+
                 options.Cookie.Name = MyCookieName;
                 options.Cookie.Domain = DomainStr;
                 options.Cookie.Path = "/";

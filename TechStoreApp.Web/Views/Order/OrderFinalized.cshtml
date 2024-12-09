@@ -12,7 +12,7 @@
         @foreach (var item in Model.Cart.CartItems)
         {
             <div class="item-info-container">
-                <img src="@item.Product.ImageUrl" onerror="invalidPhoto(this)">
+                <img src="@item.Product.ImageUrl" onerror="invalidProductPhoto(this)">
                 <p>@item.Product.Name</p>
                 <p>@item.Quantity</p><p> x </p><p>$@item.Product.Price.</p>
             </div>

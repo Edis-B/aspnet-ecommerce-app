@@ -11,17 +11,18 @@
     <link rel="stylesheet" href="~/css/profile-page.css" />
 </head>
 
+@if (isMyProfile)
+{
+    <p class="text-center">This is your profile.</p>
+}
+
 <div class="container">
-    @if (isMyProfile)
-    {
-        <p class="text-center">This is your profile.</p>
-    }
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         @if (isMyProfile)
         {
             <!-- Logout Button -->
-            <form asp-controller="Account" asp-action="Logout" method="post">
+            <form asp-controller="Account" asp-action="Logout" asp-area="" method="post">
                 <button class="btn btn-warning btn-dark-text py-2 fw-bold rounded" type="submit"> Logout </button>
             </form>
         }
@@ -49,17 +50,20 @@
 
             <dt class="col-sm-3">Profile Picture:</dt>
             <dd class="col-sm-9">
-                <img src="@Model.PictureUrl" class="img-thumbnail" style="max-height: 150px; max-width: 150px;" onerror="invalidPhoto" />
+                <img src="@Model.PictureUrl" class="img-thumbnail" style="max-height: 150px; max-width: 150px;" onerror="invalidProfilePicture(this)" />
             </dd>
 
             <dt class="col-sm-3">User Id:</dt>
             <dd class="col-sm-9">@Model.UserId</dd>
+
+            <dt class="col-sm-3">User Roles:</dt>
+            <dd class="col-sm-9">@(string.Join(", ", Model.Roles))</dd>
         </dl>
     </div>
 
     <!-- User Orders Section -->
     <div class="orders-container">
         <h2 class="mb-3">Orders:</h2>
-        @await Component.InvokeAsync("UserOrders")
+        @await Component.InvokeAsync("UserOrdersAdmin", Model.UserId)
     </div>
 </div>

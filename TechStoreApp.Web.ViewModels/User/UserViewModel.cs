@@ -12,5 +12,6 @@ namespace TechStoreApp.Web.ViewModels.User
         public string Email { get; set; }
         public string UserId { get; set; }
         public string PictureUrl { get; set; }
+        public List<string> Roles { get; set; }
     }
 }
