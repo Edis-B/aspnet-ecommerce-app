@@ -5,10 +5,11 @@ using TechStoreApp.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using TechStoreApp.Data.Data;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace TechStoreApp.Data;
 
-public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
+public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IDataProtectionKeyContext
 {
     public TechStoreDbContext(DbContextOptions<TechStoreDbContext> options)
         : base(options)
@@ -34,6 +35,7 @@ public partial class TechStoreDbContext : IdentityDbContext<ApplicationUser, App
 
     public virtual DbSet<Address> Addresses { get; set; }
 
+    public virtual DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -2,6 +2,8 @@
     menuInitialization();
 
     setCartItemsCount();
+
+    attachCSRFToAjax();
 });
 
 function menuInitialization() {
@@ -36,4 +38,17 @@ function menuInitialization() {
     });
 }
 
+function attachCSRFToAjax() {
+    const csrfToken = document.querySelector('input[name="__RequestVerificationToken"]');
+
+    if (csrfToken) {
+        const originalFetch = window.fetch;
+        window.fetch = function (url, options = {}) {
+            options.headers = options.headers || {};
+            options.headers['X-CSRF-TOKEN'] = csrfToken.value;
+
+            return originalFetch(url, options);
+        };
+    }
+}
 

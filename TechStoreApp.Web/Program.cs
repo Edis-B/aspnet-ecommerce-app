@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.Infrastructure.Extensions;
 
@@ -16,7 +17,10 @@ internal class Program
 
         builder.Services.AddRazorPages();
 
-        builder.Services.AddControllersWithViews();
+        builder.Services.AddControllersWithViews(options =>
+        {
+            options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+        });
 
         var app = builder.Build();
 

@@ -135,8 +135,8 @@ namespace TechStoreApp.Services.Tests
         {
             // Arrange
             mockUserRepository
-                .Setup(ur => ur.GetAllAttached())
-                .Returns(testUsers.AsQueryable().BuildMock());
+                .Setup(ur => ur.GetByIdAsync(userId))
+                .ReturnsAsync(testUsers.First(u => u.Id == userId));
 
             // Act
             InitializeProfileService();

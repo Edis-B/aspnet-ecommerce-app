@@ -192,9 +192,8 @@ namespace TechStoreApp.Services.Data
         {
             var userId = userService.GetUserId();
 
-            var model = userRepository
-                .GetAllAttached()
-                .First(u => u.Id == userId);
+            var model = await userRepository
+                .GetByIdAsync(userId);
 
             return new PfpViewModel()
             {

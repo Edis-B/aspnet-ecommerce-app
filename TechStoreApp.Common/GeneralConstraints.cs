@@ -12,6 +12,7 @@ namespace TechStoreApp.Common
         public const string MyCookieName = ".MyCustomCookie";
         public const string IsAdminAttr = "IsAdmin";
         public const string SecretCookieProtectionKey = "MySecureCookieProtectionKey";
+        public const string AppName = "TechStoreApp";
         public const string DomainStr = ".localhost";
         public const int CookieDurationRememberMe = 7;
         public const int SlidingExpirationInMinutes = 30;

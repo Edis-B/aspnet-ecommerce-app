@@ -13,7 +13,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Search(string? query, string? category, string? orderBy, int currentPage, int categoryId)
+        public async Task<IActionResult> Search(string? query, string? category, string? orderBy, int currentPage, int categoryId, int productsPerPage)
         {
             // Process and validate model
             var model = new SearchViewModel
@@ -25,9 +25,9 @@ namespace TechStoreApp.Web.Controllers
                 CategoryId = categoryId
             };
 
-            var modelWithNewResults = await searchService.GetSearchViewModel(model);
+            SearchViewModel? populatedModel = await searchService.GetSearchViewModel(model);
 
-            return View(modelWithNewResults);
+            return View("Search", populatedModel);
         }
     }
 }

@@ -25,7 +25,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SharedOrderForm(OrderPageViewModel model, string action, int PaymentMethod = 1)
+        public IActionResult SharedOrderForm(OrderPageViewModel model, string action, int PaymentMethod = 1)
         {
             model.PaymentId = model.PaymentId == 0 ? PaymentMethod : model.PaymentId;
 
@@ -70,7 +70,7 @@ namespace TechStoreApp.Web.Controllers
             }
 
             
-            OrderFinalizedPageViewModel? newModel = await orderService.GetOrderFinalizedModelAsync(unfinishedOrder);
+            OrderFinalizedPageViewModel? newModel = await orderService.GetOrderFinalizedModelAsync(unfinishedOrder!);
 
             return View("OrderFinalized", newModel);
         }

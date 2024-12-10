@@ -17,6 +17,7 @@ namespace TechStoreApp.Web.Controllers
             favoriteService = _favoriteService;
             requestService = _requestService;
         }
+
         [HttpPost]
         public async Task<IActionResult> AddToFavorites(ProductIdFormModel model)
         {
@@ -53,11 +54,11 @@ namespace TechStoreApp.Web.Controllers
             }
         }
         [HttpGet]
-        public async Task<IActionResult> Favorites(FavoriteViewModel model)
+        public async Task<IActionResult> Favorites()
         {
-            var newModel = await favoriteService.GetUserFavoritesAsync();
+            var model = await favoriteService.GetUserFavoritesAsync();
 
-            return View(newModel);
+            return View(model);
         }
     }
 }

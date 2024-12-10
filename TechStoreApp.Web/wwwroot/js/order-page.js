@@ -16,8 +16,10 @@ async function addressDropDown() {
         if (option.value == 0) {
             // Empty when choosing Empty
             inputs.forEach(input => {
-                value = '';
+                input.value = '';
             });
+
+            detail.value = '';
         }
         else {
             // Fill when choosing address

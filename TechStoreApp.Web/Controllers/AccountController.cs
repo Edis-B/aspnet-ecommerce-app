@@ -40,8 +40,8 @@ namespace TechStoreApp.Web.Controllers
             return View("Index", model);
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await userService.LogoutAsync();
@@ -57,7 +57,6 @@ namespace TechStoreApp.Web.Controllers
             return View("Login", model);
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -85,7 +84,6 @@ namespace TechStoreApp.Web.Controllers
             return View("Register");
         }
 
-        [ValidateAntiForgeryToken]
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model, string? returnUrl)
         {

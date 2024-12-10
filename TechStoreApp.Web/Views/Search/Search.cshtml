@@ -3,7 +3,10 @@
 @using TechStoreApp.Web.ViewModels.Search
 @model SearchViewModel
 
-<link rel="stylesheet" href="~/css/search-page.css"/>
+<head>
+    <link rel="stylesheet" href="~/css/search-page.css"/>
+    <meta name="csrf-token" content="s" />
+</head>
 
 <div class="whole-SearchPage-body">
     <div class="filters-wrap-div">

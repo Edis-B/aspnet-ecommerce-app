@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
@@ -40,7 +41,9 @@ namespace TechStoreApp.Services.Data
 
             if (model.CategoryId != 0)
             {
-                category = categoryRepository.GetById(model.CategoryId).Description!;
+                var temp = categoryRepository.GetById(model.CategoryId);
+
+                category = temp == null ? category : temp.Description!;
             }
 
             if (!string.IsNullOrEmpty(category) && category != "All")

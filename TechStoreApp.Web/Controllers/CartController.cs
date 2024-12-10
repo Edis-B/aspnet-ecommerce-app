@@ -22,6 +22,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
+        
         public async Task<IActionResult> AddToCart(ProductIdFormModel model)
         {
             if (requestService.IsAjaxRequest(Request))
@@ -48,6 +49,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
+        
         public async Task<IActionResult> IncreaseCount(ProductIdFormModel model)
         {
             if (requestService.IsAjaxRequest(Request))
@@ -66,6 +68,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
+        
         public async Task<IActionResult> DecreaseCount(ProductIdFormModel model)
         {
             if (requestService.IsAjaxRequest(Request))
@@ -82,6 +85,7 @@ namespace TechStoreApp.Web.Controllers
                 return RedirectToAction("Cart", "Cart");
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(ProductIdFormModel model)
         {

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using static TechStoreApp.Common.GeneralConstraints;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -24,17 +25,21 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddDbContext<TechStoreDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            services.AddDataProtection()
+                .PersistKeysToDbContext<TechStoreDbContext>()
+                .SetApplicationName(AppName);
+
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-            {
-                options.User.RequireUniqueEmail = true;
-                options.SignIn.RequireConfirmedAccount = false;
+                {
+                    options.User.RequireUniqueEmail = true;
+                    options.SignIn.RequireConfirmedAccount = false;
 
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-            })
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
                 .AddEntityFrameworkStores<TechStoreDbContext>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -76,10 +81,12 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.LoginPath = $"/Account/Login";
             });
 
-            services.AddDataProtection()
-                .PersistKeysToFileSystem(new DirectoryInfo(@"C:\Keys"))
-                .DisableAutomaticKeyGeneration()
-                .SetApplicationName("MyTechStoreApp"); ;
+            services.AddAntiforgery(options =>
+            {
+                options.Cookie.Name = ".MyApp.Antiforgery";
+                options.FormFieldName = "__RequestVerificationToken";
+                options.HeaderName = "X-CSRF-TOKEN";
+            });
 
             return services;
         }
