@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TechStoreApp.Data.Data;
+using TechStoreApp.Data.Seeding;
 using TechStoreApp.Data.Models;
 using TechStoreApp.Data.Repository.Interfaces;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Common;
+using Microsoft.Extensions.Hosting;
 
 namespace TechStoreApp.Services.Data
 {
@@ -98,7 +99,11 @@ namespace TechStoreApp.Services.Data
         {
             if (!productRepository.GetAll().Any())
             {
-                await productRepository.AddRangeAsync(SeedDataProducts.GetProducts());
+                var solutionRoot = Directory.GetParent(AppDomain.CurrentDomain.BaseDirectory)!.Parent!.Parent!.Parent!.Parent!.FullName;
+
+                var filePath = Path.Combine(solutionRoot, "TechStoreApp.Data", "Seeding", "Data", "productData.json");
+
+                await productRepository.AddRangeAsync(await SeedDataProducts.GetProductsAsync(filePath));
             }
         }
 

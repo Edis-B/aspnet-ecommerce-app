@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TechStoreApp.Data.Models;
 
-namespace TechStoreApp.Data.Data
+namespace TechStoreApp.Data.Seeding
 {
     public static class SeedDataCategories
     {

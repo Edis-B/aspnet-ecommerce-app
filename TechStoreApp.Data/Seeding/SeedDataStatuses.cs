@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using TechStoreApp.Data.Models;
 
-namespace TechStoreApp.Data.Data
+namespace TechStoreApp.Data.Seeding
 {
     public class SeedDataStatuses
     {
