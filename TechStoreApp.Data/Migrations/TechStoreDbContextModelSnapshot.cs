@@ -455,9 +455,6 @@ namespace TechStoreApp.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"));
 
-                    b.Property<DateTime?>("AddedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
 

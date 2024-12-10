@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using TechStoreApp.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using TechStoreApp.Data.Seeding;
+using TechStoreApp.Data.Data;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 
 namespace TechStoreApp.Data;

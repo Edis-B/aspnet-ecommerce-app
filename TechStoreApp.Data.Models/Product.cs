@@ -34,7 +34,6 @@ public partial class Product
 
     [MaxLength(maxImageUrlStringLength)]
     public string? ImageUrl { get; set; }
-    public DateTime? AddedDate { get; set; }
     public bool IsFeatured { get; set; }
 
     [ForeignKey(nameof(CategoryId))]

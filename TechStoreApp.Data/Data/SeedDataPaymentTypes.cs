@@ -1,6 +1,6 @@
 ﻿using TechStoreApp.Data.Models;
 
-namespace TechStoreApp.Data.Seeding
+namespace TechStoreApp.Data.Data
 {
     public class SeedDataPaymentTypes
     {

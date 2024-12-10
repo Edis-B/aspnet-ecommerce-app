@@ -7,6 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\Models\**" />
+    <Compile Remove="Data\obj\**" />
+    <EmbeddedResource Remove="Data\Models\**" />
+    <EmbeddedResource Remove="Data\obj\**" />
+    <None Remove="Data\Models\**" />
+    <None Remove="Data\obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Migrations\20240929172929_Initial.cs" />
     <Compile Remove="Migrations\20240929172929_Initial.Designer.cs" />
     <Compile Remove="Migrations\20241006112131_addedAdresses.cs" />
