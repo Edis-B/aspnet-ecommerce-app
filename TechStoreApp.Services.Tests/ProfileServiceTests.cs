@@ -89,7 +89,7 @@ namespace TechStoreApp.Services.Tests
         {
             // Arrange
             mockUserRepository
-                .Setup(ur => ur.GetAllAttached())
+                .Setup(ur => ur.GetAll())
                 .Returns(testUsers.AsQueryable().BuildMock());
 
             mockUserManager
