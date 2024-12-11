@@ -23,6 +23,9 @@ public partial class Order
     public bool HasBeenPaidFor {  get; set; }
 
     [Required]
+    public bool IsFinished { get; set; }
+
+    [Required]
     public int PaymentTypeId { get; set; } = 1;
 
     [Required]

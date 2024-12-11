@@ -13,11 +13,11 @@ namespace TechStoreApp.Data.Data
         {
             return new List<Category>
             {
-                new Category { Description = "Prebuilt Configuration" },
+                new Category { Description = "Prebuilt Configuration", IsFeatured = true },
                 new Category { Description = "Graphics Card" },
-                new Category { Description = "Processor" },
+                new Category { Description = "Processor", IsFeatured = true },
                 new Category { Description = "Processor Cooler" },
-                new Category { Description = "PC Case" },
+                new Category { Description = "PC Case", IsFeatured = true },
                 new Category { Description = "Motherboard" },
                 new Category { Description = "RAM" },
                 new Category { Description = "SSD" },

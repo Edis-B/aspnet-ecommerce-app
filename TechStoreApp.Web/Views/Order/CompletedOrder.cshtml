@@ -68,7 +68,7 @@
         @if (User.IsInRole(AdminRoleName))
         {
             <div class="admin-status-update mt-4">
-                <form asp-action="EditStatusOfOrder" asp-controller="Status" method="post" class="form-inline">
+                <form asp-area="Admin" asp-action="EditStatusOfOrder" asp-controller="Status" method="post" class="form-inline">
                     <input name="orderId" type="hidden" value="@Model.OrderId" />
 
                     <!-- Centering Container -->

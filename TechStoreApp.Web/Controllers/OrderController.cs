@@ -25,10 +25,8 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult SharedOrderForm(OrderPageViewModel model, string action, int PaymentMethod = 1)
+        public IActionResult SharedOrderForm(OrderPageViewModel model, string action)
         {
-            model.PaymentId = model.PaymentId == 0 ? PaymentMethod : model.PaymentId;
-
             if (!ModelState.IsValid)
             {
                 return View("Order", model);
@@ -58,7 +56,7 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FinalizeOrder(OrderFinalizedPageViewModel model, int PaymentMethod)
+        public async Task<IActionResult> FinalizeOrder(OrderFinalizedPageViewModel model)
         {
             // TempData from SharedForm Redirection
             var unfinishedOrder = TempDataUtility
@@ -111,6 +109,21 @@ namespace TechStoreApp.Web.Controllers
             var userId = userService.GetUserId();
 
             var result = await orderService.PayForOrder(orderId);
+
+            if (!result)
+            {
+                return View("Error");
+            }
+
+            return RedirectToAction("CompletedOrder", new { orderId = orderId });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(int orderId)
+        {
+            var userId = userService.GetUserId();
+
+            var result = await orderService.CancelOrder(orderId);
 
             if (!result)
             {

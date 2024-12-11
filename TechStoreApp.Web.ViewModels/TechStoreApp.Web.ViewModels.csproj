@@ -18,8 +18,4 @@
     <ProjectReference Include="..\TechStoreApp.Data\TechStoreApp.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="PaymentDetail\" />
-  </ItemGroup>
-
 </Project>

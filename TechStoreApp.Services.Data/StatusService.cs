@@ -25,6 +25,14 @@ namespace TechStoreApp.Services.Data
             }
 
             result.StatusId = statusId;
+
+            var finishedOrderStatusIds = new int[] { 1, 8, 9, 11, 13 };
+            if (finishedOrderStatusIds.Contains(statusId))
+            {
+                result.IsFinished = true;
+            }
+            else result.IsFinished = false;
+
             await orderRepository.UpdateAsync(result);
 
             return true;

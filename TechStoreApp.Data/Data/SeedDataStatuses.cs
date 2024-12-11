@@ -48,6 +48,10 @@ namespace TechStoreApp.Data.Data
                 },
                 new Status()
                 {
+                    Description = "Refunding in process"
+                },
+                new Status()
+                {
                     Description = "Returned"
                 },
                 new Status()

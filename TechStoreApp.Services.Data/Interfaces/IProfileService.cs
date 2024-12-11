@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TechStoreApp.Data.Models;
 using TechStoreApp.Web.ViewModels.ApiViewModels.Users;
 using TechStoreApp.Web.ViewModels.User;
 
@@ -12,7 +13,7 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<IdentityResult> DeleteUserAsync(string userId);
         Task<UserViewModel> GetUserViewModel(Guid userId);
         Task<PfpViewModel> GetUserProfilePictureUrlAsync();
-
+        Task<bool> UpdateUserProfilePicture(string profilePictureUrl);
         // Api
         Task<IEnumerable<UserDetailsApiViewModel>> ApiGetAllUsersAsync();
         Task<UserDetailsApiViewModel> ApiGetUserByTheirIdAsync(string userId);

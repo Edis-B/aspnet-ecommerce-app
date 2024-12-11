@@ -54,6 +54,10 @@ namespace TechStoreApp.Services.Tests
                 .Setup(rm => rm.Roles)
                 .Returns(testRoles.AsQueryable().BuildMock());
 
+            mockUserService
+                .Setup(us => us.GetUserByTheirIdAsync(userId))!
+                .ReturnsAsync(testUsers.FirstOrDefault(u => u.Id == userId));
+
             mockUserManager
                 .Setup(um => um.GetRolesAsync(It.IsAny<ApplicationUser>()))
                 .ReturnsAsync(testRoles.Select(r => r.ToString()).ToList());
@@ -85,7 +89,7 @@ namespace TechStoreApp.Services.Tests
         }
 
         [Test]
-        public async Task GetAllUsersAsync_ReturnsAllUsersCorrectly()
+        public async Task ApiGetAllUsersAsync_ReturnsAllUsersCorrectly()
         {
             // Arrange
             mockUserRepository
@@ -152,33 +156,6 @@ namespace TechStoreApp.Services.Tests
         }
 
         [Test]
-        public async Task GetUserFromIdAsync_ReturnsCorrectUser()
-        {
-            // Arrange
-            mockUserRepository
-                .Setup(ur => ur.GetAllAttached())
-                .Returns(testUsers.AsQueryable().BuildMock());
-
-            // Act
-            InitializeProfileService();
-            var result = await profileService.GetUserFromIdAsync(userId);
-
-            // Assert
-            Assert.Multiple(() =>
-            {
-                Assert.That(result, Is.Not.Null);
-                Assert.That(result.Id, Is.EqualTo(userId));
-
-                var expectedUser = testUsers.FirstOrDefault(u => u.Id == userId);
-
-                Assert.That(result.UserName, Is.EqualTo(expectedUser!.UserName));
-                Assert.That(result.Email, Is.EqualTo(expectedUser.Email));
-                Assert.That(result.ProfilePictureUrl, Is.EqualTo(expectedUser.ProfilePictureUrl));
-            });
-
-        }
-
-        [Test]
         public async Task GetUserByTheirIdAsync_ReturnsCorrectUser()
         {
             // Arrange
@@ -211,5 +188,40 @@ namespace TechStoreApp.Services.Tests
             });
 
         }
+
+        [Test]
+        public async Task UpdateUserProfilePicture_ShouldUpdateProfilePictureSuccessfully()
+        {
+            // Arrange
+            var newProfilePictureUrl = "NewProfilePic.jpg";
+
+            var testUser = new ApplicationUser
+            {
+                Id = userId,
+                UserName = "TestUser",
+                Email = "testuser@example.com",
+                ProfilePictureUrl = "OldProfilePic.jpg" 
+            };
+
+            mockUserService
+                .Setup(us => us.GetUserByTheirIdAsync(userId))
+                .ReturnsAsync(testUser);
+
+
+            // Act
+            InitializeProfileService();
+            var result = await profileService.UpdateUserProfilePicture(newProfilePictureUrl);
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.That(testUser.ProfilePictureUrl, Is.EqualTo(newProfilePictureUrl));
+
+                mockUserRepository.Verify(ur => ur.UpdateAsync(It.Is<ApplicationUser>(u => u.Id == userId && u.ProfilePictureUrl == newProfilePictureUrl)), Times.Once);
+
+                Assert.That(result, Is.True);
+            });
+        }
+
     }
 }

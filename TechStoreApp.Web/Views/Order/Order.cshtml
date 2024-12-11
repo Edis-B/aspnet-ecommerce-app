@@ -50,40 +50,19 @@
                 <div class="payment-selection-div">
                     <p>Select payment method:</p>
 
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="paymentMethod1" value="@(1)" asp-for="PaymentId">
-                        <label class="form-check-label" for="paymentMethod1">
-                            <i class="bi bi-credit-card"></i> Credit Card
-                        </label>
-                    </div>
+                    @foreach (var entry in Model.Payments)
+                    {
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="paymentMethod1" value="@entry.Id" asp-for="PaymentId">
+                            <label class="form-check-label" for="paymentMethod1">
+                                @{
+                                    string[] icon = { "bi-credit-card", "bi-paypal", "bi-bank", "bi-cash", "bi-currency-bitcoin" };
+                                    <i class="bi @icon[entry.Id-1]"></i> @entry.Type
 
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="paymentMethod2" value="@(2)" asp-for="PaymentId">
-                        <label class="form-check-label" for="paymentMethod2">
-                            <i class="bi bi-paypal"></i> PayPal
-                        </label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="paymentMethod3" value="@(3)" asp-for="PaymentId">
-                        <label class="form-check-label" for="paymentMethod3">
-                            <i class="bi bi-bank"></i> Bank Transfer
-                        </label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="paymentMethod4" value="@(4)" asp-for="PaymentId">
-                        <label class="form-check-label" for="paymentMethod4">
-                            <i class="bi bi-cash"></i> Cash on Delivery
-                        </label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" id="paymentMethod5" value="@(5)" asp-for="PaymentId">
-                        <label class="form-check-label" for="paymentMethod5">
-                            <i class="bi bi-google"></i> Google Pay
-                        </label>
-                    </div>
+                                }
+                            </label>
+                        </div>
+                    }
                 </div>
 
                 <span asp-validation-for="PaymentId" class="text-danger"></span>

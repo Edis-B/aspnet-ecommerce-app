@@ -20,7 +20,6 @@ namespace TechStoreApp.Services.Data
         private readonly IRepository<Category, int> categoryRepository;
 
         private readonly IUserService userService;
-        List<int> categories = new List<int>() { 1, 3, 5 };
         public HomeService(IRepository<Product, int> _productRepository,
             IRepository<Review, int> _reviewRepository,
             IRepository<Category, int> _categoryRepository,
@@ -52,10 +51,8 @@ namespace TechStoreApp.Services.Data
                 })
                 .ToListAsync();
 
-            //var Reviews = reviewRepository.GetAllAttached();
-
             var Categories = await categoryRepository.GetAllAttached()
-                .Where(c => categories.Contains(c.CategoryId))
+                .Where(c => c.IsFeatured)
                 .Select(c => new CategoryViewModel()
                 {
                     ImageUrls = c.Products.Take(4).Select(p => p.ImageUrl).ToList()!,

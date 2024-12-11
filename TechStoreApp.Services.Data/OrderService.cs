@@ -7,6 +7,7 @@ using TechStoreApp.Web.ViewModels.Address;
 using TechStoreApp.Web.ViewModels.ApiViewModels.Orders;
 using TechStoreApp.Web.ViewModels.Cart;
 using TechStoreApp.Web.ViewModels.Orders;
+using TechStoreApp.Web.ViewModels.PaymentDetail;
 using TechStoreApp.Web.ViewModels.Products;
 using static TechStoreApp.Common.GeneralConstraints;
 
@@ -88,6 +89,13 @@ namespace TechStoreApp.Services.Data
                 })
                 .ToList();
 
+            newModel.Payments = await paymentDetailRepository.GetAllAttached()
+                .Select(pd => new PaymentViewModel()
+                {
+                    Id = pd.PaymentId,
+                    Type = pd.PaymentType,
+                })
+                .ToListAsync();
 
             newModel.TotalCost = user.Cart.CartItems
                 .Sum(ci => ci.Product!.Price * ci.Quantity);
@@ -420,6 +428,31 @@ namespace TechStoreApp.Services.Data
 
             order.HasBeenPaidFor = true;
             order.StatusId = 3;
+            await orderRepository.UpdateAsync(order);
+
+            return true;
+        }
+
+        public async Task<bool> CancelOrder(int orderId)
+        {
+            var userId = userService.GetUserId();
+
+            var order = await orderRepository.GetByIdAsync(orderId);
+
+            if (userId != order.UserId)
+            {
+                return false;
+            }
+
+            if (order.HasBeenPaidFor)
+            {
+                order.StatusId = 10;
+                order.IsFinished = true;
+            } else
+            {
+                order.StatusId = 8;
+            }
+
             await orderRepository.UpdateAsync(order);
 
             return true;

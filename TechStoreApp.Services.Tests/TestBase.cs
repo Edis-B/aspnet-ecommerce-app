@@ -112,10 +112,35 @@ namespace TechStoreApp.Services.Tests
                 new PaymentDetail { PaymentId = 1, Description = "TestPayment1" }
             };
 
+            testCategories = new List<Category>
+            {
+                new Category { CategoryId = 1, Description = "TestCategoryDescription1", IsFeatured = true },
+                new Category { CategoryId = 2, Description = "TestCategoryDescription2", IsFeatured = true }
+            };
+
             testProducts = new List<Product>
             {
-                new Product { ProductId = 1, Name = "TestProduct1", Price = 10, Stock = 100, ImageUrl = "testimage1.jpg", Description = "Description1", Reviews = new List<Review>(), CategoryId = 1, Category = new Category { CategoryId = 1, Description = "Category1" }},
-                new Product { ProductId = 2, Name = "TestProduct2", Price = 20, Stock = 50, ImageUrl = "testimage2.jpg", Description = "Description2", Reviews = new List<Review>(), CategoryId = 2, Category = new Category { CategoryId = 2, Description = "Category2" }}
+                new Product { ProductId = 1,
+                    Name = "TestProduct1",
+                    Price = 10,
+                    Stock = 100,
+                    ImageUrl = "testimage1.jpg",
+                    Description = "Description1",
+                    Reviews = new List<Review>(),
+                    CategoryId = 1,
+                    Category = testCategories.First(c => c.CategoryId == 1)
+                },
+                new Product { ProductId = 2,
+                    Name = "TestProduct2",
+                    Price = 20,
+                    Stock = 50,
+                    ImageUrl = "testimage2.jpg",
+                    Description = "Description2",
+                    IsFeatured = true,
+                    Reviews = new List<Review>(),
+                    CategoryId = 2,
+                    Category = testCategories.First(c => c.CategoryId == 2)
+                }
             };
 
             testReviews = new List<Review>
@@ -140,11 +165,6 @@ namespace TechStoreApp.Services.Tests
                 }
             };
 
-            testCategories = new List<Category>
-            {
-                new Category { CategoryId = 1, Description = "TestCategoryDescription1" },
-                new Category { CategoryId = 2, Description = "TestCategoryDescription2" }
-            };
 
             testOrderDetails = new List<OrderDetail>
             {
@@ -198,8 +218,6 @@ namespace TechStoreApp.Services.Tests
             };
 
             testCarts[0].CartItems = testCartItems.Where(ci => ci.CartId == testCarts[0].CartId).ToList();
-
-
         }
     }
 }

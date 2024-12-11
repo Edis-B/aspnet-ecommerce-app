@@ -42,7 +42,7 @@ namespace TechStoreApp.Services.Data
                 });
             }
 
-            var user = await GetUserFromIdAsync(Guid.Parse(userId));
+            var user = await userService.GetUserByTheirIdAsync(Guid.Parse(userId));
             if (user == null)
             {
                 return IdentityResult.Failed();
@@ -58,7 +58,7 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IdentityResult> AssignRoleAsync(string userId, string role)
         {
-            var user = await GetUserFromIdAsync(Guid.Parse(userId));
+            var user = await userService.GetUserByTheirIdAsync(Guid.Parse(userId));
             if (user == null)
             {
                 return IdentityResult.Failed();
@@ -74,7 +74,7 @@ namespace TechStoreApp.Services.Data
 
         public async Task<IdentityResult> DeleteUserAsync(string userId)
         {
-            var user = await GetUserFromIdAsync(Guid.Parse(userId));
+            var user = await userService.GetUserByTheirIdAsync(Guid.Parse(userId));
             
             if (user == null)
             {
@@ -201,18 +201,9 @@ namespace TechStoreApp.Services.Data
             } ?? default!;
         }
 
-        public async Task<ApplicationUser> GetUserFromIdAsync(Guid id)
-        {
-            var user = await userRepository
-                .GetAllAttached()
-                .FirstOrDefaultAsync(u => u.Id == id);
-
-            return user!;
-        }
-
         public async Task<UserDetailsApiViewModel> ApiGetUserByTheirIdAsync(string userId)
         {
-            var user = await GetUserFromIdAsync(Guid.Parse(userId));
+            var user = await userService.GetUserByTheirIdAsync(Guid.Parse(userId));
 
             if (user == null)
             {
@@ -232,7 +223,7 @@ namespace TechStoreApp.Services.Data
 
         public async Task<UserViewModel> GetUserViewModel(Guid userId)
         {
-            var user = await GetUserFromIdAsync(userId); 
+            var user = await userService.GetUserByTheirIdAsync(userId); 
             
             if (user == null) 
             {
@@ -247,6 +238,18 @@ namespace TechStoreApp.Services.Data
                 PictureUrl = user.ProfilePictureUrl!,
                 Roles = (await userManager.GetRolesAsync(user)).ToList()
             };
+        }
+
+        public async Task<bool> UpdateUserProfilePicture(string profilePictureUrl)
+        {
+            var userId = userService.GetUserId();
+
+            var user = await userService.GetUserByTheirIdAsync(userId);
+
+            user.ProfilePictureUrl = profilePictureUrl;
+
+            await userRepository.UpdateAsync(user);
+            return true;
         }
     }
 }

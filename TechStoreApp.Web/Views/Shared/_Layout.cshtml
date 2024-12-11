@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Antiforgery
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,26 +32,16 @@
                 <div class="menu-popup-div">
                     <form id="filter-by-category-header" asp-controller="Search" asp-action="Search" method="get">
                         <ul>
-                            <li><button type="submit" name="Category" value="All">All products</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="Prebuilt Configuration">Configured Systems</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="Graphics Card">Graphics Cards</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="Processor">Processors</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="Processor Cooler">CPU Coolers</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="PC Case">PC Cases</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="Motherboard">Motherboards</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="RAM">RAM sticks</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="SSD">Solid state drives (SSDs)</button></li>
-                            <hr />
-                            <li><button type="submit" name="Category" value="HDD">Hard disk drives (HDDs)</button></li>
-                            <hr />
+                            <li><button type="submit" name="Category" value="All">All products</button></li> <hr />
+                            <li><button type="submit" name="Category" value="Prebuilt Configuration">Configured Systems</button></li><hr />
+                            <li><button type="submit" name="Category" value="Graphics Card">Graphics Cards</button></li><hr />
+                            <li><button type="submit" name="Category" value="Processor">Processors</button></li><hr />
+                            <li><button type="submit" name="Category" value="Processor Cooler">CPU Coolers</button></li><hr />
+                            <li><button type="submit" name="Category" value="PC Case">PC Cases</button></li><hr />
+                            <li><button type="submit" name="Category" value="Motherboard">Motherboards</button></li><hr />
+                            <li><button type="submit" name="Category" value="RAM">RAM sticks</button></li><hr />
+                            <li><button type="submit" name="Category" value="SSD">Solid state drives (SSDs)</button></li><hr />
+                            <li><button type="submit" name="Category" value="HDD">Hard disk drives (HDDs)</button></li><hr />
                             <li><button type="submit" name="Category" value="Powersupply">Power Supplies</button></li>
                         </ul>
                     </form>
@@ -137,7 +128,10 @@
                 </a> |
                 <a href="#" class="text-white">
                     <i class="bi bi-twitter"></i> Twitter
-                </a>
+                </a> |
+                <a href="#" class="text-white">
+                    <i class="bi bi-envelope"></i> Example@gmail.com
+                </a> |
             </p>
         </div>
     </footer>

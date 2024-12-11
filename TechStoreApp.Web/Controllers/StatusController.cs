@@ -10,17 +10,6 @@ namespace TechStoreApp.Web.Controllers
         {
             statusService= _statusService;
         }
-        [HttpPost]
-        public async Task<IActionResult> EditStatusOfOrder(int orderId, int statusId)
-        {
-            var result = await statusService.EditStatusOfOrder(orderId, statusId);
 
-            if (!result) 
-            {
-                return View("Error"); 
-            }
-
-            return RedirectToAction("CompletedOrder", "Order",  new { orderId = orderId });
-        }
     }
 }

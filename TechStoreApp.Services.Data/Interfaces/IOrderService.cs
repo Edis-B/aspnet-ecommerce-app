@@ -12,6 +12,7 @@ namespace TechStoreApp.Services.Data.Interfaces
         Task<UserOrdersListViewModel> GetUserOrdersListViewModelAsync(string? userId = null);
         Task<UserOrderSingleViewModel> GetDetailsOfOrder(int orderId);
         Task<bool> PayForOrder(int orderId);
+        Task<bool> CancelOrder(int orderId);
 
         // Api
         Task<IEnumerable<OrderApiViewModel>> ApiGetAllOrders();
