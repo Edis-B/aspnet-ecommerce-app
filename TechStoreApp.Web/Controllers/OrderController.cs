@@ -56,19 +56,16 @@ namespace TechStoreApp.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> FinalizeOrder(OrderFinalizedPageViewModel model)
+        public async Task<IActionResult> FinalizeOrder(OrderPageViewModel? model)
         {
-            // TempData from SharedForm Redirection
-            var unfinishedOrder = TempDataUtility
-                .GetTempData<OrderPageViewModel>(TempData, "Model");
+            model = TempDataUtility.GetTempData<OrderPageViewModel>(TempData, "Model");
 
-            if (model == null)
+            if (model == null || model.PaymentId == 0)
             {
                 return RedirectToAction(nameof(Order));
             }
-
             
-            OrderFinalizedPageViewModel? newModel = await orderService.GetOrderFinalizedModelAsync(unfinishedOrder!);
+            OrderFinalizedPageViewModel? newModel = await orderService.GetOrderFinalizedModelAsync(model!);
 
             return View("OrderFinalized", newModel);
         }

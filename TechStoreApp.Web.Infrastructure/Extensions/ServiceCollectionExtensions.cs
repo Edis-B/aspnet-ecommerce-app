@@ -79,6 +79,7 @@ namespace Microsoft.Extensions.DependencyInjection
                 options.Cookie.Path = "/";
 
                 options.LoginPath = $"/Account/Login";
+                options.AccessDeniedPath = "/Home/Error";
             });
 
             services.AddAntiforgery(options =>
