@@ -6,6 +6,7 @@ using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.Infrastructure;
 using TechStoreApp.Web.ViewModels.User;
 using static TechStoreApp.Web.Infrastructure.TempDataUtility;
+
 namespace TechStoreApp.Web.Controllers
 {
     [AllowAnonymous]
@@ -113,97 +114,97 @@ namespace TechStoreApp.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> ConfirmEmail(string code, string userId)
-        {
-            var model = new ConfirmEmailViewModel()
-            {
-                Code = code
-            };
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<IActionResult> ConfirmEmail(string code, string userId)
+        //{
+        //    var model = new ConfirmEmailViewModel()
+        //    {
+        //        Code = code
+        //    };
 
-            var result = await userService.ConfirmEmailAsync(model);
+        //    var result = await userService.ConfirmEmailAsync(model);
 
-            if (result.Succeeded)
-            {
-                var emailModel = new SentEmailViewModel()
-                {
-                    Message = "An email has been sent to your inbox."
-                };
+        //    if (result.Succeeded)
+        //    {
+        //        var emailModel = new SentEmailViewModel()
+        //        {
+        //            Message = "An email has been sent to your inbox."
+        //        };
 
-                return View("SentEmailViewModel", emailModel);
-            }
-            else
-            {
-                return View("Error");
-            }
-        }
+        //        return View("SentEmailViewModel", emailModel);
+        //    }
+        //    else
+        //    {
+        //        return View("Error");
+        //    }
+        //}
 
-        [HttpGet]
-        public IActionResult ForgotPassword()
-        {
-            var model = new ForgotPasswordViewModel();
+        //[HttpGet]
+        //public IActionResult ForgotPassword()
+        //{
+        //    var model = new ForgotPasswordViewModel();
 
-            return View("ForgotPassword", model);
-        }
+        //    return View("ForgotPassword", model);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("ForgotPassword");
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View("ForgotPassword");
+        //    }
 
-            var result = await userService.ForgotPasswordAsync(model);
+        //    var result = await userService.ForgotPasswordAsync(model);
 
-            if (!result.Succeeded)
-            {
-                string err = result.Errors
-                    .FirstOrDefault()!
-                    .Description;
+        //    if (!result.Succeeded)
+        //    {
+        //        string err = result.Errors
+        //            .FirstOrDefault()!
+        //            .Description;
 
-                return BadRequest(err);
-            }
+        //        return BadRequest(err);
+        //    }
 
-            return RedirectToPage("./ForgotPasswordConfirmation");
-        }
+        //    return RedirectToPage("./ForgotPasswordConfirmation");
+        //}
 
-        [HttpGet]
-        public IActionResult ResetPassword(string? code = null)
-        {
-            if (code == null)
-            {
-                return BadRequest("A code must be supplied for password reset.");
-            }
+        //[HttpGet]
+        //public IActionResult ResetPassword(string? code = null)
+        //{
+        //    if (code == null)
+        //    {
+        //        return BadRequest("A code must be supplied for password reset.");
+        //    }
 
-            var model = new ResetPasswordViewModel()
-            {
-                Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
-            };
+        //    var model = new ResetPasswordViewModel()
+        //    {
+        //        Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+        //    };
 
-            return View("ResetPassword", model);
-        }
+        //    return View("ResetPassword", model);
+        //}
 
-        [HttpPost]
-        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View("ResetPassword", model);
-            }
+        //[HttpPost]
+        //public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        return View("ResetPassword", model);
+        //    }
 
-            var result = await userService.ResetPasswordAsync(model);
+        //    var result = await userService.ResetPasswordAsync(model);
 
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-            else
-            {
-                return View("PasswordChanged");
-            }
-        }
+        //    if (!result.Succeeded)
+        //    {
+        //        return BadRequest(result.Errors);
+        //    }
+        //    else
+        //    {
+        //        return View("PasswordChanged");
+        //    }
+        //}
 
     }
 }
