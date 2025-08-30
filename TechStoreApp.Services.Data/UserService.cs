@@ -53,7 +53,6 @@ namespace TechStoreApp.Services.Data
                 httpContext.Response.Cookies.Delete(MyCookieName);
                 httpContext.Response.Cookies.Delete(IsAdminAttr);
             }
-            
         }
 
         public async Task<Microsoft.AspNetCore.Identity.SignInResult> SignInAsync(LoginViewModel model)

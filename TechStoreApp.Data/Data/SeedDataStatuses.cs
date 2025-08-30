@@ -40,7 +40,7 @@ namespace TechStoreApp.Data.Data
                 },
                 new Status()
                 {
-                    Description = "Canceled"
+                    Description = "Cancelled"
                 },
                 new Status()
                 {

@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.Infrastructure;
+using TechStoreApp.Web.Infrastructure.Utilities;
 using TechStoreApp.Web.ViewModels.Orders;
 using static TechStoreApp.Common.GeneralConstraints;
 

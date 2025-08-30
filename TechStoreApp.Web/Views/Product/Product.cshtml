@@ -53,18 +53,19 @@
         <input type="text" name="comment" asp-for="Review.Comment" id="review-comment-input">       
         <span asp-validation-for="Review.Comment" id="validate-Comment" class="text-danger"></span>
 
+
+        @* Rating *@
         <label asp-for="Review.Rating">Rating</label>
         <div class="user-rating-div">
             @for (int i = 1; i <= 5; i++)
             {
-                <label>
+                <label class="single-star" id="@i">
                     <input type="radio" name="Rating" value="@i" class="rating-input" />
-                    &#9734; @* Empty Star *@
+                    <span class="star-symbol">&#9734;</span>
                 </label>
             }
         </div>
         <span asp-validation-for="Review.Rating" id="validate-Rating" class="text-danger"></span>
-
 
         <button id="post-review-button" type="submit">Post Review</button>
     </form>

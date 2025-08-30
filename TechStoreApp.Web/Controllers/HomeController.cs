@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.Infrastructure;
+using TechStoreApp.Web.Infrastructure.Utilities;
 using TechStoreApp.Web.ViewModels;
 
 namespace TechStoreApp.Web.Controllers

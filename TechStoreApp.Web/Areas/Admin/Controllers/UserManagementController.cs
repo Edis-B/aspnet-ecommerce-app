@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels;
+using TechStoreApp.Web.Infrastructure.Utilities;
 using static TechStoreApp.Common.GeneralConstraints;
-using static TechStoreApp.Web.Infrastructure.TempDataUtility;
 
 namespace TechStoreApp.Web.Areas.Admin.Controllers
 {
@@ -34,8 +33,9 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
         {
             var result  = await profileService.DeleteUserAsync(userId);
 
-            if (result.Errors.Any()) {
-                AppendErrorViewModelToTempData(TempData,
+            if (result.Errors.Any())
+            {
+                TempDataUtility.AppendErrorViewModelToTempData(TempData,
                     nameof(ErrorViewModel),
                     result.Errors.Select(e => e.Description.ToString()),
                     403);
@@ -52,7 +52,7 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
             var result = await profileService.RemoveFromRoleAsync(userId, role);
 
             if (result.Errors.Any()) {
-                AppendErrorViewModelToTempData(TempData,
+                TempDataUtility.AppendErrorViewModelToTempData(TempData,
                     nameof(ErrorViewModel),
                     result.Errors.Select(e => e.Description.ToString()),
                     403);
@@ -69,7 +69,7 @@ namespace TechStoreApp.Web.Areas.Admin.Controllers
             var result = await profileService.AssignRoleAsync(userId, role);
 
             if (result.Errors.Any()) {
-                AppendErrorViewModelToTempData(TempData,
+                TempDataUtility.AppendErrorViewModelToTempData(TempData,
                     nameof(ErrorViewModel),
                     result.Errors.Select(e => e.Description.ToString()),
                     403);

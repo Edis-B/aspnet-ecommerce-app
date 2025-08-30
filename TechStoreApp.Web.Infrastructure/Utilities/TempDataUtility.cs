@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
-using System.Text.Json.Serialization;
+using TechStoreApp.Web.ViewModels;
 
 namespace TechStoreApp.Web.Infrastructure.Utilities
 {
@@ -17,6 +18,17 @@ namespace TechStoreApp.Web.Infrastructure.Utilities
             }
 
             return default;
+        }
+
+        public static void AppendErrorViewModelToTempData(ITempDataDictionary tempdata, string key, IEnumerable<string> result, int statusCode)
+        {
+            var errorModel = new ErrorViewModel()
+            {
+                Messages = result.ToList(),
+                StatusCode = 403
+            };
+
+            tempdata[key] = JsonConvert.SerializeObject(errorModel);
         }
     }
 }

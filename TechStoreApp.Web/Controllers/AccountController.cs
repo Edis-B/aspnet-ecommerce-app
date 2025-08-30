@@ -1,11 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
 using TechStoreApp.Services.Data.Interfaces;
-using TechStoreApp.Web.Infrastructure;
 using TechStoreApp.Web.ViewModels.User;
-using static TechStoreApp.Web.Infrastructure.TempDataUtility;
 
 namespace TechStoreApp.Web.Controllers
 {

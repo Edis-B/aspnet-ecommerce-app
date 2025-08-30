@@ -11,25 +11,25 @@
 async function starAnimations() {
     const allStars = document.querySelectorAll('.single-star');
 
-    let i = 1;
     allStars.forEach(star => {
-        star.id = i++;
-
         star.addEventListener('click', () => {
-            const reviewInput = document.getElementById('userRating');
+            const index = parseInt(star.id, 10); 
 
-            for (let j = 1; j <= star.id; j++) {
-                const starToColor = document.getElementById(j);
-                starToColor.innerHTML = '&#9733;';
+            for (let j = 1; j <= index; j++) {
+                const starToChange = document.getElementById(j); 
+                const smt = starToChange.querySelector('span'); 
+                smt.innerHTML = '&#9733;';
+                smt.style.color = 'orange'; 
             }
 
-            for (let j = 5; j > star.id; j--) {
-                const starToColor = document.getElementById(j);
-                starToColor.innerHTML = '&#9734;';
+            for (let j = index + 1; j <= 5; j++) {
+                const starToChange = document.getElementById(j); 
+                const smt = starToChange.querySelector('span'); 
+                smt.innerHTML = '&#9734;';
+                smt.style.color = '#ccc'; 
             }
-
-            reviewInput.value = star.id;
         });
     });
+
 }
 

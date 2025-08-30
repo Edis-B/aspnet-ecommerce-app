@@ -19,7 +19,7 @@ namespace TechStoreApp.Data.Data
                 new Product
                 {
                     IsFeatured = true,
-                    CategoryId = 1, // Assume category ID exists
+                    CategoryId = 1,
                     Name = "Gaming PC Starter Pack",
                     Description = "A powerful gaming PC setup with high-performance specs.",
                     Price = 999.99m,

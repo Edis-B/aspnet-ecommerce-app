@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechStoreApp.Services.Data.Interfaces;
 using TechStoreApp.Web.ViewModels.Address;
-using TechStoreApp.Web.Infrastructure;
+using TechStoreApp.Web.Infrastructure.Utilities;
 
 namespace TechStoreApp.Web.Controllers
 {

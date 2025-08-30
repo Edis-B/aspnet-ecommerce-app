@@ -95,7 +95,6 @@ namespace Microsoft.Extensions.DependencyInjection
         public static IServiceCollection AddApplicationServicesExtra(this IServiceCollection services, IConfiguration config)
         {
             services.AddHttpContextAccessor();
-
             services.AddScoped<IEmailSender<ApplicationUser>, MyEmailSender>();
 
             return services;
